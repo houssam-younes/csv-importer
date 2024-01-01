@@ -1,0 +1,107 @@
+Item Code,Item Name,Cost,Price,Margin,Description,Department
+GD-001,Widget A,12.50,24.99,12.49,High-quality widget for various uses,Electronics
+CS-002,Widget B,9.75,19.99,10.24,Compact and efficient widget,Electronics
+CP-003,Widget C,15.00,29.99,14.99,Advanced widget with multiple functions,Electronics
+DS-004,Widget D,8.25,16.99,8.74,Durable and versatile widget,Electronics
+CU-005,Widget E,11.00,22.99,11.99,Widget designed for ease of use,Electronics
+EW-006,Widget F,14.75,29.99,15.24,Widget with modern design,Electronics
+GF-007,Widget G,13.25,26.99,13.74,Widget for various applications,Electronics
+TS-008,Widget H,12.99,25.99,13.00,High-performance widget,Electronics
+WA-009,Widget I,10.50,21.99,11.49,Widget for everyday tasks,Electronics
+XC-010,Widget J,11.75,23.99,12.24,Efficient and durable widget,Electronics
+YD-011,Widget K,14.00,27.99,13.99,Feature-rich widget for professionals,Electronics
+ZE-012,Widget L,9.25,18.99,9.74,Compact and affordable widget,Electronics
+AF-013,Widget M,16.50,32.99,16.49,High-end widget with advanced features,Electronics
+BG-014,Widget N,10.99,21.99,11.00,Widget designed for precision,Electronics
+CH-015,Widget O,12.25,24.99,12.74,Versatile widget for various tasks,Electronics
+DI-016,Widget P,13.75,27.99,14.24,Widget with ergonomic design,Electronics
+EJ-017,Widget Q,14.99,29.99,15.00,Widget for professional use,Electronics
+FK-018,Widget R,11.25,22.99,11.74,Compact and reliable widget,Electronics
+GL-019,Widget S,15.25,30.99,15.74,Widget with advanced technology,Electronics
+HM-020,Widget T,12.75,25.99,13.24,High-performance widget for experts,Electronics
+AA-021,Widget U,9.00,17.99,8.99,Entry-level widget for beginners,Electronics
+BB-022,Widget V,14.25,28.99,14.74,Widget with user-friendly interface,Electronics
+CC-023,Widget W,10.75,21.99,11.24,Widget for home and office use,Electronics
+DD-024,Widget X,13.99,26.99,13.00,Advanced widget with touchscreen,Electronics
+EE-025,Widget Y,15.50,31.99,16.49,High-resolution widget for professionals,Electronics
+FF-026,Widget Z,11.49,22.99,11.50,Compact and lightweight widget,Electronics
+GG-027,Widget AA,14.75,29.99,15.24,Widget with long battery life,Electronics
+HH-028,Widget BB,12.25,24.99,12.74,Widget for outdoor enthusiasts,Electronics
+II-029,Widget CC,16.00,31.99,15.99,Widget with waterproof design,Electronics
+JJ-030,Widget DD,13.50,26.99,13.49,Widget with built-in camera,Electronics
+KK-031,Widget EE,14.99,29.99,15.00,Widget for creative professionals,Electronics
+LL-032,Widget FF,10.99,21.99,11.00,Widget with voice recognition,Electronics
+MM-033,Widget GG,12.75,25.99,13.24,High-performance widget for gamers,Electronics
+NN-034,Widget HH,15.25,30.99,15.74,Widget with virtual reality support,Electronics
+OO-035,Widget II,9.99,19.99,10.00,Widget for educational purposes,Electronics
+PP-036,Widget JJ,11.25,22.99,11.74,Compact and portable widget,Electronics
+QQ-037,Widget KK,14.50,28.99,14.49,Widget for professional audio,Electronics
+RR-038,Widget LL,12.25,24.99,12.74,Widget with noise-canceling,Electronics
+SS-039,Widget MM,15.99,31.99,16.00,Widget with customizable features,Electronics
+TT-040,Widget NN,13.75,27.99,14.24,Widget for music enthusiasts,Electronics
+UU-041,Widget OO,14.25,28.99,14.74,Widget for home automation,Electronics
+VV-042,Widget PP,10.50,21.99,11.49,Compact and energy-efficient widget,Electronics
+WW-043,Widget QQ,11.99,23.99,12.00,Widget with smart connectivity,Electronics
+XX-044,Widget RR,13.50,26.99,13.49,Widget for digital professionals,Electronics
+YY-045,Widget SS,12.75,25.99,13.24,High-performance widget for graphic design,Electronics
+ZZ-046,Widget TT,15.25,30.99,15.74,Widget with touch-sensitive controls,Electronics
+AAA-047,Widget UU,14.99,29.99,15.00,Widget for gaming enthusiasts,Electronics
+BBB-048,Widget VV,10.99,21.99,11.00,Widget with ergonomic design,Electronics
+CCC-049,Widget WW,11.75,23.99,12.24,Compact and lightweight widget,Electronics
+DDD-050,Widget XX,15.00,29.99,14.99,Widget for creative professionals,Electronics
+EEE-051,Widget YY,14.50,28.99,14.49,Widget with long battery life,Electronics
+FFF-052,Widget ZZ,13.25,26.99,13.74,Widget for outdoor enthusiasts,Electronics
+GGG-053,Widget AAA,16.75,33.99,17.24,High-end widget with advanced features,Electronics
+HHH-054,Widget BBB,12.25,24.99,12.74,Widget with user-friendly interface,Electronics
+III-055,Widget CCC,15.75,31.99,16.24,High-resolution widget for professionals,Electronics
+JJJ-056,Widget DDD,9.99,19.99,10.00,Entry-level widget for beginners,Electronics
+KKK-057,Widget EEE,11.25,22.99,11.74,Widget for home and office use,Electronics
+LLL-058,Widget FFF,14.25,28.99,14.74,Advanced widget with touchscreen,Electronics
+MMM-059,Widget GGG,12.99,25.99,13.00,Widget with virtual reality support,Electronics
+NNN-060,Widget HHH,13.75,27.99,14.24,Compact and portable widget,Electronics
+OOO-061,Widget III,14.99,29.99,15.00,Widget for professional audio,Electronics
+PPP-062,Widget JJJ,10.75,21.99,11.24,Widget with noise-canceling,Electronics
+QQQ-063,Widget KKK,16.25,32.99,16.74,Widget with customizable features,Electronics
+RRR-064,Widget LLL,13.25,26.99,13.74,Widget for music enthusiasts,Electronics
+SSS-065,Widget MMM,15.50,31.99,16.49,Widget for home automation,Electronics
+TTT-066,Widget NNN,9.49,18.99,9.50,Compact and energy-efficient widget,Electronics
+UUU-067,Widget OOO,12.75,25.99,13.24,Widget with smart connectivity,Electronics
+VVV-068,Widget PPP,11.99,23.99,12.00,High-performance widget for digital professionals,Electronics
+WWW-069,Widget XXX,14.99,29.99,15.00,High-performance widget for graphic design,Electronics
+XXX-070,Widget YYY,15.25,30.99,15.74,Widget with touch-sensitive controls,Electronics
+YYY-071,Widget ZZZ,14.25,28.99,14.74,Widget for gaming enthusiasts,Electronics
+ZZZ-072,Widget AAAA,11.50,22.99,11.49,Widget with ergonomic design,Electronics
+AAAA-073,Widget BBBB,12.25,24.99,12.74,Compact and lightweight widget,Electronics
+BBBB-074,Widget CCCC,15.00,29.99,14.99,Widget for creative professionals,Electronics
+CCCC-075,Widget DDDD,14.50,28.99,14.49,Widget with long battery life,Electronics
+DDDD-076,Widget EEEE,13.25,26.99,13.74,Widget for outdoor enthusiasts,Electronics
+EEEE-077,Widget FFFF,16.75,33.99,17.24,High-end widget with advanced features,Electronics
+FFFF-078,Widget GGGG,12.25,24.99,12.74,Widget with user-friendly interface,Electronics
+GGGG-079,Widget HHHH,15.75,31.99,16.24,High-resolution widget for professionals,Electronics
+HHHH-080,Widget IIII,9.99,19.99,10.00,Entry-level widget for beginners,Electronics
+IIII-081,Widget JJJJ,11.25,22.99,11.74,Widget for home and office use,Electronics
+JJJJ-082,Widget KKKK,14.25,28.99,14.74,Advanced widget with touchscreen,Electronics
+KKKK-083,Widget LLLL,12.99,25.99,13.00,Widget with virtual reality support,Electronics
+LLLL-084,Widget MMMM,13.75,27.99,14.24,Compact and portable widget,Electronics
+MMMM-085,Widget NNNN,14.99,29.99,15.00,Widget for professional audio,Electronics
+NNNN-086,Widget OOOO,10.75,21.99,11.24,Widget with noise-canceling,Electronics
+OOOO-087,Widget PPPP,16.25,32.99,16.74,Widget with customizable features,Electronics
+PPPP-088,Widget QQQQ,13.25,26.99,13.74,Widget for music enthusiasts,Electronics
+QQQQ-089,Widget RRRR,15.50,31.99,16.49,Widget for home automation,Electronics
+RRRR-090,Widget SSSS,9.49,18.99,9.50,Compact and energy-efficient widget,Electronics
+SSSS-091,Widget TTTT,12.75,25.99,13.24,Widget with smart connectivity,Electronics
+TTTT-092,Widget UUUU,11.99,23.99,12.00,High-performance widget for digital professionals,Electronics
+UUUU-093,Widget VVVV,14.99,29.99,15.00,High-performance widget for graphic design,Electronics
+VVVV-094,Widget WWWW,15.25,30.99,15.74,Widget with touch-sensitive controls,Electronics
+WWWW-095,Widget XXXX,14.25,28.99,14.74,Widget for gaming enthusiasts,Electronics
+XXXX-096,Widget YYYY,11.50,22.99,11.49,Widget with ergonomic design,Electronics
+YYYY-097,Widget ZZZZ,12.25,24.99,12.74,Compact and lightweight widget,Electronics
+ZZZZ-098,Widget AAAAA,15.00,29.99,14.99,Widget for creative professionals,Electronics
+AAAAA-099,Widget BBBBB,14.50,28.99,14.49,Widget with long battery life,Electronics
+BBBBB-100,Widget CCCCC,13.25,26.99,13.74,Widget for outdoor enthusiasts,Electronics
+CCCCC-101,Widget DDDDD,16.75,33.99,17.24,High-end widget with advanced features,Electronics
+DDDDD-102,Widget EEEEE,12.25,24.99,12.74,Widget with user-friendly interface,Electronics
+EEEEE-103,Widget FFFFF,15.75,31.99,16.24,High-resolution widget for professionals,Electronics
+FFFFF-104,Widget GGGGG,9.99,19.99,10.00,Entry-level widget for beginners,Electronics
+GGGGG-105,Widget HHHHH,11.25,22.99,11.74,Widget for home and office use,Electronics
+HHHHH-106,Widget IIIII,14.25,28.99,14.74,Advanced widget with touchscreen,Electronics

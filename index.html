@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV Importer</title>
+    <link rel="stylesheet" href="styles/index.css">
+</head>
+
+<body>
+    <header>
+        <h1>CSV File Importer</h1>
+    </header>
+    <main>
+        <div id="importView">
+            <input type="file" id="csvFileInput" accept=".csv" hidden>
+            <div class="button-container">
+                <button id="importCsvBtn">Import CSV File</button>
+                <div id="spinner" style="display: none;"></div> <!-- Spinner element -->
+            </div>
+        </div>
+
+        <div id="tableView" style="display: none;">
+            <button id="backBtn">Import Another File</button>
+            <div class="expandable" id="matchingItems">
+                <button class="expandable-title">Matching Items</button>
+                <div class="expandable-content">
+                    <div class="table-container">
+                        <!-- table goes here -->
+                    </div>
+                </div>
+            </div>
+            <div class="expandable" id="partialMatches">
+                <button class="expandable-title">Partial Matches</button>
+                <div class="expandable-content">
+                    <div class="table-container">
+                        <!--table goes here -->
+                    </div>
+                </div>
+            </div>
+            <div class="expandable" id="noMatches">
+                <button class="expandable-title">No Matches</button>
+                <div class="expandable-content">
+                    <div class="table-container">
+                        <!--table goes here -->
+                    </div>
+                </div>
+            </div>
+            <div id="csvDisplayArea"></div>
+        </div>
+
+    </main>
+    <footer>
+        <p>© 2023 *Company</p>
+    </footer>
+    <script type="module" src="js/main.js"></script>
+</body>
+
+</html>
