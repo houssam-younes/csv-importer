@@ -1,7 +1,7 @@
 const express = require('express');
 const pool = require('./db'); // Require your database pool
 const app = express();
-const port = 80;
+const port = 8080;
 
 // console.log('connecting');
 // client.connect(function(err) {
@@ -30,6 +30,6 @@ app.get('/api/inventory', async (req, res) => {
 //   res.sendFile(__dirname + '/index.html'); // Assuming you have an index.html in your project root
 // });
 
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
   console.log(`Server running on http://localhost:${port}`);
 });
