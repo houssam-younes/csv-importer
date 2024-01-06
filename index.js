@@ -1,13 +1,14 @@
 const express = require('express');
 const pool = require('./db'); // Require your database pool
 const app = express();
-const port = 3000;
+const port = 80;
 
 // console.log('connecting');
 // client.connect(function(err) {
 //   if (err) throw err;
 //   console.log("Connected!");
 // });
+console.log('hello');
 
 app.use(express.static(__dirname));
 app.use(express.json());
