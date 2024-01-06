@@ -3,35 +3,14 @@ const pool = require('./db'); // Require your database pool
 const app = express();
 const port = 3000;
 
-// const { Client } = require('pg')
-// const client = new Client({
-//   user: 'postgres',
-//   host: '35.237.148.74',
-//   socketPath: '/cloudsql/automatic-rock-409816:us-east1:demodb',
-//   database: 'postgres',
-//   password: '131619',
-//   port: 5432,
-// })
-console.log('connecting');
-client.connect(function(err) {
-  if (err) throw err;
-  console.log("Connected!");
-});
+// console.log('connecting');
+// client.connect(function(err) {
+//   if (err) throw err;
+//   console.log("Connected!");
+// });
 
-app.use(express.static(__dirname)); // Serve static files
-app.use(express.json()); // Middleware to parse JSON data
-
-// Route to fetch sales data
-// app.get('/sales-data', async (req, res) => {
-app.get('/a', async (req, res) => {
-  try {
-    const inventoryData = await pool.query('SELECT * FROM inventory LIMIT 1');
-    // res.json(salesData.rows);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Server error');
-  }
-});
+app.use(express.static(__dirname));
+app.use(express.json());
 
 app.get('/api/inventory', async (req, res) => {
     try {
