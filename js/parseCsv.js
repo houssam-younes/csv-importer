@@ -1,4 +1,5 @@
 export function parseCsv(csvData) {
+    console.log('whats csvdata '+csvData);
     const lines = csvData.trim().split("\n");
     const headers = lines[0].split(",").map(header => header.trim());
     

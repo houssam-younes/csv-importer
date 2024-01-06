@@ -17,19 +17,21 @@ export function compareCsvData(databaseCsv, userCsv) {
     userItems.forEach(userItem => {
         const userItemCsv = objectToCsvString(userItem, dbHeaders);
 
-        const matchingItem = databaseItems.find(dbItem => dbItem['Item Code'] === userItem['Item Code']);
+        //const matchingItem = databaseItems.find(dbItem => dbItem['Item Code'] === userItem['Item Code']);
+        const matchingItem = databaseItems.find(dbItem => dbItem['scan_code'] == userItem['scan_code']);
         if (matchingItem) {
             const dbItemCsv = objectToCsvString(matchingItem, dbHeaders);
             matchingItems.push(dbItemCsv, userItemCsv);
         } else {
             // Perform a case-insensitive partial match for descriptions
-            const userDescription = userItem['Description'] ? userItem['Description'].trim().toLowerCase() : "";
+            const userDescription = userItem['item_name'] ? userItem['item_name'].trim().toLowerCase() : "";
             let isPartialMatchFound = false;
         
             if (userDescription) {
                 const partialMatch = databaseItems.find(dbItem => {
                     // return dbDescription.includes(userDescription) || userDescription.includes(dbDescription);
-                    const dbDescription = dbItem['Description'] ? dbItem['Description'].trim().toLowerCase() : "";
+                    //const dbDescription = dbItem['Description'] ? dbItem['Description'].trim().toLowerCase() : "";
+                    const dbDescription = dbItem['item_name'] ? dbItem['item_name'].trim().toLowerCase() : "";
                     return similarity(userDescription, dbDescription) >= 0.7;// 70% similarity
                 });
         
