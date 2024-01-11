@@ -19,29 +19,29 @@ document.addEventListener("DOMContentLoaded", function () {
       setupNavigation();
       // Process and display your data as needed
 
-      localStorage.setItem("inventoryData", JSON.stringify(data));
+      // localStorage.setItem("inventoryData", JSON.stringify(data));
 
-      const lsdata = JSON.parse(localStorage.getItem("inventoryData"));
-      console.log("whats data from localstorage ", lsdata);
+      // const lsdata = JSON.parse(localStorage.getItem("inventoryData"));
+      // console.log("whats data from localstorage ", lsdata);
       //   console.log("equal? " + isEqual(lsdata, data));
     })
     .catch((error) => {
       console.error("Error fetching inventory:", error);
 
-      const localData = localStorage.getItem("inventoryData");
-      if (localData) {
-        const data = JSON.parse(localData);
-        console.log("whats data from localstorage ", data);
-        // const csvData = jsonToCsv(data);
-        databaseCsv = data;
-        databaseCsvHeaders = Object.keys(data[0]);
-        // console.log('headers '+databaseCsvHeaders);
-        setupNavigation();
-        // Process the data as if it were loaded from the database
-        // clearLocalState()
-      } else {
-        console.error("No local data available");
-      }
+      // const localData = localStorage.getItem("inventoryData");
+      // if (localData) {
+      //   const data = JSON.parse(localData);
+      //   console.log("whats data from localstorage ", data);
+      //   // const csvData = jsonToCsv(data);
+      //   databaseCsv = data;
+      //   databaseCsvHeaders = Object.keys(data[0]);
+      //   // console.log('headers '+databaseCsvHeaders);
+      //   setupNavigation();
+      //   // Process the data as if it were loaded from the database
+      //   // clearLocalState()
+      // } else {
+      //   console.error("No local data available");
+      // }
     });
 
   console.log("hi");

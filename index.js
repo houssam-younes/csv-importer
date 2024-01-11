@@ -8,7 +8,6 @@ const port = 8080;
 //   if (err) throw err;
 //   console.log("Connected!");
 // });
-console.log('hello');
 
 app.use(express.static(__dirname));
 app.use(express.json());
