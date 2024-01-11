@@ -1,0 +1,33 @@
+/* Legend Styles */
+.legend {
+    position: absolute;
+    padding: 10px;
+    /* margin-top: 10px; */
+    margin-left: 10px;
+    border-radius: 5px;
+    right: 100px;
+    top: 0%;
+}
+
+.legend p {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+/* You can also style strong tag if needed */
+.legend strong {
+    font-weight: bold;
+}
+
+/* Media query for tablets and mobile phones */
+@media (max-width: 768px) {
+    .legend {
+        /* position: static; Reset the position to default */
+        position: unset;
+        bottom: 0;
+        right: 0;
+        left: 0; /* Center horizontally */
+        width: 90%; /* Adjust the width as needed */
+        text-align: center; /* Center the text inside the legend */
+    }
+}
