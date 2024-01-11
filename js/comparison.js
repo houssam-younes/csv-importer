@@ -47,7 +47,7 @@ function buildSimplifiedMap(databaseItems) {
 export function compareCsvDataToDB(databaseCsv, userCsv) {
   // Initialize the database map
   setDatabaseMap(databaseCsv);
-  console.log('done and set');
+  // console.log('done and set');
   // const simplifiedMap = buildSimplifiedMap([...databaseMap.values()]);
 
   const userItems = parseCsv(userCsv);
@@ -109,7 +109,7 @@ function findSimplifiedPartialMatches(userItem, partialMatches, userItemCsv, dbH
 
   if (bestMatch && highestScore >= 0.7) {
     partialMatches.push(userItemCsv, objectToCsvString(bestMatch, dbHeaders));
-    console.log('found partial match for '+simplifiedUserItemName);
+    // console.log('found partial match for '+simplifiedUserItemName);
     return true;
   }
   return false;
@@ -123,7 +123,7 @@ function findExhaustivePartialMatches(userItem, partialMatches, userItemCsv, dbH
   for (let dbItem of databaseMap.values()) {
     const score = similarity(userItem.item_name.trim().toLowerCase(), dbItem.item_name.trim().toLowerCase());
     if (score>=0.9){
-      console.log('www greater than 0.9 can continue '+userItem.item_name.trim().toLowerCase());
+      // console.log('www greater than 0.9 can continue '+userItem.item_name.trim().toLowerCase());
       partialMatches.push(userItemCsv, objectToCsvString(dbItem, dbHeaders));
       return true;
     }

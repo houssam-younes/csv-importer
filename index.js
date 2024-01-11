@@ -1,7 +1,7 @@
 const express = require('express');
 const pool = require('./db'); // Require your database pool
 const app = express();
-const port = 8080;
+const port = 3000;
 
 // console.log('connecting');
 // client.connect(function(err) {
@@ -14,7 +14,7 @@ app.use(express.json());
 
 app.get('/api/inventory', async (req, res) => {
     try {
-        console.log('getting inventory data');
+        // console.log('getting inventory data');
       //const queryResult = await pool.query('SELECT * FROM inventory LIMIT 100');
       const queryResult = await pool.query('SELECT * FROM inventory');
       res.json(queryResult.rows);
