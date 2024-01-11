@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
       // }
     });
 
-  console.log("hi");
+  // console.log("hi");
 
   // fetch('resources/csv/updated_user_data_v6.csv')
   //     .then(response => response.text())
@@ -133,7 +133,7 @@ async function handleFileSelect(event) {
 
   const reader = new FileReader();
   reader.onload = (e) => {
-    console.log("reader loading");
+    // console.log("reader loading");
     const userCsvData = e.target.result;
     // Split the userCsvData into an array of rows
     //const userCsvRows = userCsvData.split('\n');
@@ -145,13 +145,13 @@ async function handleFileSelect(event) {
       databaseCsv,
       userCsvData
     );
-    console.log("no matches ", noMatches);
+    // console.log("no matches ", noMatches);
     displayResults(matchingItems, partialMatches, noMatches);
     // Hide spinner and enable button
     toggleLoading(false);
     switchView("tableView");
   };
-  console.log("reading as text file");
+  // console.log("reading as text file");
   reader.readAsText(file);
 }
 

@@ -49,7 +49,7 @@ export function createCsvTable(rows, type) {
 }
 
 export function displayResults(matchingItems, partialMatches, noMatches) {
-  console.log("toggle displaying results");
+  // console.log("toggle displaying results");
   const matchingContent = document.querySelector(
     "#matchingItems .expandable-content .table-container"
   );
