@@ -41,5 +41,4 @@
   
   // testPairs.forEach((pair, index) => {
   //   const score = similarity(pair[0], pair[1]);
-  //   console.log(`Test ${index + 1}: Similarity Score: ${score.toFixed(4) * 100}%`);
   // });

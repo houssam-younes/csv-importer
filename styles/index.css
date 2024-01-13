@@ -19,6 +19,16 @@ header {
   padding: 10px 0;
   position: relative;
   background-color: rgba(192, 192, 192, 0.5);
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+header h1 {
+  width: fit-content;
+  cursor: pointer;
+  color: #36454f;
 }
 
 main {
@@ -46,26 +56,26 @@ main {
   margin: auto;
 }
 
-#csvTable {
+.csvTable {
   min-width: 90%;
   border-collapse: collapse;
   margin: 0 auto; /* Centering the table */
 }
 
-#csvTable th,
-#csvTable td {
+.csvTable th,
+.csvTable td {
   border: 1px solid #ddd;
   padding: 8px;
   text-align: left;
 }
 
-#csvTable th {
+.csvTable th {
   background-color: #f2f2f2;
   color: black;
 }
 
 #importCsvBtn,
-#backBtn {
+#export-btn {
   padding: 10px 20px;
   font-size: 20px;
   color: whitesmoke;
@@ -81,7 +91,7 @@ main {
 }
 
 #importCsvBtn:not(:disabled):hover,
-#backBtn:hover {
+#export-btn:hover {
   background-color: black;
   transform: scale(1.02);
 }
@@ -91,7 +101,7 @@ main {
   cursor: not-allowed;
 }
 
-#backBtn {
+#export-btn {
   font-size: 15px;
   font-weight: bold;
   display: block;
@@ -137,9 +147,13 @@ footer::before {
   }
 }
 
-.matching-user-row td,
-.partial-user-row td,
-.no-match-user-row td {
+/* .matching-user-row td,
+.partial-user-row td {
+  font-weight: bold;
+} */
+
+.matching-database-row td,
+.partial-database-row td {
   font-weight: bold;
 }
 
@@ -183,4 +197,70 @@ footer::before {
 .button-container {
   position: relative;
   display: inline-block;
+}
+
+.relative-td {
+  position: relative;
+}
+
+/* .row-checkbox {
+  position: absolute;
+  left: -25px; 
+  margin: 0;
+} */
+
+.row-checkbox {
+  position: absolute;
+  left: -25px; /* Adjust this value based on your layout */
+  top: 50%; /* Vertically center the checkbox */
+  transform: translateY(-50%); /* Center it vertically */
+  margin: 0;
+}
+
+/* Style the checkbox with class row-checkbox */
+.row-checkbox {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 16px; /* Adjust the size as needed */
+  height: 16px; /* Adjust the size as needed */
+  /* border: 2px solid #555; Border color for the checkbox */
+  border: 2px solid #d0cccc;
+  border-radius: 50%; /* Make it round like a radio button */
+  cursor: pointer;
+  vertical-align: middle;
+  margin-right: 10px; /* Add margin for spacing if needed */
+  background-color: #fff; /* Background color when unchecked */
+}
+
+/* Style the checkbox when checked */
+.row-checkbox:checked {
+  background-color: #ccccd4; /* Background color when checked */
+  border-color: #ccccd4; /* Border color when checked */
+}
+
+/* Add a hover effect */
+.row-checkbox:hover {
+  border-color: lightgray; /* Border color on hover */
+}
+
+/* Add a focus effect */
+.row-checkbox:focus {
+  outline: none;
+  box-shadow: none; /* Remove the box-shadow on focus */
+}
+
+/* Add these styles to your CSS file */
+.matching-row-1,
+.partial-row-1 {
+  background-color: #e8e8e8; /* Light gray for one set of rows */
+}
+
+.matching-row-2,
+.partial-row-2 {
+  background-color: snow; /* Snow white for another set of rows */
+}
+
+.no-match-user-row {
+  background-color: snow; /* Single color for no-match rows */
 }

@@ -1,0 +1,57 @@
+.selection-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 15px;
+  position: relative;
+  width: 90%;
+  margin: 0px auto 10px auto;
+  font-size: 16px;
+}
+
+.selection-buttons {
+  display: flex;
+  align-items: center;
+}
+
+.selection-buttons input[type="radio"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: #c4c4c4;
+  color: #fff;
+  width: 15px;
+  height: 15px;
+  border: 1px solid #999;
+  border-radius: 50%;
+  outline: none;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.selection-buttons input[type="radio"]:checked {
+  background-color: #666;
+}
+
+.selection-controls label {
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.unselect-button {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #333;
+  position: absolute;
+  right: 0;
+  transition: color 0.3s, background-color 0.3s;
+}
+.unselect-button:hover {
+  color: #555;
+  background-color: #f0f0f0;
+}

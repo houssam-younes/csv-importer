@@ -4,6 +4,11 @@ import { similarity } from "./distance.js";
 // External variable for database items map
 let databaseMap = new Map();
 let simplifiedMap = new Map();
+let userMap= new Map();
+
+export function getUserMap(){
+  return userMap;
+}
 
 // Function to set the database map
 export function setDatabaseMap(databaseItems) {
@@ -21,6 +26,10 @@ export function setDatabaseMap(databaseItems) {
     }
     simplifiedMap.get(simplifiedKey).push(item);
   });
+}
+
+export function getDatabaseMap(){
+  return databaseMap;
 }
 
 // export function setDatabaseMap(databaseItems) {
@@ -47,10 +56,10 @@ function buildSimplifiedMap(databaseItems) {
 export function compareCsvDataToDB(databaseCsv, userCsv) {
   // Initialize the database map
   setDatabaseMap(databaseCsv);
-  // console.log('done and set');
   // const simplifiedMap = buildSimplifiedMap([...databaseMap.values()]);
 
   const userItems = parseCsv(userCsv);
+  //userMap=userItems;
   const userCsvLines = userCsv.trim().split("\n");
 
 
@@ -65,10 +74,14 @@ export function compareCsvDataToDB(databaseCsv, userCsv) {
   let noMatches = [userHeaders.join(",")];
 
   userItems.forEach((userItem) => {
+    if (!userItem.scan_code){
+      skip;
+    }
+    userMap.set(userItem.scan_code, userItem);
+
     const userItemCsv = objectToCsvString(userItem, dbHeaders);
 
     if (!findExactMatches(userItem, matchingItems, userItemCsv, dbHeaders)) {
-      // console.log('started search partial');
       if (
         // !findPartialMatches(userItem, partialMatches, userItemCsv, dbHeaders)
         !findPartialMatch(userItem, partialMatches, userItemCsv, dbHeaders)
@@ -85,7 +98,12 @@ export function compareCsvDataToDB(databaseCsv, userCsv) {
 function findExactMatches(userItem, matchingItems, userItemCsv, dbHeaders) {
   const matchingItem = databaseMap.get(userItem.scan_code);
   if (matchingItem) {
-    matchingItems.push(userItemCsv, objectToCsvString(matchingItem, dbHeaders));
+    // matchingItems.push(
+    //   { csv: userItemCsv, type: 'user', pair_id: pair_id },
+    //   { csv: objectToCsvString(matchingItem, dbHeaders), type: 'db', pair_id: pair_id }
+    // );
+    matchingItems.push({ csv: userItemCsv, pair_id: matchingItem.scan_code });
+    // matchingItems.push(userItemCsv, objectToCsvString(matchingItem, dbHeaders));
     return true;
   }
   return false;
@@ -94,8 +112,6 @@ function findExactMatches(userItem, matchingItems, userItemCsv, dbHeaders) {
 function findSimplifiedPartialMatches(userItem, partialMatches, userItemCsv, dbHeaders) {
   const simplifiedUserItemName = simplifyString(userItem.item_name);
   const potentialMatches = simplifiedMap.get(simplifiedUserItemName) || [];
-  // console.log('potential matches');
-  // console.log(potentialMatches);
   let bestMatch = null;
   let highestScore = 0;
 
@@ -108,8 +124,8 @@ function findSimplifiedPartialMatches(userItem, partialMatches, userItemCsv, dbH
   });
 
   if (bestMatch && highestScore >= 0.7) {
-    partialMatches.push(userItemCsv, objectToCsvString(bestMatch, dbHeaders));
-    // console.log('found partial match for '+simplifiedUserItemName);
+    partialMatches.push({ csv: userItemCsv, pair_id: bestMatch.scan_code });
+    //partialMatches.push(userItemCsv, objectToCsvString(bestMatch, dbHeaders));
     return true;
   }
   return false;
@@ -123,8 +139,7 @@ function findExhaustivePartialMatches(userItem, partialMatches, userItemCsv, dbH
   for (let dbItem of databaseMap.values()) {
     const score = similarity(userItem.item_name.trim().toLowerCase(), dbItem.item_name.trim().toLowerCase());
     if (score>=0.9){
-      // console.log('www greater than 0.9 can continue '+userItem.item_name.trim().toLowerCase());
-      partialMatches.push(userItemCsv, objectToCsvString(dbItem, dbHeaders));
+      partialMatches.push({ csv: userItemCsv, pair_id: bestMatch.scan_code });
       return true;
     }
     if (score > highestScore) {
@@ -134,7 +149,9 @@ function findExhaustivePartialMatches(userItem, partialMatches, userItemCsv, dbH
   }
 
   if (bestMatch && highestScore >= 0.7) {
-    partialMatches.push(userItemCsv, objectToCsvString(bestMatch, dbHeaders));
+    partialMatches.push({ csv: userItemCsv, pair_id: bestMatch.scan_code });
+    // partialMatches.push(userItemCsv, objectToCsvString(bestMatch, dbHeaders));
+    // partialMatches.push(userItemCsv, objectToCsvString(bestMatch, dbHeaders));
     return true;
   }
   return false;
@@ -181,7 +198,7 @@ function findPartialMatches(userItem, partialMatches, userItemCsv, dbHeaders) {
 }
 
 // Function to convert object to CSV string
-function objectToCsvString(obj, headers) {
+export function objectToCsvString(obj, headers) {
   return headers
     .map((header) => {
       const value = obj[header] ? obj[header].toString() : "";
@@ -192,149 +209,3 @@ function objectToCsvString(obj, headers) {
     })
     .join(",");
 }
-
-// export function compareCsvDataToDB2(databaseCsv, userCsv) {
-//   // Assume parseCsv returns an array of objects and the first row contains headers
-
-//   //   const { databaseMap, userItems, dbHeaders, userHeaders } =
-//   //     initializeMapsAndHeaders(databaseCsv, userCsv);
-
-//   console.log("db csv ", databaseCsv);
-//   const databaseItems = databaseCsv;
-//   console.log("whats databaseitems ", databaseItems);
-//   const userItems = parseCsv(userCsv);
-//   const userCsvLines = userCsv.trim().split("\n");
-
-//   const dbHeaders = Object.keys(databaseItems[0]);
-//   const userHeaders =
-//     userCsvLines.length > 0
-//       ? userCsvLines[0].split(",").map((header) => header.trim())
-//       : [];
-//   let matchingItems = [dbHeaders.join(",")];
-//   let partialMatches = [dbHeaders.join(",")];
-//   // Use original headers from user CSV
-//   let noMatches = [userHeaders.join(",")];
-
-//   console.log("comparing");
-
-//   userItems.forEach((userItem) => {
-//     const userItemCsv = objectToCsvString(userItem, dbHeaders);
-
-//     //const matchingItem = databaseItems.find(dbItem => dbItem['Item Code'] === userItem['Item Code']);
-//     const matchingItem = databaseItems.find(
-//       (dbItem) => dbItem["scan_code"] == userItem["scan_code"]
-//     );
-//     if (matchingItem) {
-//       const dbItemCsv = objectToCsvString(matchingItem, dbHeaders);
-//       matchingItems.push(dbItemCsv, userItemCsv);
-//     } else {
-//       // Perform a case-insensitive partial match for descriptions
-//       const userDescription = userItem["item_name"]
-//         ? userItem["item_name"].trim().toLowerCase()
-//         : "";
-//       let isPartialMatchFound = false;
-
-//       if (userDescription) {
-//         const partialMatch = databaseItems.find((dbItem) => {
-//           // return dbDescription.includes(userDescription) || userDescription.includes(dbDescription);
-//           //const dbDescription = dbItem['Description'] ? dbItem['Description'].trim().toLowerCase() : "";
-//           const dbDescription = dbItem["item_name"]
-//             ? dbItem["item_name"].trim().toLowerCase()
-//             : "";
-//           return similarity(userDescription, dbDescription) >= 0.7; // 70% similarity
-//         });
-
-//         if (partialMatch) {
-//           const partialMatchCsv = objectToCsvString(partialMatch, dbHeaders);
-//           partialMatches.push(partialMatchCsv, userItemCsv);
-//           isPartialMatchFound = true;
-//         }
-//       }
-//       if (!isPartialMatchFound) {
-//         noMatches.push(userItemCsv);
-//       }
-//     }
-//   });
-//   console.log("done comparing");
-
-//   return { matchingItems, partialMatches, noMatches };
-// }
-
-// export function compareCsvData(databaseCsv, userCsv) {
-//   // Assume parseCsv returns an array of objects and the first row contains headers
-//   const databaseItems = parseCsv(databaseCsv);
-//   console.log("whats databaseitems ", databaseItems);
-//   const userItems = parseCsv(userCsv);
-//   const userCsvLines = userCsv.trim().split("\n");
-
-//   const dbHeaders = Object.keys(databaseItems[0]);
-//   const userHeaders =
-//     userCsvLines.length > 0
-//       ? userCsvLines[0].split(",").map((header) => header.trim())
-//       : [];
-//   let matchingItems = [dbHeaders.join(",")];
-//   let partialMatches = [dbHeaders.join(",")];
-//   // Use original headers from user CSV
-//   let noMatches = [userHeaders.join(",")];
-
-//   userItems.forEach((userItem) => {
-//     const userItemCsv = objectToCsvString(userItem, dbHeaders);
-
-//     //const matchingItem = databaseItems.find(dbItem => dbItem['Item Code'] === userItem['Item Code']);
-//     const matchingItem = databaseItems.find(
-//       (dbItem) => dbItem["scan_code"] == userItem["scan_code"]
-//     );
-//     if (matchingItem) {
-//       const dbItemCsv = objectToCsvString(matchingItem, dbHeaders);
-//       matchingItems.push(dbItemCsv, userItemCsv);
-//     } else {
-//       // Perform a case-insensitive partial match for descriptions
-//       const userDescription = userItem["item_name"]
-//         ? userItem["item_name"].trim().toLowerCase()
-//         : "";
-//       let isPartialMatchFound = false;
-
-//       if (userDescription) {
-//         const partialMatch = databaseItems.find((dbItem) => {
-//           // return dbDescription.includes(userDescription) || userDescription.includes(dbDescription);
-//           //const dbDescription = dbItem['Description'] ? dbItem['Description'].trim().toLowerCase() : "";
-//           const dbDescription = dbItem["item_name"]
-//             ? dbItem["item_name"].trim().toLowerCase()
-//             : "";
-//           return similarity(userDescription, dbDescription) >= 0.7; // 70% similarity
-//         });
-
-//         if (partialMatch) {
-//           const partialMatchCsv = objectToCsvString(partialMatch, dbHeaders);
-//           partialMatches.push(partialMatchCsv, userItemCsv);
-//           isPartialMatchFound = true;
-//         }
-//       }
-//       if (!isPartialMatchFound) {
-//         noMatches.push(userItemCsv);
-//       }
-//     }
-//   });
-
-//   return { matchingItems, partialMatches, noMatches };
-// }
-
-// function objectToCsvString2(obj, headers) {
-//   // Convert object to CSV string, ensuring to handle commas, newlines, and quotes
-//   return headers
-//     .map((header) => {
-//       const value = obj[header] ? obj[header].toString() : "";
-//       if (value.includes(",") || value.includes("\n") || value.includes('"')) {
-//         return `"${value.replace(/"/g, '""')}"`;
-//       }
-//       return value;
-//     })
-//     .join(",");
-// }
-
-// function isPartialMatch(desc1, desc2) {
-//     // Basic partial match logic
-//     console.log('desc1 '+desc1);
-//     console.log('desc 2 '+desc2);
-//     return desc1.includes(desc2) || desc2.includes(desc1);
-// }

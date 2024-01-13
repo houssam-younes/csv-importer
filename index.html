@@ -7,11 +7,12 @@
     <title>CSV Importer</title>
     <link rel="stylesheet" href="styles/index.css">
     <link rel="stylesheet" href="styles/legend.css">
+    <link rel="stylesheet" href="styles/select-radio-buttons.css">
 </head>
 
 <body>
     <header>
-        <h1>CSV File Importer</h1>
+        <h1 class="back-header">CSV File Importer</h1>
     </header>
     <main>
         <div class="legend">
@@ -27,7 +28,7 @@
         </div>
 
         <div id="tableView" style="display: none;">
-            <button id="backBtn">Import Another File</button>
+            <button id="export-btn">Export Selected To CSV</button>
             <div class="expandable" id="matchingItems">
                 <button class="expandable-title">Matching Items</button>
                 <div class="expandable-content">
@@ -54,6 +55,8 @@
             </div>
             <div id="csvDisplayArea"></div>
         </div>
+
+        <button id="exportCsvBtn" style="display: none;">Export Selected Rows</button>
 
     </main>
     <footer>
