@@ -4,7 +4,7 @@ export async function fetchInventory() {
     try {
       toggleLoading(true);
       console.log('fetching...');
-      const response = await fetch("/api/inventory");
+      const response = await fetch("/api/inventoryy");
       toggleLoading(false);
       if (!response.ok){
         throw error;

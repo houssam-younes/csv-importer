@@ -264,3 +264,115 @@ footer::before {
 .no-match-user-row {
   background-color: snow; /* Single color for no-match rows */
 }
+
+.green-color-class {
+  color: green;
+}
+
+.red-color-class {
+  color: red;
+}
+
+/* Base styling for price info */
+.price-info,
+.price-difference,
+.cost-info,
+.cost-difference {
+  font-size: 0.9em; /* Smaller font size */
+  /* display: block; Ensure each piece of info appears on a new line */
+  /* margin-top: 5px; Add some space above the info */
+}
+
+/* Styling for matching prices */
+.price-match,
+.cost-match {
+  font-size: 0.9em; /* Smaller font size */
+  color: #4caf50; /* Green color for match */
+  font-style: italic; /* Italicize the 'Match' text */
+}
+
+/* Styling for positive price differences (green) */
+.green-color-class {
+  color: #4caf50; /* Green color for positive differences */
+}
+
+/* Styling for negative price differences (red) */
+.red-color-class {
+  color: #f44336; /* Red color for negative differences */
+}
+
+/* Optional: Add some padding and border styling to the cell */
+.compare-td {
+  /* padding: 10px; */
+  border-bottom: 1px solid #ddd; /* Light grey border at the bottom */
+}
+
+.compare-td-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* align-items: center; */
+  position: relative;
+  /* padding: 10px; */
+  /* border-bottom: 1px solid #ddd; */
+  /* min-height: 60px; */
+}
+
+.price-container {
+  /* Style for the main price container */
+}
+
+.price-info-container,
+.cost-info-container {
+  /* Style for the container of supplementary information */
+  /* margin-top: 10px; Adds space between the main price and supplementary info */
+  display: flex;
+  flex-direction: column;
+  /* text-align: center; */
+}
+
+.average-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.average-info div {
+  margin: 0 20px;
+}
+
+/* Styles for individual stat groups */
+.price-stats,
+.cost-stats {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.table-container,
+.averages-container {
+  margin-bottom: 20px;
+}
+
+.stats-group {
+  margin: 0 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Styles for positive and negative values */
+.positive-diff {
+  color: #4caf50; /* Green for positive */
+}
+
+.negative-diff {
+  color: #f44336; /* Red for negative */
+}
+
+/* Optional: Styling for the percentage and total difference paragraphs */
+.price-stats p,
+.cost-stats p {
+  margin: 5px 0;
+  /* font-weight: bold; Optional: Makes text bold */
+}

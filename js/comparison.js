@@ -1,12 +1,13 @@
 import { parseCsv } from "./parseCsv.js";
 import { similarity } from "./distance.js";
+import { databaseHeaders } from "./file-constants.js";
 
 // External variable for database items map
 let databaseMap = new Map();
 let simplifiedMap = new Map();
-let userMap= new Map();
+let userMap = new Map();
 
-export function getUserMap(){
+export function getUserMap() {
   return userMap;
 }
 
@@ -28,7 +29,7 @@ export function setDatabaseMap(databaseItems) {
   });
 }
 
-export function getDatabaseMap(){
+export function getDatabaseMap() {
   return databaseMap;
 }
 
@@ -41,17 +42,17 @@ function simplifyString(str) {
   return str.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
 }
 
-function buildSimplifiedMap(databaseItems) {
-  const map = new Map();
-  databaseItems.forEach(item => {
-    const key = simplifyString(item.item_name);
-    if (!map.has(key)) {
-      map.set(key, []);
-    }
-    map.get(key).push(item);
-  });
-  return map;
-}
+// function buildSimplifiedMap(databaseItems) {
+//   const map = new Map();
+//   databaseItems.forEach(item => {
+//     const key = simplifyString(item.item_name);
+//     if (!map.has(key)) {
+//       map.set(key, []);
+//     }
+//     map.get(key).push(item);
+//   });
+//   return map;
+// }
 
 export function compareCsvDataToDB(databaseCsv, userCsv) {
   // Initialize the database map
@@ -60,22 +61,28 @@ export function compareCsvDataToDB(databaseCsv, userCsv) {
 
   const userItems = parseCsv(userCsv);
   //userMap=userItems;
-  const userCsvLines = userCsv.trim().split("\n");
+
+  // const dbHeaders =
+  // databaseMap.size > 0 ? Object.keys([...databaseMap.values()][0]) : [];
+
+  const dbHeaders = databaseHeaders;
 
 
-  const dbHeaders =
-    databaseMap.size > 0 ? Object.keys([...databaseMap.values()][0]) : [];
-  const userHeaders = userCsvLines[0]
-    ? userCsvLines[0].split(",").map((header) => header.trim())
-    : [];
+  // const userHeaders = userCsvLines[0]
+  // ? userCsvLines[0].split(",").map((header) => header.trim())
+  // : [];
 
-  let matchingItems = [dbHeaders.join(",")];
-  let partialMatches = [dbHeaders.join(",")];
-  let noMatches = [userHeaders.join(",")];
+  // let matchingItems = [dbHeaders.join(",")];
+  // let partialMatches = [dbHeaders.join(",")];
+  // let noMatches = [userHeaders.join(",")];
+
+  let matchingItems = [databaseHeaders.join(",")];
+  let partialMatches = [databaseHeaders.join(",")];
+  let noMatches = [databaseHeaders.join(",")];
 
   userItems.forEach((userItem) => {
-    if (!userItem.scan_code){
-      skip;
+    if (!userItem.scan_code) {
+      return;
     }
     userMap.set(userItem.scan_code, userItem);
 
@@ -86,7 +93,7 @@ export function compareCsvDataToDB(databaseCsv, userCsv) {
         // !findPartialMatches(userItem, partialMatches, userItemCsv, dbHeaders)
         !findPartialMatch(userItem, partialMatches, userItemCsv, dbHeaders)
       ) {
-          noMatches.push(userItemCsv); // Handle no matches
+        noMatches.push(userItemCsv); // Handle no matches
       }
     }
   });
@@ -95,7 +102,7 @@ export function compareCsvDataToDB(databaseCsv, userCsv) {
 }
 
 // Function to find exact matches
-function findExactMatches(userItem, matchingItems, userItemCsv, dbHeaders) {
+function findExactMatches(userItem, matchingItems, userItemCsv) {
   const matchingItem = databaseMap.get(userItem.scan_code);
   if (matchingItem) {
     // matchingItems.push(
@@ -109,7 +116,7 @@ function findExactMatches(userItem, matchingItems, userItemCsv, dbHeaders) {
   return false;
 }
 
-function findSimplifiedPartialMatches(userItem, partialMatches, userItemCsv, dbHeaders) {
+function findSimplifiedPartialMatches(userItem, partialMatches, userItemCsv) {
   const simplifiedUserItemName = simplifyString(userItem.item_name);
   const potentialMatches = simplifiedMap.get(simplifiedUserItemName) || [];
   let bestMatch = null;
@@ -132,13 +139,13 @@ function findSimplifiedPartialMatches(userItem, partialMatches, userItemCsv, dbH
 }
 
 
-function findExhaustivePartialMatches(userItem, partialMatches, userItemCsv, dbHeaders) {
+function findExhaustivePartialMatches(userItem, partialMatches, userItemCsv) {
   let bestMatch = null;
   let highestScore = 0;
 
   for (let dbItem of databaseMap.values()) {
     const score = similarity(userItem.item_name.trim().toLowerCase(), dbItem.item_name.trim().toLowerCase());
-    if (score>=0.9){
+    if (score >= 0.9) {
       partialMatches.push({ csv: userItemCsv, pair_id: bestMatch.scan_code });
       return true;
     }
@@ -165,37 +172,36 @@ function findPartialMatch(userItem, partialMatches, userItemCsv, dbHeaders) {
 }
 
 // Function to find partial matches
-function findPartialMatches(userItem, partialMatches, userItemCsv, dbHeaders) {
+// function findPartialMatches(userItem, partialMatches, userItemCsv, dbHeaders) {
 
-  const simplifiedMap = buildSimplifiedMap(databaseItems);
-  const simplifiedUserItemName = simplifyString(userItem.item_name);
-  const potentialMatches = simplifiedMap.get(simplifiedUserItemName) || [];
-  let bestMatch = null;
-  let highestScore = 0;
+//   const simplifiedMap = buildSimplifiedMap(databaseItems);
+//   const simplifiedUserItemName = simplifyString(userItem.item_name);
+//   const potentialMatches = simplifiedMap.get(simplifiedUserItemName) || [];
+//   let bestMatch = null;
+//   let highestScore = 0;
 
-  potentialMatches.forEach(dbItem => {
-    const score = similarity(userItem.item_name, dbItem.item_name);
-    if (score > highestScore) {
-      highestScore = score;
-      bestMatch = dbItem;
-    }
-  });
+//   potentialMatches.forEach(dbItem => {
+//     const score = similarity(userItem.item_name, dbItem.item_name);
+//     if (score > highestScore) {
+//       highestScore = score;
+//       bestMatch = dbItem;
+//     }
+//   });
 
-  const userDescription = userItem.item_name
-    ? userItem.item_name.trim().toLowerCase()
-    : "";
-  for (let dbItem of databaseMap.values()) {
-    const dbDescription = dbItem.item_name
-      ? dbItem.item_name.trim().toLowerCase()
-      : "";
-    if (similarity(userDescription, dbDescription) >= 0.7) {
-      // 70% similarity
-      partialMatches.push(userItemCsv, objectToCsvString(dbItem, dbHeaders));
-      return true;
-    }
-  }
-  return false;
-}
+//   const userDescription = userItem.item_name
+//     ? userItem.item_name.trim().toLowerCase()
+//     : "";
+//   for (let dbItem of databaseMap.values()) {
+//     const dbDescription = dbItem.item_name
+//       ? dbItem.item_name.trim().toLowerCase()
+//       : "";
+//     if (similarity(userDescription, dbDescription) >= 0.7) {
+//       // 70% similarity
+//       return true;
+//     }
+//   }
+//   return false;
+// }
 
 // Function to convert object to CSV string
 export function objectToCsvString(obj, headers) {
