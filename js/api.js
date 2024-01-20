@@ -4,10 +4,10 @@ export async function fetchInventory() {
     try {
       toggleLoading(true);
       console.log('fetching...');
-      const response = await fetch("/api/inventoryy");
+      const response = await fetch("/api/inventory");
       toggleLoading(false);
       if (!response.ok){
-        throw error;
+        throw new Error("Failed to fetch inventory");
       }
       return response.json();
     } catch (error) {
