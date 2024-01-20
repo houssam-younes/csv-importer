@@ -7,7 +7,7 @@ export async function fetchInventory() {
       const response = await fetch("/api/inventory");
       toggleLoading(false);
       if (!response.ok){
-        throw new Error("Failed to fetch inventory");
+        throw new Error("Failed - Could not fetch inventory");
       }
       return response.json();
     } catch (error) {
