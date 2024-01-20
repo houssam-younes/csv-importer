@@ -92,11 +92,11 @@ export function createCsvTableNew(rows, type) {
     <div class="average-info">
       <div class="stats-group price-stats">
         <p>Average % Price Difference: ${formatDifference(averagePricePercentageDiff)}%</p>
-        <p>Average Total Price Difference: ${formatDifference(averagePriceTotalDiff)} $</p>
+        <p>Average Price Difference: ${formatDifference(averagePriceTotalDiff)} $</p>
       </div>
       <div class="stats-group cost-stats">
         <p>Average % Cost Difference: ${formatDifference(averageCostPercentageDiff, true)}%</p>
-        <p>Average Total Cost Difference: ${formatDifference(averageCostTotalDiff, true)} $</p>
+        <p>Average Cost Difference: ${formatDifference(averageCostTotalDiff, true)} $</p>
       </div>
      </div>
     `;

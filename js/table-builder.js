@@ -115,7 +115,7 @@ function addCostCompareToTD(cellValue, pair_id) {
 
   const colorClass = percentageDifference >= 0 ? "red-color-class" : "green-color-class";
 
-  let costDisplayPercentageMessage= `${percentageDisplay}% compared to database`;
+  let costDisplayPercentageMessage= `${percentageDisplay}% Compared To Database`;
   if (databaseCost === 0){
     costDisplayPercentageMessage= "N/A";
   }
