@@ -95,8 +95,8 @@ export function createCsvTableNew(rows, type) {
         <p>Average Total Price Difference: ${formatDifference(averagePriceTotalDiff)} $</p>
       </div>
       <div class="stats-group cost-stats">
-        <p>Average % Cost Difference: ${formatDifference(averageCostPercentageDiff)}%</p>
-        <p>Average Total Cost Difference: ${formatDifference(averageCostTotalDiff)} $</p>
+        <p>Average % Cost Difference: ${formatDifference(averageCostPercentageDiff, true)}%</p>
+        <p>Average Total Cost Difference: ${formatDifference(averageCostTotalDiff, true)} $</p>
       </div>
      </div>
     `;
@@ -108,10 +108,10 @@ export function createCsvTableNew(rows, type) {
   return table;
 }
 
-function formatDifference(value) {
+function formatDifference(value, inverted = false) {
   const formattedValue = value.toFixed(2);
   const sign = value >= 0 ? "+" : "";
-  const colorClass = value >= 0 ? "positive-diff" : "negative-diff";
+  const colorClass= ( value >= 0 && !inverted) ? "positive-diff" : "negative-diff"; 
   return `<span class="${colorClass}">${sign}${formattedValue}</span>`;
 }
 
