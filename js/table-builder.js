@@ -179,7 +179,7 @@ function addPriceCompareToTD(cellValue, pair_id) {
      <div class="compare-td-container">
       <div class="price-container">${cellValue}</div>
         <div class="price-info-container">
-          <span class="price-info ${colorClass}">${percentageDisplay}% compared to database</span>
+          <span class="price-info ${colorClass}">${percentageDisplay}% Compared To Database</span>
           <span class="price-difference ${colorClass}">Difference: ${priceDifferenceDisplay}</span>
         </div>
       </div>  
