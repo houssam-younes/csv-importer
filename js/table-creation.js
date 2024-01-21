@@ -100,9 +100,9 @@ export function createCsvTableNew(rows, type) {
       </div>
      </div>
     `;
-    console.log('row type no match ');
+    // console.log('row type no match ');
     // console.log(PricePercentageArray);
-    console.log(CostPercentageArray);
+    // console.log(CostPercentageArray);
     resetPriceCostTables();
   }
   return table;
