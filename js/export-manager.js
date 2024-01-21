@@ -3,34 +3,101 @@ import { getDatabaseCsvHeaders } from "./data-manager.js";
 import { objectToCsvString } from "./comparison.js";
 import { getUserMap } from "./comparison.js";
 import { RowSource } from "./table.js";
-
+import { databaseHeaders, columnsForUpdate } from "./file-constants.js";
 
 // Global map to track selected rows
 const selectedRowsMap = new Map();
 
-export function updateSelectedRows(id, rowSource, isChecked) {
-  if (isChecked) {
-    let entry=null;
-    entry = getEntryBySouce(id, rowSource);
-    if (entry){
-      selectedRowsMap.set(id, entry);
-    }
-  } else {
-    deleteSelectedRows(id);
-  }
-  // console.log(selectedRowsMap);
-}
+// export function updateSelectedRows(id, rowSource, isChecked, pairId) {
+//   if (isChecked) {
+//     let entry=null;
+//     entry = getEntryBySouce(id, rowSource);
+//     if (entry){
+//       selectedRowsMap.set(id, entry);
+//     }
+//   } else {
+//     deleteSelectedRows(id);
+//   }
+//   // console.log(selectedRowsMap);
+// }
 
-function getEntryBySouce(id, rowSource){
-  let entry=null;
-  if (rowSource == RowSource.DATABASE){
-    entry= getDatabaseMap().get(id);
+export function updateSelectedRows(id, rowSource, isChecked, pairId) {
+  if (!isChecked) {
+    deleteSelectedRows(id);
+    return;
   }
-  else if (rowSource == RowSource.USER){
+
+  let entry = null;
+  if (rowSource === RowSource.DATABASE) {
+    entry = updateUserEntryFromDatabase(id, pairId);
+  } else if (rowSource === RowSource.USER) {
     entry = getUserMap().get(id);
   }
-  return entry;
+
+  if (entry) {
+    selectedRowsMap.set(id, entry);
+  }
 }
+
+function updateUserEntryFromDatabase(databaseId, pairId) {
+  const dbEntry = getDatabaseMap().get(databaseId);
+  const userEntryOriginal = getUserMap().get(pairId);
+
+  if (!dbEntry || !userEntryOriginal) {
+    return null;
+  }
+
+  // Create a shallow copy of the user entry
+  const userEntryCopy = { ...userEntryOriginal };
+
+  columnsForUpdate.forEach(header => {
+    if (Object.prototype.hasOwnProperty.call(dbEntry, header) && 
+        Object.prototype.hasOwnProperty.call(userEntryCopy, header)) {
+          userEntryCopy[header] = dbEntry[header];
+    }
+  });
+
+  return userEntryCopy;
+}
+
+// export function updateSelectedRows(id, rowSource, isChecked, pairId) {
+//   if (isChecked) {
+//     let entry = null;
+//     if (rowSource == RowSource.DATABASE) {
+//       const dbEntry = getDatabaseMap().get(id);
+//       const userEntry = getUserMap().get(pairId);
+//       if (dbEntry && userEntry) {
+//         // Iterate through the databaseHeaders array
+//         databaseHeaders.forEach(header => {
+//           // Check if the key exists in both entries and update user entry if it does
+//           if (dbEntry.hasOwnProperty(header) && userEntry.hasOwnProperty(header)) {
+//             userEntry[header] = dbEntry[header];
+//           }
+//         });
+//         entry = userEntry;
+//       }
+//     } else if (rowSource == RowSource.USER) {
+//       entry = getUserMap().get(id);
+//     }
+//     if (entry) {
+//       selectedRowsMap.set(id, entry);
+//     }
+//   } else {
+//     deleteSelectedRows(id);
+//   }
+//   // console.log(selectedRowsMap);
+// }
+
+// function getEntryBySouce(id, rowSource){
+//   let entry=null;
+//   if (rowSource == RowSource.DATABASE){
+//     entry= getDatabaseMap().get(id);
+//   }
+//   else if (rowSource == RowSource.USER){
+//     entry = getUserMap().get(id);
+//   }
+//   return entry;
+// }
 
 export function deleteSelectedRows(id) {
   if (selectedRowsMap.get(id)){

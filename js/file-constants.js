@@ -18,6 +18,12 @@ export const databaseHeaders = [
   'price',
 ];
 
+export const columnsForUpdate = [
+  'cost',
+  'price',
+  'department'
+];
+
 export const CELL_INDICES = {
   price: 5, // Assuming the 'price' cell is usually at index 5
   cost: 4

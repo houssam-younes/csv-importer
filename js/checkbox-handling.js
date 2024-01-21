@@ -20,7 +20,7 @@ export function handleCheckboxChange(event) {
 
     const currentRowSource = currentRow.classList.contains(RowSource.USER) ? RowSource.USER : RowSource.DATABASE;
 
-    updateSelectedRows(dataID, currentRowSource, isChecked);
+    updateSelectedRows(dataID, currentRowSource, isChecked, pairId);
     // Only proceed if the checkbox is being checked
     if (isChecked) {
         if (pairId) {
