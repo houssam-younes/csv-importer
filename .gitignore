@@ -2,4 +2,5 @@
 .DS_Store
 db.js
 node_modules/
+/resources
 .eslintrc.js

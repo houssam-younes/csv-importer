@@ -9,12 +9,10 @@ import { resetPriceCostTables, calculateAverage, PricePercentageArray, PriceDiff
 //   }
 
 export function createCsvTableNew(rows, type) {
-  // let table = '<table id="csvTable">';
-  let table = `<table id="csvTable_${type}" class="csvTable">`;
-
-  if (!areHeadersMatching(rows[0])) {
-    return "<p>Error: CSV headers do not match the database headers.</p>";
-  }
+  let table = `<div class='table-div'> <table id="csvTable_${type}" class="csvTable">`;
+  // if (!areHeadersMatching(rows[0])) {
+    // return "<p>Error: CSV headers do not match the database headers.</p>";
+  // }
 
   // Add table headers (assuming the first row contains headers)
   const headers = rows[0].split(",").map((header) => header.trim());
@@ -31,11 +29,13 @@ export function createCsvTableNew(rows, type) {
     if (typeof rows[i] === "object" && rows[i].pair_id) {
       // Extract user row details
       const userRow = rows[i];
-      // console.log(userRow.csv);
       const dbItemId = userRow.pair_id;
       const dbItem = databaseMap.get(dbItemId);
+
       const userCells = userRow.csv.split(",").map((cell) => cell.trim());
+
       const userItemId = userCells[0];
+
       const dbCells = dbItem
         // ? objectToCsvString(dbItem, dbHeaders)
         ? objectToCsvString(dbItem, databaseHeaders)
@@ -79,7 +79,7 @@ export function createCsvTableNew(rows, type) {
     }
   }
 
-  table += "</table>";
+  table += "</table></div>";
   if (type !== RowTypes.NO_MATCH) {
     const averagePricePercentageDiff = calculateAverage(PricePercentageArray);
     const averagePriceTotalDiff = calculateAverage(PriceDifferenceArrayTypeMatching);
@@ -100,9 +100,6 @@ export function createCsvTableNew(rows, type) {
       </div>
      </div>
     `;
-    // console.log('row type no match ');
-    // console.log(PricePercentageArray);
-    // console.log(CostPercentageArray);
     resetPriceCostTables();
   }
   return table;

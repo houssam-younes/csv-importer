@@ -34,6 +34,8 @@ export function areHeadersMatching(userHeaders) {
 }
 
 export function generateRowHtml(cells, rowClass, pair_id, index, type) {
+  if (rowClass.includes('no-match-')){
+  }
   pair_id = pair_id || "";
   const modifiedCells = [...cells];
   const checkboxHtml = `<input type="checkbox" class="row-checkbox" data-pair-id="${pair_id}" name="rowSelect${index}">`;

@@ -7,13 +7,30 @@
     <title>CSV Importer</title>
     <link rel="stylesheet" href="styles/index.css">
     <link rel="stylesheet" href="styles/legend.css">
+    <link rel="stylesheet" href="styles/how-to-use.css">
     <link rel="stylesheet" href="styles/select-radio-buttons.css">
 </head>
 
 <body>
     <header>
+        <button id="homeBtn" class="home-btn">Home</button>
         <h1 class="back-header">CSV File Importer</h1>
+        <button id="howToUseBtn" class="how-to-use-btn">How to Use</button>
     </header>
+    <div id="asideContainer" class="aside-container">
+        <aside id="howToUseAside" class="how-to-use-aside">
+            <!-- Aside content here -->
+            <h2>Instructions</h2>
+            <p>Import a CSV file that contains the required headers:</p>
+            <ul>
+                <li>scan_code</li>
+                <li>item_name</li>
+                <li>cost</li>
+                <li>price</li>
+            </ul>
+        </aside>
+        <button id="closeAsideBtn" class="close-aside-btn">&times;</button>
+    </div>
     <main>
         <div class="legend">
             <p><strong>Bold</strong> - Database Entry</p>
@@ -33,7 +50,9 @@
                 <button class="expandable-title">Matching Items</button>
                 <div class="expandable-content">
                     <div class="table-container">
-                        <!-- table goes here -->
+                        <!-- <div class="table-div"> -->
+                        <!-- table div goes here -->
+                        <!-- </div> -->
                     </div>
                 </div>
             </div>
@@ -41,7 +60,9 @@
                 <button class="expandable-title">Partial Matches</button>
                 <div class="expandable-content">
                     <div class="table-container">
-                        <!--table goes here -->
+                        <!-- <div class="table-div"> -->
+                        <!--table div goes here -->
+                        <!-- </div> -->
                     </div>
                 </div>
             </div>
@@ -49,7 +70,9 @@
                 <button class="expandable-title">No Matches</button>
                 <div class="expandable-content">
                     <div class="table-container">
-                        <!--table goes here -->
+                        <!-- <div class="table-div"> -->
+                        <!--table div goes here -->
+                        <!-- </div> -->
                     </div>
                 </div>
             </div>
@@ -63,6 +86,7 @@
         <p>© 2023 *Company</p>
     </footer>
     <script type="module" src="js/main.js"></script>
+    <script type="module" src="js/how-to-use/how-to-use.js"></script>
 </body>
 
 </html>

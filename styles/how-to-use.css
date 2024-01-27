@@ -1,0 +1,70 @@
+.aside-container {
+  position: fixed;
+  top: 0;
+  right: -350px; /* Width of the aside plus a bit more for the button */
+  width: 310px; /* Slightly wider than the aside to accommodate the button */
+  height: 100vh;
+  transition: right 0.3s ease-in-out; /* Slide-in effect */
+  z-index: 1000; /* Ensure it's above other content */
+}
+
+.aside-container.open {
+  right: 0; /* Slide the container (and thus the aside and button) into view */
+}
+
+.how-to-use-aside {
+  width: 300px; /* Original width for the aside */
+  height: 100%;
+  background-color: #f9f9f9;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.how-to-use-btn {
+  position: absolute;
+  right: 20px;
+  padding: 7px 14px;
+  font-size: 12px;
+  margin-right: 20px;
+  color: whitesmoke;
+  background-color: #36454f;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#homeBtn {
+  position: absolute;
+  left: 20px;
+  padding: 7px 14px;
+  font-size: 12px;
+  margin-right: 20px;
+  color: whitesmoke;
+  background-color: #36454f;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.close-aside-btn {
+  position: absolute;
+  right: 100%; /* Position the button to the left of the aside */
+  top: 10px;
+  margin-right: 10px; /* Adjust the gap between the button and the aside */
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  padding: 0;
+  font-size: 18px;
+  color: #495057;
+  background-color: transparent;
+  border: 1px solid #495057;
+  border-radius: 50%;
+  cursor: pointer;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

@@ -1,3 +1,7 @@
+:root {
+  --checkbox-width: 30px;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -57,9 +61,12 @@ main {
 }
 
 .csvTable {
-  min-width: 90%;
+  min-width: calc(90% - var(--checkbox-width));
+  max-width: calc(90% - var(--checkbox-width));
   border-collapse: collapse;
   margin: 0 auto; /* Centering the table */
+  position: relative;
+  left: var(--checkbox-width);
 }
 
 .csvTable th,
@@ -167,6 +174,7 @@ footer::before {
 .expandable .expandable-content {
   display: block;
   background-color: snow;
+  overflow: auto;
 }
 
 .expandable-title {
@@ -188,10 +196,18 @@ footer::before {
 }
 
 .table-container {
-  padding: 20px 10px;
+  padding: 20px 0px;
   overflow: scroll;
   max-height: 100vh;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.table-div {
+  overflow: scroll;
+  padding-right: var(--checkbox-width);
+  max-height: 100vh;
 }
 
 .button-container {
@@ -336,6 +352,7 @@ footer::before {
   justify-content: center;
   align-items: center;
   padding: 20px;
+  padding-top: 30px;
 }
 
 .average-info div {
@@ -350,7 +367,6 @@ footer::before {
   align-items: flex-start;
 }
 
-.table-container,
 .averages-container {
   margin-bottom: 20px;
 }
@@ -375,4 +391,14 @@ footer::before {
 .cost-stats p {
   margin: 5px 0;
   /* font-weight: bold; Optional: Makes text bold */
+}
+
+.file-error {
+  color: red;
+  margin-bottom: 5px;
+}
+
+.overflow-adjustment {
+  position: relative;
+  left: 30px;
 }

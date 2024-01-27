@@ -1,6 +1,7 @@
 import { parseCsv } from "./parseCsv.js";
 import { similarity } from "./distance.js";
 import { databaseHeaders } from "./file-constants.js";
+import { setGlobalErrorMessage, clearGlobalErrorMessage } from './file-error.js'; // Adjust the path as needed
 
 // External variable for database items map
 let databaseMap = new Map();
@@ -54,51 +55,79 @@ function simplifyString(str) {
 //   return map;
 // }
 
-export function compareCsvDataToDB(databaseCsv, userCsv) {
+export async function compareCsvDataToDB(databaseCsv, userCsv) {
   // Initialize the database map
   setDatabaseMap(databaseCsv);
-  // const simplifiedMap = buildSimplifiedMap([...databaseMap.values()]);
-
   const userItems = parseCsv(userCsv);
-  //userMap=userItems;
-
-  // const dbHeaders =
-  // databaseMap.size > 0 ? Object.keys([...databaseMap.values()][0]) : [];
-
-  const dbHeaders = databaseHeaders;
-
-
-  // const userHeaders = userCsvLines[0]
-  // ? userCsvLines[0].split(",").map((header) => header.trim())
-  // : [];
-
-  // let matchingItems = [dbHeaders.join(",")];
-  // let partialMatches = [dbHeaders.join(",")];
-  // let noMatches = [userHeaders.join(",")];
 
   let matchingItems = [databaseHeaders.join(",")];
   let partialMatches = [databaseHeaders.join(",")];
-  let noMatches = [databaseHeaders.join(",")];
+  
+  const userHeaders = userItems.length > 0 ? Object.keys(userItems[0]) : [];
+  let noMatches = [userHeaders.join(",")];
+
+   // Check if any user header matches the database headers
+   const anyHeaderMatches = databaseHeaders.some(header => userHeaders.includes(header));
+
+   // If no header matches, set a global error message
+   if (!anyHeaderMatches) {
+       setGlobalErrorMessage("Headers do not match database headers.");
+   } else {
+       // If some headers match, check for missing headers and list them if any
+       const missingHeaders = databaseHeaders.filter(header => !userHeaders.includes(header));
+       if (missingHeaders.length > 0) {
+           const errorMessage = `Missing required headers: ${missingHeaders.join(', ')}`;
+           setGlobalErrorMessage(errorMessage);
+       } else {
+           clearGlobalErrorMessage(); // Clear any previous error message if all headers are correct
+       }
+   }
+
+  await new Promise(resolve => {
+    setTimeout(resolve, 2000); // Wait for 2 seconds
+  });
+
 
   userItems.forEach((userItem) => {
     if (!userItem.scan_code) {
+      const userItemCsv = objectToCsvString(userItem, userHeaders); // Use user headers here
+      noMatches.push(userItemCsv);
       return;
     }
     userMap.set(userItem.scan_code, userItem);
 
-    const userItemCsv = objectToCsvString(userItem, dbHeaders);
+    let userItemCsv = objectToCsvString(userItem, databaseHeaders);
 
-    if (!findExactMatches(userItem, matchingItems, userItemCsv, dbHeaders)) {
+    if (!findExactMatches(userItem, matchingItems, userItemCsv)) {
       if (
-        // !findPartialMatches(userItem, partialMatches, userItemCsv, dbHeaders)
-        !findPartialMatch(userItem, partialMatches, userItemCsv, dbHeaders)
+        !findPartialMatch(userItem, partialMatches, userItemCsv, databaseHeaders)
       ) {
-        noMatches.push(userItemCsv); // Handle no matches
+        userItemCsv = objectToCsvString(userItem, userHeaders); 
+        noMatches.push(userItemCsv);
       }
     }
   });
 
   return { matchingItems, partialMatches, noMatches };
+}
+
+function displayErrorMessage(errorMessage) {
+  // Remove existing error message, if any
+  const existingError = document.getElementById('errorContainer');
+  if (existingError) {
+    existingError.parentNode.removeChild(existingError);
+  }
+
+  // Create and insert the new error message
+  const errorContainer = document.createElement('div');
+  errorContainer.setAttribute('id', 'errorContainer');
+  errorContainer.style.color = 'red';
+  errorContainer.style.fontWeight = 'bold';
+  errorContainer.style.marginTop = '20px';
+  errorContainer.innerHTML = `<span style="color: red;">⚠️</span> ${errorMessage}`;
+
+  const mainElement = document.querySelector('main');
+  mainElement.insertBefore(errorContainer, mainElement.firstChild); // Insert at the top of the main element
 }
 
 // Function to find exact matches
@@ -205,13 +234,24 @@ function findPartialMatch(userItem, partialMatches, userItemCsv, dbHeaders) {
 
 // Function to convert object to CSV string
 export function objectToCsvString(obj, headers) {
-  return headers
-    .map((header) => {
-      const value = obj[header] ? obj[header].toString() : "";
-      if (value.includes(",") || value.includes("\n") || value.includes('"')) {
-        return `"${value.replace(/"/g, '""')}"`;
-      }
-      return value;
-    })
-    .join(",");
+  // Create an empty array to store the CSV values
+  const csvValues = [];
+
+  // Iterate through each header
+  for (const header of headers) {
+    // Retrieve the corresponding value from the object, using a ternary operator for conciseness
+    const value = obj[header] ? obj[header].toString() : "";
+
+    // Check if the value needs quoting
+    if (value.includes(",") || value.includes("\n") || value.includes('"')) {
+      // Quote the value and escape any existing double quotes
+      csvValues.push(`"${value.replace(/"/g, '""')}"`);
+    } else {
+      // Add the value without quotes
+      csvValues.push(value);
+    }
+  }
+
+  // Join the CSV values with commas and return the string
+  return csvValues.join(",");
 }

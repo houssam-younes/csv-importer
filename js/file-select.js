@@ -11,10 +11,11 @@ export async function handleFileSelect(event, databaseCsv) {
       toggleLoading(false);
       return;
     }
-    processCsvFile(file, databaseCsv, (databaseData, userData) => {
-      const { matchingItems, partialMatches, noMatches } = compareCsvDataToDB(databaseData, userData);
+    processCsvFile(file, databaseCsv, async (databaseData, userData) => {
+      const { matchingItems, partialMatches, noMatches } = await compareCsvDataToDB(databaseData, userData);
       displayResults(matchingItems, partialMatches, noMatches);
       toggleLoading(false);
+      // window.location.href = 'results.html';
       switchView("tableView");
     });
   }

@@ -13,7 +13,6 @@ export const databaseHeaders = [
   'scan_code',
   'item_name',
   'department',
-  'vendor',
   'cost',
   'price',
 ];
@@ -24,8 +23,15 @@ export const columnsForUpdate = [
   'department'
 ];
 
+// Calculate cell indices for 'price' and 'cost' during module initialization
 export const CELL_INDICES = {
-  price: 5, // Assuming the 'price' cell is usually at index 5
-  cost: 4
-  // ... other cell indices
+  price: null,
+  cost: null
 };
+
+columnsForUpdate.forEach((columnName) => {
+  const columnIndex = databaseHeaders.indexOf(columnName);
+  if (columnIndex !== -1) {
+    CELL_INDICES[columnName] = columnIndex;
+  }
+});

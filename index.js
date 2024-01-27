@@ -22,6 +22,15 @@ app.get('/api/inventory', async (req, res) => {
     }
 });
 
+
+app.get('/compare', (req, res) => {
+  // Option 1: Serve a specific HTML file
+  res.sendFile(__dirname + '/compare.html');
+
+  // Option 2: Render a template (if using a template engine like EJS, Pug, etc.)
+  // res.render('compare', { results: null }); // Assuming 'compare' is your template file
+});
+
 // Existing route to serve static files (if needed)
 // app.get('/', (req, res) => {
 //   res.sendFile(__dirname + '/index.html'); // Assuming you have an index.html in your project root

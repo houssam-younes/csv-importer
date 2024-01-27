@@ -24,122 +24,126 @@ function areHeadersMatching(userHeaders) {
   );
 }
 
-export function createCsvTable(rows, type) {
-  let table = '<table id="csvTable">';
+// export function createCsvTable(rows, type) {
+//   let table = '<table id="csvTable">';
 
-  if (!areHeadersMatching(rows[0])) {
-    return "<p>Error: CSV headers do not match the database headers.</p>";
-  }
+//   if (!areHeadersMatching(rows[0])) {
+//     return "<p>Error: CSV headers do not match the database headers.</p>";
+//   }
 
-  // Add table headers (assuming the first row contains headers)
-  const headers = rows[0].split(",").map((header) => header.trim());
-  const headerRow = headers.map((header) => `<th>${header}</th>`).join("");
-  table += `<tr>${headerRow}</tr>`;
+//   // Add table headers (assuming the first row contains headers)
+//   const headers = rows[0].split(",").map((header) => header.trim());
+//   const headerRow = headers.map((header) => `<th>${header}</th>`).join("");
+//   table += `<tr>${headerRow}</tr>`;
 
-  function getRowClass(index, type) {
-    if (type === RowTypes.NO_MATCH) {
-      return "no-match-user-row";
-    }
-    return index % 2 === 0 ? `${type}-database-row` : `${type}-user-row`;
-  }
+//   function getRowClass(index, type) {
+//     if (type === RowTypes.NO_MATCH) {
+//       return "no-match-user-row";
+//     }
+//     return index % 2 === 0 ? `${type}-database-row` : `${type}-user-row`;
+//   }
 
-  // Add each data row to the table
-  for (let i = 1; i < rows.length; i++) {
-    const cells = rows[i].split(",").map((cell) => cell.trim());
-    const rowClass = getRowClass(i, type);
+//   // Add each data row to the table
+//   for (let i = 1; i < rows.length; i++) {
+//     const cells = rows[i].split(",").map((cell) => cell.trim());
+//     const rowClass = getRowClass(i, type);
 
-    const checkboxHtml = `<input type="checkbox" class="row-checkbox" name="rowSelect${i}">`;
-    // Embed the checkbox within the first cell of the row
-    cells[0] = `${checkboxHtml}<span class="cell-content">${cells[0]}</span>`;
+//     const checkboxHtml = `<input type="checkbox" class="row-checkbox" name="rowSelect${i}">`;
+//     // Embed the checkbox within the first cell of the row
+//     cells[0] = `${checkboxHtml}<span class="cell-content">${cells[0]}</span>`;
 
-    const rowHtml = cells.map((cell) => `<td class="relative-td">${cell}</td>`).join("");
-    table += `<tr class="${rowClass}" name="${i}">${rowHtml}</tr>`;
+//     const rowHtml = cells.map((cell) => `<td class="relative-td">${cell}</td>`).join("");
+//     table += `<tr class="${rowClass}" name="${i}">${rowHtml}</tr>`;
 
-    //table += `<tr class="${rowClass}">${rowHtml}</tr>`;
-  }
+//     //table += `<tr class="${rowClass}">${rowHtml}</tr>`;
+//   }
 
-  // const modifiedRows = addSelectionOptionsToRows(rows, type);
-  // modifiedRows.forEach(rowHtml => {
-  //   table += `<tr>${rowHtml}</tr>`;
-  // });
+//   // const modifiedRows = addSelectionOptionsToRows(rows, type);
+//   // modifiedRows.forEach(rowHtml => {
+//   //   table += `<tr>${rowHtml}</tr>`;
+//   // });
 
-  table += "</table>";
+//   table += "</table>";
 
-  return table;
-}
+//   return table;
+// }
 
-export function createCsvTableNew(rows, type) {
-  // let table = '<table id="csvTable">';
-  let table = `<table id="csvTable_${type}" class="csvTable">`;
+// export function createCsvTableNew(rows, type) {
+//   // let table = '<table id="csvTable">';
+//   let table = `<table id="csvTable_${type}" class="csvTable">`;
 
-  if (!areHeadersMatching(rows[0])) {
-    return "<p>Error: CSV headers do not match the database headers.</p>";
-  }
+//   // if (!areHeadersMatching(rows[0])) {
+//     // return "<p>Error: CSV headers do not match the database headers.</p>";
+//   // }
 
-  // Add table headers (assuming the first row contains headers)
-  const headers = rows[0].split(",").map((header) => header.trim());
-  const headerRow = headers.map((header) => `<th>${header}</th>`).join("");
-  const databaseMap=getDatabaseMap();
-  const dbHeaders = Object.keys([...databaseMap.values()][0]);
+//   // Add table headers (assuming the first row contains headers)
+//   const headers = rows[0].split(",").map((header) => header.trim());
+//   const headerRow = headers.map((header) => `<th>${header}</th>`).join("");
+//   const databaseMap=getDatabaseMap();
+//   const dbHeaders = Object.keys([...databaseMap.values()][0]);
 
-  table += `<tr>${headerRow}</tr>`;
+//   table += `<tr>${headerRow}</tr>`;
 
-  // ...existing setup code for headers...
+//   // ...existing setup code for headers...
 
-  // Loop through rows starting from index 1, since index 0 contains headers
-  for (let i = 1; i < rows.length; i++) {
-    // Check if row is an object with a pair_id (scan_code), indicating a user row
-    if (typeof rows[i] === 'object' && rows[i].pair_id) {
-      // Extract user row details
-      const userRow = rows[i];
-      // console.log(userRow.csv);
-      const dbItemId=userRow.pair_id;
-      const dbItem = databaseMap.get(dbItemId);
-      const userCells = userRow.csv.split(",").map(cell => cell.trim());
-      const userItemId= userCells[0];
-      const dbCells = dbItem ? objectToCsvString(dbItem, dbHeaders).split(",").map(cell => cell.trim()) : [];
+//   // Loop through rows starting from index 1, since index 0 contains headers
+//   for (let i = 1; i < rows.length; i++) {
+//     console.log('rows ', rows);
+//     // Check if row is an object with a pair_id (scan_code), indicating a user row
+//     if (typeof rows[i] === 'object' && rows[i].pair_id) {
+//       console.log('whatssss type'+type);
+//       // Extract user row details
+//       const userRow = rows[i];
+//       // console.log(userRow.csv);
+//       const dbItemId=userRow.pair_id;
+//       const dbItem = databaseMap.get(dbItemId);
+//       const userCells = userRow.csv.split(",").map(cell => cell.trim());
+//       const userItemId= userCells[0];
+//       const dbCells = dbItem ? objectToCsvString(dbItem, dbHeaders).split(",").map(cell => cell.trim()) : [];
 
-      // Generate HTML for user row
-      const userRowHtml = generateRowHtml(userCells, `user-row ${type}-user-row ${userItemId}`, userRow.pair_id, i, type);
-      // Generate HTML for corresponding DB row
-      // userCells[0] is user item scan_id
-      const dbRowHtml = dbItem ? generateRowHtml(dbCells, `database-row ${type}-database-row ${dbItemId}`, userItemId, i, type) : '';
+//       // Generate HTML for user row
+//       const userRowHtml = generateRowHtml(userCells, `user-row ${type}-user-row ${userItemId}`, userRow.pair_id, i, type);
+//       // Generate HTML for corresponding DB row
+//       // userCells[0] is user item scan_id
+//       const dbRowHtml = dbItem ? generateRowHtml(dbCells, `database-row ${type}-database-row ${dbItemId}`, userItemId, i, type) : '';
       
 
-      // Add both rows to the table HTML
-      table += dbRowHtml + userRowHtml ;
-    } else if (type === RowTypes.NO_MATCH) {
-      // No matches don't have a pair_id, process normally
-      const cells = rows[i].split(",").map(cell => cell.trim());
-      const rowHtml = generateRowHtml(cells, 'no-match-user-row user-row', null, i, type);
-      table += rowHtml;
-    }
-  }
+//       // Add both rows to the table HTML
+//       table += dbRowHtml + userRowHtml ;
+//     } else if (type === RowTypes.NO_MATCH) {
+//       console.log('whats rows ');
+//       console.log(rows[i]);
+//       // No matches don't have a pair_id, process normally
+//       const cells = rows[i].split(",").map(cell => cell.trim());
+//       const rowHtml = generateRowHtml(cells, 'no-match-user-row user-row', null, i, type);
+//       table += rowHtml;
+//     }
+//   }
 
-  table += "</table>";
-  return table;
-}
+//   table += "</table>";
+//   return table;
+// }
 
-function generateRowHtml(cells, rowClass, pair_id, index, type) {
-  pair_id= pair_id ? pair_id : '';
-  const modifiedCells = [...cells];
-  const checkboxHtml = `<input type="checkbox" class="row-checkbox" data-pair-id="${pair_id}" name="rowSelect${index}">`;
-  modifiedCells[0] = `${checkboxHtml}<span class="cell-content">${cells[0]}</span>`;
+// function generateRowHtml(cells, rowClass, pair_id, index, type) {
+//   pair_id= pair_id ? pair_id : '';
+//   const modifiedCells = [...cells];
+//   const checkboxHtml = `<input type="checkbox" class="row-checkbox" data-pair-id="${pair_id}" name="rowSelect${index}">`;
+//   modifiedCells[0] = `${checkboxHtml}<span class="cell-content">${cells[0]}</span>`;
 
 
-  // Determine the additional class for alternating colors
-  let colorClass = '';
-  if (type === RowTypes.MATCHING || type === RowTypes.PARTIAL) {
-    //colorClass = Math.floor((index - 1) / 2) % 2 === 0 ? `${type}-row-1` : `${type}-row-2`;
-    colorClass = (index % 2) === 0 ? `${type}-row-2` : `${type}-row-1`;
-  } 
-  // else if (type === RowTypes.NO_MATCH) {
-    // colorClass = 'no-match-user-row';
-  // }
+//   // Determine the additional class for alternating colors
+//   let colorClass = '';
+//   if (type === RowTypes.MATCHING || type === RowTypes.PARTIAL) {
+//     //colorClass = Math.floor((index - 1) / 2) % 2 === 0 ? `${type}-row-1` : `${type}-row-2`;
+//     colorClass = (index % 2) === 0 ? `${type}-row-2` : `${type}-row-1`;
+//   } 
+//   // else if (type === RowTypes.NO_MATCH) {
+//     // colorClass = 'no-match-user-row';
+//   // }
 
-  const rowHtml = modifiedCells.map(cell => `<td class="relative-td">${cell}</td>`).join("");
-  return `<tr class="${rowClass} ${colorClass}" data-id="${cells[0]}" data-pair-id="${pair_id}">${rowHtml}</tr>`;
-}
+//   const rowHtml = modifiedCells.map(cell => `<td class="relative-td">${cell}</td>`).join("");
+//   return `<tr class="${rowClass} ${colorClass}" data-id="${cells[0]}" data-pair-id="${pair_id}">${rowHtml}</tr>`;
+// }
 
 
 export function displayResults(matchingItems, partialMatches, noMatches) {
