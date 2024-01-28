@@ -4,6 +4,7 @@ import { objectToCsvString } from "./comparison.js";
 import { RowTypes } from "./file-constants.js";
 import { databaseHeaders } from "./file-constants.js";
 import { resetPriceCostTables, calculateAverage, PricePercentageArray, PriceDifferenceArrayTypeMatching, CostDifferenceArrayTypeMatching, CostPercentageArray } from "./table-builder.js";
+import { originalUserHeaders } from "./user-header-to-db-header.js";
 // export function createCsvTable(rows, type) {
 // ... implementation (using areHeadersMatching and generateRowHtml) ...
 //   }
@@ -19,7 +20,15 @@ export function createCsvTableNew(rows, type) {
   const headerRow = headers.map((header) => `<th>${header}</th>`).join("");
   const databaseMap = getDatabaseMap();
 
-  table += `<tr>${headerRow}</tr>`;
+  if (type === RowTypes.NO_MATCH)
+  {
+    // const userHeaders = rows[0].split(",").map((header) => header.trim());
+    const userHeaderRow = originalUserHeaders.map((userHeader) => `<th>${userHeader}</th>`).join("");
+    table += `<tr>${userHeaderRow}</tr>`;
+  }
+  else{
+    table += `<tr>${headerRow}</tr>`;
+  }
 
   // ...existing setup code for headers...
 

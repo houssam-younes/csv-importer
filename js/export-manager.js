@@ -181,6 +181,11 @@ export function deleteSelectedRows(id) {
 
 export function exportSelectedRowsToCsv() {
   if (selectedRowsMap.size === 0) {
+    const checkboxes = document.querySelectorAll('input.row-checkbox:checked');
+    if (checkboxes.length != 0) {
+        alert("Please make sure file includes required headers");
+        return;
+    }
       alert("No Rows Selected");
       return;
   }
