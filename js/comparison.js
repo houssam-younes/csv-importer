@@ -1,7 +1,9 @@
 import { parseCsv } from "./parseCsv.js";
 import { similarity } from "./distance.js";
-import { databaseHeaders } from "./file-constants.js";
+import { databaseHeaders, userHeaderMappings } from "./file-constants.js";
 import { setGlobalErrorMessage, clearGlobalErrorMessage } from './file-error.js'; // Adjust the path as needed
+import { normalizeUserItemKeys, originalUserHeaders, setOriginalUserHeaders } from "./user-header-to-db-header.js";
+
 
 // External variable for database items map
 let databaseMap = new Map();
@@ -64,6 +66,9 @@ export async function compareCsvDataToDB(databaseCsv, userCsv) {
   let partialMatches = [databaseHeaders.join(",")];
   
   const userHeaders = userItems.length > 0 ? Object.keys(userItems[0]) : [];
+   // Extract and store original user headers
+  //  setOriginalUserHeaders(userHeaders);
+  //  originalUserHeaders = userItems.length > 0 ? Object.keys(userItems[0]) : [];
   let noMatches = [userHeaders.join(",")];
 
    // Check if any user header matches the database headers

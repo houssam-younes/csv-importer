@@ -3,11 +3,16 @@ import { getDatabaseCsvHeaders } from "./data-manager.js";
 import { objectToCsvString } from "./comparison.js";
 import { getUserMap } from "./comparison.js";
 import { RowSource } from "./table.js";
-import { databaseHeaders, columnsForUpdate } from "./file-constants.js";
+import { databaseHeaders, columnsForUpdate, userHeaderMappings } from "./file-constants.js";
+import { originalUserHeaders } from "./user-header-to-db-header.js";
+
 
 // Global map to track selected rows
-const selectedRowsMap = new Map();
+let selectedRowsMap = new Map();
 
+export function clearSelectedRowsMap(){
+  selectedRowsMap= new Map();
+}
 // export function updateSelectedRows(id, rowSource, isChecked, pairId) {
 //   if (isChecked) {
 //     let entry=null;
@@ -106,26 +111,99 @@ export function deleteSelectedRows(id) {
   // console.log(selectedRowsMap);
 }
 
+// export function exportSelectedRowsToCsv() {
+//   if (selectedRowsMap.size==0){
+//     alert("No Rows Selected");
+//     return;
+//   }
+
+//   let csvContent = "data:text/csv;charset=utf-8,";
+
+//   // Retrieve the headers from your data source
+//   const headers = getDatabaseCsvHeaders(); // Assuming this function returns an array of header strings
+//   csvContent += headers.join(",") + "\r\n";
+
+//   // Iterate over the selectedRowsMap to add each row to the CSV content
+//   console.log(selectedRowsMap);
+//   selectedRowsMap.forEach((row) => {
+//     // Convert the row object to a CSV string if necessary
+//     //let rowCsv = Array.isArray(row) ? row.join(",") : objectToCsvString(row, headers);
+//     let rowCsv = objectToCsvString(row, headers);
+//     csvContent += rowCsv + "\r\n";
+//   });
+
+//   // Trigger the download
+//   const encodedUri = encodeURI(csvContent);
+//   const link = document.createElement("a");
+//   link.setAttribute("href", encodedUri);
+//   link.setAttribute("download", "selected_rows.csv");
+//   document.body.appendChild(link);
+//   link.click();
+//   document.body.removeChild(link);
+// }
+
+// export function exportSelectedRowsToCsv() {
+//   if (selectedRowsMap.size === 0) {
+//       alert("No Rows Selected");
+//       return;
+//   }
+
+//   let csvContent = "data:text/csv;charset=utf-8,\uFEFF"; // Include UTF-8 BOM for Excel compatibility
+//   csvContent += originalUserHeaders.join(",") + "\r\n"; // Use original user headers for the CSV header row
+//   console.log('whats original ');
+//   console.log(originalUserHeaders);
+
+//   // Iterate over the selected rows
+//   selectedRowsMap.forEach(row => {
+//       console.log('whats row ');
+//       console.log(row);
+//       console.log('whataa are original user headers ');
+//       console.log(originalUserHeaders);
+//       const rowCsv = originalUserHeaders.map(originalHeader => {
+//           // Reverse mapping: Find the database header that corresponds to the original user header
+//           const dbHeader = Object.keys(userHeaderMappings).find(key => 
+//               userHeaderMappings[key].includes(originalHeader) || key === originalHeader);
+//           const cellValue = row[dbHeader] || row[originalHeader];
+//           return `"${cellValue.toString().replace(/"/g, '""')}"`; // Handle internal quotes
+//       }).join(",");
+//       csvContent += rowCsv + "\r\n";
+//   });
+
+//   const encodedUri = encodeURI(csvContent);
+//   const link = document.createElement("a");
+//   link.setAttribute("href", encodedUri);
+//   link.setAttribute("download", "selected_rows.csv");
+//   document.body.appendChild(link);
+//   link.click();
+//   document.body.removeChild(link);
+// }
+
+
 export function exportSelectedRowsToCsv() {
-  if (selectedRowsMap.size==0){
-    alert("No Rows Selected");
-    return;
+  if (selectedRowsMap.size === 0) {
+      alert("No Rows Selected");
+      return;
   }
 
-  let csvContent = "data:text/csv;charset=utf-8,";
+  let csvContent = "data:text/csv;charset=utf-8,\uFEFF"; // Include UTF-8 BOM for Excel compatibility
 
-  // Retrieve the headers from your data source
-  const headers = getDatabaseCsvHeaders(); // Assuming this function returns an array of header strings
-  csvContent += headers.join(",") + "\r\n";
+  // Map originalUserHeaders to their corresponding database headers
+  const mappedUserHeaders = originalUserHeaders.map(originalHeader =>
+      getDatabaseHeaderFromUserHeader(originalHeader)
+  );
 
-  // Iterate over the selectedRowsMap to add each row to the CSV content
-  selectedRowsMap.forEach((row) => {
-    // Convert the row object to a CSV string if necessary
-    let rowCsv = Array.isArray(row) ? row.join(",") : objectToCsvString(row, headers);
-    csvContent += rowCsv + "\r\n";
+  csvContent += originalUserHeaders.join(",") + "\r\n"; // Use mapped user headers for the CSV header row
+
+  selectedRowsMap.forEach(row => {
+      const rowCsv = mappedUserHeaders.map(mappedHeader => {
+          // Directly use the value if it exists under the mapped header
+          const cellValue = (mappedHeader in row) ? row[mappedHeader] : "";
+          return `"${cellValue.toString().replace(/"/g, '""')}"`; // Handle internal quotes
+      }).join(",");
+
+      csvContent += rowCsv + "\r\n";
   });
 
-  // Trigger the download
   const encodedUri = encodeURI(csvContent);
   const link = document.createElement("a");
   link.setAttribute("href", encodedUri);
@@ -135,30 +213,13 @@ export function exportSelectedRowsToCsv() {
   document.body.removeChild(link);
 }
 
-// export function addSelectedUserRow(id) {
-//   let userRow= getUserMap().get(id);
-//   if (userRow){
-//     selectedRowsMap.set(id, userRow);
-//   }
-// }
-
-// export function exportSelectedRowsToCsv(getDatabaseCsvHeaders) {
-//   let csvContent = "data:text/csv;charset=utf-8,";
-
-//   // Add CSV headers
-//   csvContent += getDatabaseCsvHeaders().join(",") + "\r\n";
-
-//   // Add each selected row to the CSV
-//   selectedRowsMap.forEach((rowCsv) => {
-//     csvContent += rowCsv + "\r\n";
-//   });
-
-//   // Trigger CSV download
-//   const encodedUri = encodeURI(csvContent);
-//   const link = document.createElement("a");
-//   link.setAttribute("href", encodedUri);
-//   link.setAttribute("download", "selected_rows.csv");
-//   document.body.appendChild(link);
-//   link.click();
-//   document.body.removeChild(link);
-// }
+// Function to get the database header from the user header using userHeaderMappings
+function getDatabaseHeaderFromUserHeader(userHeader) {
+  for (const dbHeader in userHeaderMappings) {
+      if (userHeaderMappings[dbHeader].includes(userHeader)) {
+          return dbHeader;
+      }
+  }
+  // If not found, return the user header itself
+  return userHeader;
+}

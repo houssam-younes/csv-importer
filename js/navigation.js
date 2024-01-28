@@ -1,6 +1,6 @@
 import { clearCsvTable } from "./table.js";
 import { handleFileSelect, resetFileInput } from "./file-select.js";
-import { exportSelectedRowsToCsv } from "./export-manager.js";
+import { clearSelectedRowsMap, exportSelectedRowsToCsv } from "./export-manager.js";
 import { clearGlobalErrorMessage } from './file-error.js'; // Ensure the path is correct
 
 
@@ -8,6 +8,8 @@ export function switchView(viewId) {
     const importView = document.getElementById("importView");
     const tableView = document.getElementById("tableView");
     const legend = document.getElementsByClassName("legend")[0];
+
+    clearSelectedRowsMap();
   
     importView.style.display = viewId === "importView" ? "block" : "none";
     tableView.style.display = viewId === "tableView" ? "flex" : "none";
@@ -15,7 +17,7 @@ export function switchView(viewId) {
 
     if (viewId === "importView") {
       clearGlobalErrorMessage(); // Clear the error message when switching back to the import view
-  }
+    }
 }
 
   export function toggleLoading(isLoading) {

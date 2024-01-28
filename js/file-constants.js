@@ -17,6 +17,14 @@ export const databaseHeaders = [
   'price',
 ];
 
+export const userHeaderMappings = {
+  'scan_code': ['Scan Code', 'scan code', 'Scan_Code', 'ScanCode'],
+  'item_name': ['Item Name', 'ItemName'],
+  'department': ['Department'],
+  'cost': ['Cost'],
+  'price': ['Price'],
+};
+
 export const columnsForUpdate = [
   'cost',
   'price',
