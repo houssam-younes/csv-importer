@@ -19,7 +19,7 @@ export const databaseHeaders = [
 
 export const userHeaderMappings = {
   'scan_code': ['Scan Code', 'scan code', 'Scan_Code', 'ScanCode'],
-  'item_name': ['Item Name', 'ItemName'],
+  'item_name': ['Item Name', 'item name', 'Scan_Code', 'ItemName'],
   'department': ['Department'],
   'cost': ['Cost'],
   'price': ['Price'],
