@@ -88,10 +88,6 @@ export async function compareCsvDataToDB(databaseCsv, userCsv) {
        }
    }
 
-  await new Promise(resolve => {
-    setTimeout(resolve, 2000); // Wait for 2 seconds
-  });
-
 
   userItems.forEach((userItem) => {
     if (!userItem.scan_code) {
