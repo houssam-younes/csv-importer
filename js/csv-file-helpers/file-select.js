@@ -1,8 +1,7 @@
 import { processCsvFile } from "./csv-handler.js";
-import { compareCsvDataToDB } from "./comparison.js";
-// import { displayResults } from "./table.js";
-import { displayResults } from "./display-results.js";
-import { toggleLoading, switchView } from "./navigation.js";
+import { compareCsvDataToDB } from "../table-builders/comparison/comparison.js";
+import { displayResults } from "../display-page/display-results.js";
+import { toggleLoading, switchView } from "../navigation.js";
 
 export async function handleFileSelect(event, databaseCsv) {
     toggleLoading(true);
@@ -22,13 +21,6 @@ export async function handleFileSelect(event, databaseCsv) {
 
   try {
       // Process the CSV file, error handling is now within processCsvFile
-      // processCsvFile(file, databaseCsv, async (databaseData, userData) => {
-      //     const { matchingItems, partialMatches, noMatches } = await compareCsvDataToDB(databaseData, userData);
-      //     displayResults(matchingItems, partialMatches, noMatches);
-      //     toggleLoading(false);
-      //     switchView("tableView");
-      // });
-       // Await the processCsvFile Promise
        const userData = await processCsvFile(file);
        const { matchingItems, partialMatches, noMatches } = await compareCsvDataToDB(databaseCsv, userData);
        displayResults(matchingItems, partialMatches, noMatches);

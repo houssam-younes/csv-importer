@@ -72,7 +72,8 @@ main {
 .csvTable th,
 .csvTable td {
   border: 1px solid #ddd;
-  padding: 8px;
+  padding: 15px;
+  padding: 15px 20px;
   text-align: left;
 }
 
@@ -154,15 +155,53 @@ footer::before {
   }
 }
 
-/* .matching-user-row td,
-.partial-user-row td {
-  font-weight: bold;
-} */
-
-.matching-database-row td,
-.partial-database-row td {
-  font-weight: bold;
+/* Base styles for all rows */
+.table-div .csvTable tr {
+  transition: background-color 0.3s ease;
 }
+
+/* Export row - Assuming you might have specific styles */
+/* .export-row { */
+/* background-color: #f0f0f0; Light grey to indicate active or focus */
+/* Additional styles for export rows */
+/* } */
+
+/* User row styles */
+.user-row,
+.database-row {
+  background-color: #e7e7e7; /* Slightly darker grey to indicate read-only */
+  color: #606060; /* Dim text color */
+  cursor: not-allowed; /* Indicates non-interactivity */
+  font-style: italic; /* Suggests immutability */
+  opacity: 0.8; /* Slightly faded appearance */
+}
+
+/* Database row styles */
+/* .database-row {
+  background-color: #e7e7e7;
+  background-color: #e0e0e0; /* Consistent with user row but allows for differentiation if needed */
+/* color: #505050; Slightly darker text for contrast */
+/* cursor: not-allowed; */
+/* font-weight: lighter; Lighter font weight to suggest non-editability */
+/* opacity: 0.8; */
+/* } */
+
+select:hover,
+option:hover {
+  cursor: pointer;
+}
+
+/* Hover styles for further emphasizing non-editability */
+.table-div .csvTable tr.export-row:hover {
+  /* cursor: pointer; */
+  background-color: #f7f7f7; /* Keeps background consistent to avoid suggesting interactivity */
+  /* color: #606060; Keeps color consistent */
+}
+
+/* .matching-database-row td, */
+/* .partial-database-row td { */
+/* font-weight: bold; */
+/* } */
 
 .expandable {
   width: 90%;
@@ -219,6 +258,10 @@ footer::before {
   position: relative;
 }
 
+.source-column {
+  position: relative;
+}
+
 /* .row-checkbox {
   position: absolute;
   left: -25px; 
@@ -267,15 +310,15 @@ footer::before {
 }
 
 /* Add these styles to your CSS file */
-.matching-row-1,
-.partial-row-1 {
-  background-color: #e8e8e8; /* Light gray for one set of rows */
-}
+/* .matching-row-1, */
+/* .partial-row-1 { */
+/* background-color: #e8e8e8; Light gray for one set of rows */
+/* } */
 
-.matching-row-2,
-.partial-row-2 {
-  background-color: snow; /* Snow white for another set of rows */
-}
+/* .matching-row-2, */
+/* .partial-row-2 { */
+/* background-color: snow; Snow white for another set of rows */
+/* } */
 
 .no-match-user-row {
   background-color: snow; /* Single color for no-match rows */
@@ -305,6 +348,7 @@ footer::before {
   font-size: 0.9em; /* Smaller font size */
   color: #4caf50; /* Green color for match */
   font-style: italic; /* Italicize the 'Match' text */
+  text-align: center;
 }
 
 /* Styling for positive price differences (green) */
@@ -325,13 +369,10 @@ footer::before {
 
 .compare-td-container {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  /* align-items: center; */
+  align-items: center;
+  gap: 10px;
   position: relative;
-  /* padding: 10px; */
-  /* border-bottom: 1px solid #ddd; */
-  /* min-height: 60px; */
+  flex: 1;
 }
 
 .price-container {
@@ -344,7 +385,8 @@ footer::before {
   /* margin-top: 10px; Adds space between the main price and supplementary info */
   display: flex;
   flex-direction: column;
-  /* text-align: center; */
+  text-align: center;
+  flex: 1;
 }
 
 .average-info {
@@ -401,4 +443,13 @@ footer::before {
 .overflow-adjustment {
   position: relative;
   left: 30px;
+}
+
+.export-row {
+  border-top: 3px solid lightgray;
+  /* border-top-style: double; */
+}
+
+.fixed-width-cell {
+  width: 17%;
 }

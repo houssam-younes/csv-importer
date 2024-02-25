@@ -1,0 +1,48 @@
+.cell-dropdown {
+  /* -webkit-appearance: none;  */
+  /* -moz-appearance: none;  */
+  /* appearance: none;  */
+  width: 20px;
+  outline: none; /* Remove the selected border */
+  background: transparent; /* Make the background transparent */
+  border: none; /* Remove the border */
+  position: relative; /* Required for positioning the pseudo-element */
+}
+
+.cell-dropdown::after {
+  content: "\25BC"; /* Unicode character for a downward arrow */
+  font-size: 12px; /* Adjust size as needed */
+  position: absolute;
+  right: 5px; /* Adjust based on padding */
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none; /* Makes the pseudo-element non-interactive */
+}
+
+.cell-content-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%; /* Ensure the wrapper takes up the full cell width */
+}
+
+.dropdown-container {
+  display: grid;
+  grid-template-rows: auto 1fr; /* Adjust as needed */
+  font-size: 0.8em;
+  /* text-align: center; */
+  justify-items: center;
+  place-items: center;
+}
+
+.source-select {
+  /* Styles are the same as in the Flexbox example */
+  width: fit-content;
+  margin-top: 5px; /* Adjust as needed */
+  background: #fff; /* Background color */
+  background: transparent;
+  border: 1px solid #ccc; /* Border */
+  border-radius: 4px; /* Rounded corners */
+  padding: 5px; /* Inner padding */
+  /* Add more styling as needed */
+}

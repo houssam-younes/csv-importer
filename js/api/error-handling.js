@@ -1,5 +1,5 @@
-import { setupNavigation } from "./navigation.js";
-import { setDatabaseCsvHeaders } from "./data-manager.js";
+import { setupNavigation } from "../navigation.js";
+import { setDatabaseCsvHeaders } from "../data-manager.js";
 
 export function handleFetchError() {
     console.error("Failed to fetch inventory data. Attempting to load from local storage.");

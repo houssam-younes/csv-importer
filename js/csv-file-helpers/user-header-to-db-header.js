@@ -1,4 +1,4 @@
-import { userHeaderMappings } from "./file-constants.js";
+import { userHeaderMappings } from "../file-constants.js";
 
 export let originalUserHeaders = [];
 

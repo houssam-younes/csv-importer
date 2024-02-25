@@ -32,3 +32,12 @@
     text-align: center; /* Center the text inside the legend */
   }
 }
+
+.complementary-info {
+  font-size: 0.85em; /* Smaller font size */
+  color: #666; /* Subtle text color */
+  font-weight: normal; /* Default weight for complementary text */
+  margin-left: 10px; /* Space from the main content */
+  display: inline-block; /* Ensures it sits next to other inline elements */
+  vertical-align: middle; /* Aligns with the middle of adjacent elements */
+}

@@ -7,6 +7,15 @@ export const RowTypes = {
 export const RowSource = {
   USER: "user-row",
   DATABASE: "database-row",
+  EXPORT: "export-row"
+};
+
+export const userHeaderMappings = {
+  'scan_code': ['Scan Code', 'scan code', 'Scan_Code', 'ScanCode'],
+  'item_name': ['Item Name', 'item name', 'Scan_Code', 'ItemName'],
+  'department': ['Department'],
+  'cost': ['Cost'],
+  'price': ['Price'],
 };
 
 export const databaseHeaders = [
@@ -17,13 +26,20 @@ export const databaseHeaders = [
   'price',
 ];
 
-export const userHeaderMappings = {
-  'scan_code': ['Scan Code', 'scan code', 'Scan_Code', 'ScanCode'],
-  'item_name': ['Item Name', 'item name', 'Scan_Code', 'ItemName'],
-  'department': ['Department'],
-  'cost': ['Cost'],
-  'price': ['Price'],
-};
+// Initialize CELL_INDICES to dynamically fill in indices
+// example:
+//CELL_INDICES = {
+// price: 3,
+// cost: 4
+// };
+export const CELL_INDICES = {};
+
+databaseHeaders.forEach((columnName, columnIndex) => {
+  console.log('name ', columnName);
+  console.log('index ', columnIndex);
+  CELL_INDICES[columnName] = columnIndex;
+});
+
 
 export const columnsForUpdate = [
   'cost',
@@ -31,15 +47,10 @@ export const columnsForUpdate = [
   'department'
 ];
 
-// Calculate cell indices for 'price' and 'cost' during module initialization
-export const CELL_INDICES = {
-  price: null,
-  cost: null
-};
+// columnsForUpdate.forEach((columnName) => {
+//   const columnIndex = databaseHeaders.indexOf(columnName);
+//   if (columnIndex !== -1) {
+//     CELL_INDICES[columnName] = columnIndex;
+//   }
+// });
 
-columnsForUpdate.forEach((columnName) => {
-  const columnIndex = databaseHeaders.indexOf(columnName);
-  if (columnIndex !== -1) {
-    CELL_INDICES[columnName] = columnIndex;
-  }
-});

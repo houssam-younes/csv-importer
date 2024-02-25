@@ -1,17 +1,70 @@
-import { parseCsv } from "./parseCsv.js";
+import { parseCsv } from "../../csv-file-helpers/parseCsv.js";
 import { similarity } from "./distance.js";
-import { databaseHeaders, userHeaderMappings } from "./file-constants.js";
-import { setGlobalErrorMessage, clearGlobalErrorMessage } from './file-error.js'; // Adjust the path as needed
-import { normalizeUserItemKeys, originalUserHeaders, setOriginalUserHeaders } from "./user-header-to-db-header.js";
+import { databaseHeaders, userHeaderMappings } from "../../file-constants.js";
+import { setGlobalErrorMessage, clearGlobalErrorMessage } from '../../csv-file-helpers/file-error.js'; // Adjust the path as needed
+import { normalizeUserItemKeys, originalUserHeaders, setOriginalUserHeaders } from "../../csv-file-helpers/user-header-to-db-header.js";
 
 
 // External variable for database items map
 let databaseMap = new Map();
 let simplifiedMap = new Map();
 let userMap = new Map();
+export let exportRowsMap = new Map();
+
+// Define a unique Symbol for the selection status
+export const isSelectedKey = Symbol('isSelected');
+
+export function getExportRowsMap() {
+  return exportRowsMap;
+}
 
 export function getUserMap() {
   return userMap;
+}
+
+// Function to add items to exportRowMap with selection status
+function addToExportRowsMap(userItem) {
+  // Clone userItem to avoid modifying the original object
+  const userItemWithSelection = { ...userItem };
+  // Use the Symbol as a key for the selection status
+  userItemWithSelection[isSelectedKey] = false;
+
+  // Store the modified item in exportRowMap
+  exportRowsMap.set(userItem.scan_code, userItemWithSelection);
+}
+
+// Function to toggle the selection status of a row in exportRowMap
+export function toggleSelection(scan_code) {
+  if (exportRowsMap.has(scan_code)) {
+    const userItem = exportRowsMap.get(scan_code);
+    // Toggle the selection status using the Symbol key
+    userItem[isSelectedKey] = !userItem[isSelectedKey];
+  }
+}
+
+function prepareForExport3() {
+  const exportData = [];
+
+  exportRowMap.forEach((userItem) => {
+    const itemForExport = {};
+
+    // Copy all string-keyed properties
+    for (const key in userItem) {
+      if (userItem.hasOwnProperty(key)) {
+        itemForExport[key] = userItem[key];
+      }
+    }
+
+    // Optionally, explicitly skip Symbol-keyed properties (for clarity)
+    const symbolKeys = Object.getOwnPropertySymbols(userItem);
+    symbolKeys.forEach((symbolKey) => {
+      delete itemForExport[symbolKey];
+    });
+
+    exportData.push(itemForExport);
+  });
+
+  return exportData;
 }
 
 // Function to set the database map
@@ -62,40 +115,46 @@ export async function compareCsvDataToDB(databaseCsv, userCsv) {
   setDatabaseMap(databaseCsv);
   const userItems = parseCsv(userCsv);
 
-  let matchingItems = [databaseHeaders.join(",")];
-  let partialMatches = [databaseHeaders.join(",")];
-  
+  const headerStringFirstEntry = [databaseHeaders.join(",")];
+
+  // let commonHeaders = [databaseHeaders.join(",")];
+  let matchingItems = [...headerStringFirstEntry];
+  let partialMatches = [...headerStringFirstEntry];
+  let noMatches = [...headerStringFirstEntry];
+
   const userHeaders = userItems.length > 0 ? Object.keys(userItems[0]) : [];
-   // Extract and store original user headers
+  // Extract and store original user headers
   //  setOriginalUserHeaders(userHeaders);
   //  originalUserHeaders = userItems.length > 0 ? Object.keys(userItems[0]) : [];
-  let noMatches = [userHeaders.join(",")];
+  // let noMatches = [userHeaders.join(",")];
 
-   // Check if any user header matches the database headers
-   const anyHeaderMatches = databaseHeaders.some(header => userHeaders.includes(header));
+  // Check if any user header matches the database headers
+  const anyHeaderMatches = databaseHeaders.some(header => userHeaders.includes(header));
 
-   // If no header matches, set a global error message
-   if (!anyHeaderMatches) {
-       setGlobalErrorMessage("Headers do not match database headers.");
-   } else {
-       // If some headers match, check for missing headers and list them if any
-       const missingHeaders = databaseHeaders.filter(header => !userHeaders.includes(header));
-       if (missingHeaders.length > 0) {
-           const errorMessage = `Missing required headers: ${missingHeaders.join(', ')}`;
-           setGlobalErrorMessage(errorMessage);
-       } else {
-           clearGlobalErrorMessage(); // Clear any previous error message if all headers are correct
-       }
-   }
+  // If no header matches, set a global error message
+  if (!anyHeaderMatches) {
+    setGlobalErrorMessage("Headers do not match database headers.");
+  } else {
+    // If some headers match, check for missing headers and list them if any
+    const missingHeaders = databaseHeaders.filter(header => !userHeaders.includes(header));
+    if (missingHeaders.length > 0) {
+      const errorMessage = `Missing required headers: ${missingHeaders.join(', ')}`;
+      setGlobalErrorMessage(errorMessage);
+    } else {
+      clearGlobalErrorMessage(); // Clear any previous error message if all headers are correct
+    }
+  }
 
 
   userItems.forEach((userItem) => {
     if (!userItem.scan_code) {
-      const userItemCsv = objectToCsvString(userItem, userHeaders); // Use user headers here
+      //const userItemCsv = objectToCsvString(userItem, userHeaders); // Use user headers here
+      const userItemCsv = objectToCsvString(userItem, databaseHeaders); // Use user headers here
       noMatches.push(userItemCsv);
       return;
     }
     userMap.set(userItem.scan_code, userItem);
+    addToExportRowsMap(userItem);
 
     let userItemCsv = objectToCsvString(userItem, databaseHeaders);
 
@@ -103,11 +162,15 @@ export async function compareCsvDataToDB(databaseCsv, userCsv) {
       if (
         !findPartialMatch(userItem, partialMatches, userItemCsv, databaseHeaders)
       ) {
-        userItemCsv = objectToCsvString(userItem, userHeaders); 
+        userItemCsv = objectToCsvString(userItem, databaseHeaders);
+        //userItemCsv = objectToCsvString(userItem, userHeaders); 
         noMatches.push(userItemCsv);
       }
     }
   });
+
+  console.log('whats user export map');
+  console.log(exportRowsMap);
 
   return { matchingItems, partialMatches, noMatches };
 }

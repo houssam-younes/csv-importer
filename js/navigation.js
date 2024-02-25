@@ -1,23 +1,32 @@
-import { clearCsvTable } from "./table.js";
-import { handleFileSelect, resetFileInput } from "./file-select.js";
-import { clearSelectedRowsMap, exportSelectedRowsToCsv } from "./export-manager.js";
-import { clearGlobalErrorMessage } from './file-error.js'; // Ensure the path is correct
-
+import { handleFileSelect, resetFileInput } from "./csv-file-helpers/file-select.js";
+import { clearSelectedRowsMap, exportSelectedRowsToCsv } from "./export/export-manager.js";
+import { clearGlobalErrorMessage } from './csv-file-helpers/file-error.js'; // Ensure the path is correct
 
 export function switchView(viewId) {
-    const importView = document.getElementById("importView");
-    const tableView = document.getElementById("tableView");
-    const legend = document.getElementsByClassName("legend")[0];
+  const importView = document.getElementById("importView");
+  const tableView = document.getElementById("tableView");
+  const legend = document.getElementsByClassName("legend")[0];
 
-    clearSelectedRowsMap();
-  
-    importView.style.display = viewId === "importView" ? "block" : "none";
-    tableView.style.display = viewId === "tableView" ? "flex" : "none";
-    legend.style.display = viewId === "importView" ? "none" : "block";
+  clearSelectedRowsMap();
 
-    if (viewId === "importView") {
+  // Function to clear inner HTML of all elements with a given class
+  const clearTableContainers = () => {
+      const containers = document.querySelectorAll('.table-container');
+      containers.forEach(container => container.innerHTML = '');
+  };
+
+  // Toggle display and clear content of table containers if not in view
+  if (viewId === "importView") {
+      importView.style.display = "block";
+      tableView.style.display = "none";
+      clearTableContainers(); // Clear content of table containers
+      legend.style.display = "none";
       clearGlobalErrorMessage(); // Clear the error message when switching back to the import view
-    }
+  } else if (viewId === "tableView") {
+      tableView.style.display = "flex";
+      importView.style.display = "none";
+      legend.style.display = "block";
+  }
 }
 
   export function toggleLoading(isLoading) {
@@ -44,14 +53,12 @@ export function setupNavigation(databaseCsv) {
   };
   
   backBtn.onclick = () => {
-    clearCsvTable();
     resetFileInput(fileInput);
     switchView("importView");
   };
 
     // Add the event listener for the home button
     homeBtn.onclick = () => {
-      clearCsvTable();
       resetFileInput(fileInput);
       switchView("importView");
     };

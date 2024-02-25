@@ -1,4 +1,4 @@
-import { RowTypes } from "./file-constants.js";
+import { RowTypes } from "../../file-constants.js";
 import { handleCheckboxChange } from "./checkbox-handling.js";
 
 export function createSelectionControls(type) {

@@ -8,13 +8,15 @@
     <link rel="stylesheet" href="styles/index.css">
     <link rel="stylesheet" href="styles/legend.css">
     <link rel="stylesheet" href="styles/how-to-use.css">
+    <link rel="stylesheet" href="styles/dropdown.css">
     <link rel="stylesheet" href="styles/select-radio-buttons.css">
+    <link rel="stylesheet" href="styles/custom-input.css">
 </head>
 
 <body>
     <header>
         <button id="homeBtn" class="home-btn">Home</button>
-        <h1 class="back-header">CSV File Importer</h1>
+        <h1 class="back-header"></h1>
         <button id="howToUseBtn" class="how-to-use-btn">How to Use</button>
     </header>
     <div id="asideContainer" class="aside-container">
@@ -47,7 +49,8 @@
         <div id="tableView" style="display: none;">
             <button id="export-btn">Export Selected To CSV</button>
             <div class="expandable" id="matchingItems">
-                <button class="expandable-title">Matching Items</button>
+                <button class="expandable-title">Matching Items <span
+                        class="matching-total complementary-info"></span></button>
                 <div class="expandable-content">
                     <div class="table-container">
                         <!-- <div class="table-div"> -->
@@ -57,7 +60,8 @@
                 </div>
             </div>
             <div class="expandable" id="partialMatches">
-                <button class="expandable-title">Partial Matches</button>
+                <button class="expandable-title">Partial Matches <span
+                        class="partial-total complementary-info"></span></button>
                 <div class="expandable-content">
                     <div class="table-container">
                         <!-- <div class="table-div"> -->
@@ -67,7 +71,8 @@
                 </div>
             </div>
             <div class="expandable" id="noMatches">
-                <button class="expandable-title">No Matches</button>
+                <button class="expandable-title">No Matches <span
+                        class="no-match-total complementary-info"></span></button>
                 <div class="expandable-content">
                     <div class="table-container">
                         <!-- <div class="table-div"> -->
@@ -86,7 +91,7 @@
         <p>© 2023 *Company</p>
     </footer>
     <script type="module" src="js/main.js"></script>
-    <script type="module" src="js/how-to-use/how-to-use.js"></script>
+    <script type="module" src="js/home/how-to-use/how-to-use.js"></script>
 </body>
 
 </html>

@@ -1,5 +1,6 @@
-import { RowSource } from './file-constants.js';
-import { updateSelectedRows, deleteSelectedRows } from './export-manager.js';
+import { RowSource } from '../../file-constants.js';
+import { updateSelectedRows, deleteSelectedRows } from '../../export/export-manager.js';
+import { toggleSelection } from '../../table-builders/comparison/comparison.js';
 
 export function setupCheckboxes() {
     // Add event listeners to all checkboxes
@@ -9,6 +10,27 @@ export function setupCheckboxes() {
 }
 
 export function handleCheckboxChange(event) {
+    // Get the current checkbox and its state
+    const currentCheckbox = event.target;
+    const isChecked = currentCheckbox.checked;
+    const currentRow = currentCheckbox.closest('tr');
+    // const dataID = currentRow.dataset.id; // Assuming 'data-id' holds the unique identifier for the row
+    const dataID = currentRow.dataset.scanCode; // Assuming 'data-scan-code' holds the unique identifier for the row
+
+    // Toggle the selection status in exportRowsMap
+    toggleSelection(dataID);
+
+    // Additional logic for handling paired rows, if necessary
+    const pairId = currentCheckbox.dataset.pairId;
+    if (isChecked && pairId) {
+        // Logic to handle paired rows, uncheck the paired checkbox, etc.
+        // This might include calling toggleSelection for the paired row as well
+        // Ensure that the logic here is consistent with your application's requirements
+    }
+}
+
+
+export function handleCheckboxChangeOld(event) {
     // Get the current checkbox and its state
     const currentCheckbox = event.target;
     const isChecked = currentCheckbox.checked;
