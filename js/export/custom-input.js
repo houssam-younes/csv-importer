@@ -2,13 +2,22 @@
 import { CELL_INDICES } from "../file-constants.js";
 import { getExportRowsMap } from "../table-builders/comparison/comparison.js";
 
-let isEditing = false; // Flag to indicate if any field is being edited
+// let isEditing = false; // Flag to indicate if any field is being edited
+
+/**
+ * Check if editing is in progress by looking for specific elements in the DOM.
+ */
+function isEditing() {
+    const doneButtonContainer = document.querySelector('.done-button-container');
+    const editableDiv = document.querySelector('.editable-div');
+    return doneButtonContainer !== null && editableDiv !== null && editableDiv.contentEditable === 'true';
+}
 
 /**
  * Routes the handling of custom input based on the cell index.
  */
 export function handleCustomInput(userItemId, pairId, cellIndex, currentScanCode, eventTarget) {
-    if (isEditing) {
+    if (isEditing()) {
         alert("Please finish editing the open field before editing another.");
         eventTarget.value = eventTarget.getAttribute('data-prev-value'); // Revert to previous value
         return;
@@ -28,7 +37,7 @@ export function handleCustomInput(userItemId, pairId, cellIndex, currentScanCode
  * Handles custom input specifically for the price field.
  */
 function handleCustomPriceInput(currentScanCode, eventTarget) {
-    isEditing = true; // Set the flag as editing started
+    // isEditing = true; // Set the flag as editing started
 
     const parentTd = eventTarget.closest('td');
     const jsUiValueContainer = parentTd.querySelector('.js-ui-value');
@@ -72,7 +81,7 @@ function finalizeCustomInput(currentScanCode, editableDiv, flexContainer, jsUiVa
         editableDiv.style.cursor = 'default';
 
         // Reset editing flag to allow new edits
-        isEditing = false;
+        // isEditing = false;
 
         // Remove the "Done" button and replace with the "Edit" button
         removeButtonFromContainer(flexContainer, 'button');
@@ -93,7 +102,7 @@ function removeButtonFromContainer(container, selector) {
 function createEditableDiv(currentValue) {
     const editableDiv = document.createElement('div');
     editableDiv.contentEditable = true; // Ensure it's editable when "Custom" is selected
-    editableDiv.className = 'custom-price-editable';
+    editableDiv.className = 'custom-price-editable editable-div';
     editableDiv.style.border = '1px solid #ccc';
     editableDiv.style.padding = '5px 8px';
     // editableDiv.style.width = '100px'; // Fixed width
@@ -127,7 +136,8 @@ function createEditableDiv(currentValue) {
 function createDoneButton(onClick) {
     const button = document.createElement('button');
     button.onclick = onClick;
-    button.innerHTML = '<img src="../resources/img/comment.png" alt="Done" class="done-button" style="width: 24px; height: 24px;">'; // Adjust path as necessary
+    button.className = "done-button-container";
+    button.innerHTML = '<img src="../resources/img/done.png" alt="Done" class="done-button" style="width: 24px; height: 24px;">'; // Adjust path as necessary
     styleIconButton(button);
     return button;
 }
@@ -139,13 +149,13 @@ function createEditButton(currentScanCode, editableDiv, flexContainer, jsUiValue
 
     button.onclick = () => {
 
-        if (isEditing) {
+        if (isEditing()) {
             // If another field is already being edited, alert the user and exit the function
             alert("Please finish editing the current field before editing another.");
             return;
         }
 
-        isEditing = true; // Indicate that editing has started
+        // isEditing = true; // Indicate that editing has started
 
         // Make the div editable
         editableDiv.contentEditable = true;

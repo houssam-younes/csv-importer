@@ -5,6 +5,7 @@ import { RowTypes } from "../file-constants.js";
 import { databaseHeaders } from "../file-constants.js";
 import { resetPriceCostTables, calculateAverage, PricePercentageArray, PriceDifferenceArrayTypeMatching, CostDifferenceArrayTypeMatching, CostPercentageArray } from "./table-builder.js";
 import { originalUserHeaders } from "../csv-file-helpers/user-header-to-db-header.js";
+import { calculateAveragesMatching, calculateAveragesPartialMatch, calculateAverageCostsMatching, calculateAverageCostsPartialMatch } from "./comparison/price-comparison.js";
 
 /**
  * Creates a structured representation of a CSV table as a JavaScript object. This function is designed to handle and
@@ -91,44 +92,146 @@ export function createCsvTableNew(rows, type) {
 }
 
 
-export function appendStatisticsInfo(type) {
+// export function appendStatisticsInfo(type) {
+// const statsDiv = document.createElement('div');
+// statsDiv.className = "average-info";
+
+// if (type !== RowTypes.NO_MATCH) {
+//   const averagePricePercentageDiff = calculateAverage(PricePercentageArray);
+//   const averagePriceTotalDiff = calculateAverage(PriceDifferenceArrayTypeMatching);
+//   const averageCostPercentageDiff = calculateAverage(CostPercentageArray);
+//   const averageCostTotalDiff = calculateAverage(CostDifferenceArrayTypeMatching);
+
+//   // Constructing price stats with dynamic class names based on type
+//   const pricePercentageClass = `${type}-average-percentage` + (averagePricePercentageDiff >= 0 ? ' positive-diff' : ' negative-diff');
+//   const priceTotalClass = `${type}-average-total` + (averagePriceTotalDiff >= 0 ? ' positive-diff' : ' negative-diff');
+
+//   const priceStatsDiv = document.createElement('div');
+//   priceStatsDiv.className = "stats-group price-stats";
+//   priceStatsDiv.innerHTML = `
+//           <p>Average % Price Difference: <span class="${pricePercentageClass}">${formatDifference(averagePricePercentageDiff)}</span>%</p>
+//           <p>Average Price Difference: <span class="${priceTotalClass}">${formatDifference(averagePriceTotalDiff)}</span> $</p>
+//       `;
+
+//   // Constructing cost stats with dynamic class names based on type
+//   const costPercentageClass = `${type}-average-percentage` + (averageCostPercentageDiff >= 0 ? ' positive-diff' : ' negative-diff');
+//   const costTotalClass = `${type}-average-total` + (averageCostTotalDiff >= 0 ? ' positive-diff' : ' negative-diff');
+
+//   const costStatsDiv = document.createElement('div');
+//   costStatsDiv.className = "stats-group cost-stats";
+//   costStatsDiv.innerHTML = `
+//           <p>Average % Cost Difference: <span class="${costPercentageClass}">${formatDifference(averageCostPercentageDiff)}</span>%</p>
+//           <p>Average Cost Difference: <span class="${costTotalClass}">${formatDifference(averageCostTotalDiff)}</span> $</p>
+//       `;
+
+//   statsDiv.appendChild(priceStatsDiv);
+//   statsDiv.appendChild(costStatsDiv);
+//   resetPriceCostTables();
+// }
+
+// return statsDiv;
+// }
+
+// Function to append statistics info for matching items
+export function appendMatchingStatisticsInfo() {
   const statsDiv = document.createElement('div');
   statsDiv.className = "average-info";
 
-  if (type !== RowTypes.NO_MATCH) {
-    const averagePricePercentageDiff = calculateAverage(PricePercentageArray);
-    const averagePriceTotalDiff = calculateAverage(PriceDifferenceArrayTypeMatching);
-    const averageCostPercentageDiff = calculateAverage(CostPercentageArray);
-    const averageCostTotalDiff = calculateAverage(CostDifferenceArrayTypeMatching);
+  const { averagePriceDifference, averagePercentagePriceDifference } = calculateAveragesMatching();
+  // Price statistics
+  const pricePercentageClass = `matching-average-percentage` + (averagePercentagePriceDifference >= 0 ? ' positive-diff' : ' negative-diff');
+  const priceTotalClass = `matching-average-total` + (averagePriceDifference >= 0 ? ' positive-diff' : ' negative-diff');
 
-    const priceStatsDiv = document.createElement('div');
-    priceStatsDiv.className = "stats-group price-stats";
-    priceStatsDiv.innerHTML = `
-      <p>Average % Price Difference: ${formatDifference(averagePricePercentageDiff)}%</p>
-      <p>Average Price Difference: ${formatDifference(averagePriceTotalDiff)} $</p>
+  const priceStatsDiv = document.createElement('div');
+  priceStatsDiv.className = "stats-group price-stats";
+  // Updated to include the sign
+  const formattedAvgPercentageDiff = (averagePercentagePriceDifference >= 0 ? "+" : "") + averagePercentagePriceDifference.toFixed(2);
+  const formattedAvgPriceDiff = (averagePriceDifference >= 0 ? "+" : "") + averagePriceDifference.toFixed(2);
+
+  priceStatsDiv.innerHTML = `
+        <p>Average % Price Difference: <span class="${pricePercentageClass}">${formattedAvgPercentageDiff}</span>%</p>
+        <p>Average Price Difference: <span class="${priceTotalClass}">${formattedAvgPriceDiff}</span> $</p>
     `;
 
-    const costStatsDiv = document.createElement('div');
-    costStatsDiv.className = "stats-group cost-stats";
-    costStatsDiv.innerHTML = `
-      <p>Average % Cost Difference: ${formatDifference(averageCostPercentageDiff, true)}%</p>
-      <p>Average Cost Difference: ${formatDifference(averageCostTotalDiff, true)} $</p>
-    `;
+  const { averageCostDifference, averagePercentageCostDifference } = calculateAverageCostsMatching();
 
-    statsDiv.appendChild(priceStatsDiv);
-    statsDiv.appendChild(costStatsDiv);
-    resetPriceCostTables();
-  }
+  // Initialize cost averages to 0
+  // const averageCostDifference = 0; // Assuming no calculation needed for now
+  // const averagePercentageCostDifference = 0; // Assuming no calculation needed for now
 
+  const costPercentageClass = `matching-average-cost-percentage` + (averagePercentageCostDifference >= 0 ? ' negative-diff' : ' positive-diff');
+  const costTotalClass = `matching-average-cost-total` + (averageCostDifference >= 0 ? ' negative-diff' : ' positive-diff');
+
+  // Format the cost differences to include the sign
+  const formattedAvgCostDiff = (averageCostDifference >= 0 ? "+" : "") + averageCostDifference.toFixed(2);
+  const formattedAvgPercentageCostDiff = (averagePercentageCostDifference >= 0 ? "+" : "") + averagePercentageCostDifference.toFixed(2);
+
+
+  // Cost statistics set to 0 for now
+  const costStatsDiv = document.createElement('div');
+  costStatsDiv.className = "stats-group cost-stats";
+  costStatsDiv.innerHTML = `
+      <p>Average % Cost Difference: <span class="${costPercentageClass}">${formattedAvgPercentageCostDiff}</span>%</p>
+      <p>Average Cost Difference: <span class="${costTotalClass}">${formattedAvgCostDiff}</span> $</p>
+  `;
+
+  statsDiv.appendChild(priceStatsDiv);
+  statsDiv.appendChild(costStatsDiv);
   return statsDiv;
-  // Convert statsDiv to HTML string
-  // const tempContainer = document.createElement('div');
-  // tempContainer.appendChild(statsDiv);
-  // return tempContainer.innerHTML;
+}
+
+// Function to append statistics info for partial matching items
+export function appendPartialMatchStatisticsInfo() {
+  const statsDiv = document.createElement('div');
+  statsDiv.className = "average-info";
+
+  const { averagePriceDifference, averagePercentagePriceDifference } = calculateAveragesPartialMatch();
+
+  // Price statistics
+  const pricePercentageClass = `partial-match-average-percentage` + (averagePercentagePriceDifference >= 0 ? ' positive-diff' : ' negative-diff');
+  const priceTotalClass = `partial-match-average-total` + (averagePriceDifference >= 0 ? ' positive-diff' : ' negative-diff');
+
+  const priceStatsDiv = document.createElement('div');
+  priceStatsDiv.className = "stats-group price-stats";
+  // Updated to include the sign
+  const formattedAvgPercentageDiff = (averagePercentagePriceDifference >= 0 ? "+" : "") + averagePercentagePriceDifference.toFixed(2);
+  const formattedAvgPriceDiff = (averagePriceDifference >= 0 ? "+" : "") + averagePriceDifference.toFixed(2);
+
+  priceStatsDiv.innerHTML = `
+       <p>Average % Price Difference: <span class="${pricePercentageClass}">${formattedAvgPercentageDiff}</span>%</p>
+       <p>Average Price Difference: <span class="${priceTotalClass}">${formattedAvgPriceDiff}</span> $</p>
+   `;
+
+
+  const { averageCostDifference, averagePercentageCostDifference } = calculateAverageCostsPartialMatch();
+  // Initialize cost averages to 0
+  // const averageCostDifference = 0; // Assuming no calculation needed for now
+  // const averagePercentageCostDifference = 0; // Assuming no calculation needed for now
+
+  // Format the cost differences to include the sign
+  const formattedAvgCostDiff = (averageCostDifference >= 0 ? "+" : "") + averageCostDifference.toFixed(2);
+  const formattedAvgPercentageCostDiff = (averagePercentageCostDifference >= 0 ? "+" : "") + averagePercentageCostDifference.toFixed(2);
+
+  const costPercentageClass = `partial-match-average-cost-percentage` + (averagePercentageCostDifference >= 0 ? ' negative-diff' : ' positive-diff');
+  const costTotalClass = `partial-match-average-cost-total` + (averageCostDifference >= 0 ? ' negative-diff' : ' positive-diff');
+
+  // Cost statistics set to 0 for now
+  const costStatsDiv = document.createElement('div');
+  costStatsDiv.className = "stats-group cost-stats";
+
+  costStatsDiv.innerHTML = `
+      <p>Average % Cost Difference: <span class="${costPercentageClass}">${formattedAvgPercentageCostDiff}</span>%</p>
+      <p>Average Cost Difference: <span class="${costTotalClass}">${formattedAvgCostDiff}</span> $</p>
+  `;
+
+  statsDiv.appendChild(priceStatsDiv);
+  statsDiv.appendChild(costStatsDiv);
+  return statsDiv;
 }
 
 
-function formatDifference(value, inverted = false) {
+
+export function formatDifference(value, inverted = false) {
   const formattedValue = value.toFixed(2);
   const sign = value >= 0 ? "+" : "";
   const colorClass = (value >= 0 && !inverted) ? "positive-diff" : "negative-diff";

@@ -453,3 +453,7 @@ option:hover {
 .fixed-width-cell {
   width: 17%;
 }
+
+td img {
+  overflow: visible;
+}

@@ -3,7 +3,7 @@ import { similarity } from "./distance.js";
 import { databaseHeaders, userHeaderMappings } from "../../file-constants.js";
 import { setGlobalErrorMessage, clearGlobalErrorMessage } from '../../csv-file-helpers/file-error.js'; // Adjust the path as needed
 import { normalizeUserItemKeys, originalUserHeaders, setOriginalUserHeaders } from "../../csv-file-helpers/user-header-to-db-header.js";
-
+import { incrementMatchingTotals, incrementPartialMatchTotals } from './price-comparison.js';
 
 // External variable for database items map
 let databaseMap = new Map();
@@ -203,6 +203,7 @@ function findExactMatches(userItem, matchingItems, userItemCsv) {
     //   { csv: objectToCsvString(matchingItem, dbHeaders), type: 'db', pair_id: pair_id }
     // );
     matchingItems.push({ csv: userItemCsv, pair_id: matchingItem.scan_code });
+    incrementMatchingTotals(matchingItem, userItem);
     // matchingItems.push(userItemCsv, objectToCsvString(matchingItem, dbHeaders));
     return true;
   }
@@ -226,6 +227,7 @@ function findSimplifiedPartialMatches(userItem, partialMatches, userItemCsv) {
   if (bestMatch && highestScore >= 0.7) {
     partialMatches.push({ csv: userItemCsv, pair_id: bestMatch.scan_code });
     //partialMatches.push(userItemCsv, objectToCsvString(bestMatch, dbHeaders));
+    incrementPartialMatchTotals(bestMatch, userItem);
     return true;
   }
   return false;
@@ -252,16 +254,29 @@ function findExhaustivePartialMatches(userItem, partialMatches, userItemCsv) {
     partialMatches.push({ csv: userItemCsv, pair_id: bestMatch.scan_code });
     // partialMatches.push(userItemCsv, objectToCsvString(bestMatch, dbHeaders));
     // partialMatches.push(userItemCsv, objectToCsvString(bestMatch, dbHeaders));
+    incrementPartialMatchTotals(bestMatch, userItem);
     return true;
   }
   return false;
 }
 
 function findPartialMatch(userItem, partialMatches, userItemCsv, dbHeaders) {
-  if (findSimplifiedPartialMatches(userItem, partialMatches, userItemCsv, dbHeaders)) {
-    return true;
+  let isPartialMatchFound = false;
+  isPartialMatchFound = findSimplifiedPartialMatches(userItem, partialMatches, userItemCsv, dbHeaders);
+  if (!isPartialMatchFound) {
+    isPartialMatchFound = findExhaustivePartialMatches(userItem, partialMatches, userItemCsv, dbHeaders);
   }
-  return findExhaustivePartialMatches(userItem, partialMatches, userItemCsv, dbHeaders);
+  return isPartialMatchFound;
+  // if (findSimplifiedPartialMatches(userItem, partialMatches, userItemCsv, dbHeaders)) {
+  //   isPartialMatchFound = true;
+  // }
+  // else if (findExhaustivePartialMatches(userItem, partialMatches, userItemCsv, dbHeaders)) {
+  //   isPartialMatchFound = true;
+  // }
+  // if (isPartialMatchFound) {
+  //   incrementPartialMatchTotals(parseFloat(bestMatch.price), parseFloat(userItem.price));
+  // }
+  // return isPartialMatchFound;
 }
 
 // Function to find partial matches

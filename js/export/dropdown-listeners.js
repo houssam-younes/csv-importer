@@ -1,12 +1,14 @@
 import { databaseHeaders, CELL_INDICES } from "../file-constants.js";
 import { getUserMap, getDatabaseMap, getExportRowsMap } from "../table-builders/comparison/comparison.js";
+// import { updateMatchingAveragesUI, updatePartialMatchingAveragesUI } from "../table-builders/comparison/price-comparison.js";
 import { handleCustomInput } from "./custom-input.js";
-
 /**
  * Handles the change event for dropdowns, updating the respective field based on the selected value.
  */
 export function handleDropdownChange(userItemId, pairId, cellIndex, currentScanCode, eventTarget) {
     let selectedValue = eventTarget.value;
+    // updatePartialMatchingAveragesUI();
+    // updateMatchingAveragesUI();
     // Directly handle custom value case without fetching
     if (selectedValue === "custom") {
         // Call a function to handle custom input, this function needs to be implemented to handle the UI logic for custom inputs

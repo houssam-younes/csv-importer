@@ -417,6 +417,7 @@ function addPriceCompareToTD(cellValue, pair_id) {
     const sign = value => value >= 0 ? "+" : "";
     const priceDifferenceDisplay = `${sign(priceDifference)}${priceDifference.toFixed(2)}`;
     const percentageDisplay = percentageDifference ? `${sign(percentageDifference)}${percentageDifference.toFixed(2)}%` : "N/A";
+    // const percentageDisplay = percentageDifference ? `${sign(percentageDifference)}${percentageDifference}%` : "N/A";
 
     // Determine color class based on the difference
     const colorClass = priceDifference >= 0 ? 'green-color-class' : 'red-color-class';

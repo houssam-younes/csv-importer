@@ -1,5 +1,5 @@
 import { RowTypes } from '../file-constants.js';
-import { createCsvTableNew, appendStatisticsInfo } from '../table-builders/table-creation.js';
+import { createCsvTableNew, appendMatchingStatisticsInfo, appendPartialMatchStatisticsInfo } from '../table-builders/table-creation.js';
 // import { getDatabaseMap, objectToCsvString } from "./comparison.js";
 // import { updateSelectedRows, deleteSelectedRows } from './export-manager.js';
 import { createSelectionControls, setupSelectionControls } from '../tables/row-select/selection-controls.js';
@@ -81,8 +81,14 @@ function insertTables(type, items) {
     // Assuming createCsvTableNew now returns a DOM element instead of an HTML string
     let tableDOMElement = createCsvTableNew(items, type);
 
-    // Assuming appendStatisticsInfo now returns a DOM element instead of an HTML string
-    let statsElement = appendStatisticsInfo(type);
+    // Use a conditional check to determine which statistics info function to call
+    let statsElement = document.createElement('div');
+    if (type === RowTypes.MATCHING) {
+        statsElement = appendMatchingStatisticsInfo(); // For matching items
+    } else if (type === RowTypes.PARTIAL) {
+        statsElement = appendPartialMatchStatisticsInfo(); // For partial matching items
+    }
+
 
     // Find or create the 'table-div' within the container to insert the table
     // let tableDiv = container.querySelector('.table-div');
