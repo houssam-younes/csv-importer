@@ -12,8 +12,8 @@ export const RowSource = {
 
 export const userHeaderMappings = {
   'scan_code': ['Scan Code', 'scan code', 'Scan_Code', 'ScanCode'],
-  'item_name': ['Item Name', 'item name', 'Scan_Code', 'ItemName'],
-  'department': ['Department'],
+  'item_name': ['Item Name', 'item name', 'Scan_Code', 'ItemName', 'Description'],
+  'department': ['Department', 'Department # In register'],
   'cost': ['Cost'],
   'price': ['Price'],
 };
@@ -35,8 +35,6 @@ export const databaseHeaders = [
 export const CELL_INDICES = {};
 
 databaseHeaders.forEach((columnName, columnIndex) => {
-  console.log('name ', columnName);
-  console.log('index ', columnIndex);
   CELL_INDICES[columnName] = columnIndex;
 });
 

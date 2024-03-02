@@ -1,14 +1,13 @@
-import { databaseHeaders, CELL_INDICES } from "../file-constants.js";
+import { databaseHeaders, CELL_INDICES, RowTypes } from "../file-constants.js";
 import { getUserMap, getDatabaseMap, getExportRowsMap } from "../table-builders/comparison/comparison.js";
-// import { updateMatchingAveragesUI, updatePartialMatchingAveragesUI } from "../table-builders/comparison/price-comparison.js";
+import { updatePriceAveragesUI, updateCostAveragesUI, toggleMatchingPriceSelection, togglePartialMatchPriceSelection, updatePartialMatchPriceAveragesUI, updateMatchingPriceAveragesUI } from "../table-builders/comparison/price-comparison.js";
+import { ValueType, updateTotalsAndInfoForRow } from "../table-builders/comparison/price-cost-update-helpers.js";
 import { handleCustomInput } from "./custom-input.js";
 /**
  * Handles the change event for dropdowns, updating the respective field based on the selected value.
  */
 export function handleDropdownChange(userItemId, pairId, cellIndex, currentScanCode, eventTarget) {
     let selectedValue = eventTarget.value;
-    // updatePartialMatchingAveragesUI();
-    // updateMatchingAveragesUI();
     // Directly handle custom value case without fetching
     if (selectedValue === "custom") {
         // Call a function to handle custom input, this function needs to be implemented to handle the UI logic for custom inputs
@@ -151,11 +150,42 @@ function changeCost(currentScanCode, newValue, eventTarget) {
     const exportRowsMap = getExportRowsMap();
     if (exportRowsMap.has(currentScanCode)) {
         let exportData = exportRowsMap.get(currentScanCode);
+        let oldCost = validateAndParseNumber(exportData.cost, 'old cost', 'cost');
+        console.log('old cost? ' + oldCost);
         exportData.cost = newValue;
         updateUIValueInClosestTd(eventTarget, newValue);
+
+        updateRowAndTotalsForNewCost(eventTarget, oldCost, newValue);
     } else {
         console.log(`No entry found for the scan code: ${currentScanCode}`);
     }
+}
+
+function updateRowAndTotalsForNewCost(eventTarget, oldCost, newCost) {
+    // Find the closest 'tr' element to get the associated row
+    const rowElement = eventTarget.closest('tr');
+    if (!rowElement) {
+        console.error('No row element found for the event target');
+        return;
+    }
+    if (rowElement.classList.contains(RowTypes.NO_MATCH)) {
+        return;
+    }
+
+    // Get the database cost from the dataset of the row
+    const databaseCost = parseFloat(rowElement.dataset.databaseCost || 0);
+    if (isNaN(databaseCost)) {
+        console.warn('Invalid or missing database cost in the row dataset');
+        return;
+    }
+
+    // Update the dataset of the row with the new cost (export cost)
+    const validatedNewCost = validateAndParseNumber(newCost, 'Export item', 'cost');
+    console.log('what was old cost in row dataset? ' + rowElement.dataset.userCost);
+    rowElement.dataset.userCost = validatedNewCost;
+
+    // Call a function to update the totals based on the new cost
+    updateTotalsAndInfoForRow(databaseCost, oldCost, validatedNewCost, eventTarget, ValueType.COST);
 }
 
 /**
@@ -165,11 +195,55 @@ function changePrice(currentScanCode, newValue, eventTarget) {
     const exportRowsMap = getExportRowsMap();
     if (exportRowsMap.has(currentScanCode)) {
         let exportData = exportRowsMap.get(currentScanCode);
+        let oldPrice = validateAndParseNumber(exportData.price, 'old price', 'price');
+        console.log('old price ' + oldPrice);
         exportData.price = newValue;
         updateUIValueInClosestTd(eventTarget, newValue);
+
+        // Now call the new function to update the row's dataset and totals
+        updateRowAndTotalsForNewPrice(eventTarget, oldPrice, newValue);
+
     } else {
         console.log(`No entry found for the scan code: ${currentScanCode}`);
     }
+}
+
+export function updateRowAndTotalsForNewPrice(eventTarget, oldPrice, newPrice) {
+    // Find the closest 'tr' element to get the associated row
+    const rowElement = eventTarget.closest('tr');
+    if (!rowElement) {
+        console.error('No row element found for the event target');
+        return;
+    }
+    debugger
+    if (rowElement.classList.contains(RowTypes.NO_MATCH)) {
+        return;
+    }
+
+    // Get the database price from the dataset of the row
+    const databasePrice = parseFloat(rowElement.dataset.databasePrice || 0);
+    if (isNaN(databasePrice)) {
+        console.warn('Invalid or missing database price in the row dataset');
+        return;
+    }
+
+    // Update the dataset of the row with the new price (export price)
+    const validatedNewPrice = validateAndParseNumber(newPrice, 'Export item', 'price');
+    console.log(' in row dataset old price ' + rowElement.dataset.userPrice);
+    rowElement.dataset.userPrice = validatedNewPrice;
+
+    // Call a function to update the totals based on the new price
+    // updatePriceTotalsForRow(databasePrice, validatedNewPrice, rowElement);
+    updateTotalsAndInfoForRow(databasePrice, oldPrice, validatedNewPrice, eventTarget, ValueType.PRICE);
+}
+
+export function validateAndParseNumber(value, itemName, valueType) {
+    const parsedValue = parseFloat(value);
+    if (isNaN(parsedValue)) {
+        console.warn(`${itemName} ${valueType} is not a valid number: ${value}`);
+        return 0; // Default to 0 if the value is not a valid number
+    }
+    return parsedValue;
 }
 
 /**

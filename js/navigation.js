@@ -9,7 +9,6 @@ export function switchView(viewId) {
   const legend = document.getElementsByClassName("legend")[0];
 
   clearSelectedRowsMap();
-  resetTotals();
 
   // Function to clear inner HTML of all elements with a given class
   const clearTableContainers = () => {
@@ -24,6 +23,7 @@ export function switchView(viewId) {
     clearTableContainers(); // Clear content of table containers
     legend.style.display = "none";
     clearGlobalErrorMessage(); // Clear the error message when switching back to the import view
+    resetTotals();
   } else if (viewId === "tableView") {
     tableView.style.display = "flex";
     importView.style.display = "none";

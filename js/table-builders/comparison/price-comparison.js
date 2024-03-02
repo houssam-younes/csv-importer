@@ -19,12 +19,12 @@ let totalSelectedExportItems_partial_match = 0;
 
 
 // Totals for matching items - including cost
-let totalSelectedDatabaseItemCosts_matching = 0;
-let totalSelectedExportItemCosts_matching = 0;
+export let totalSelectedDatabaseItemCosts_matching = 0;
+export let totalSelectedExportItemCosts_matching = 0;
 
 // Totals for partial matching items - including cost
-let totalSelectedDatabaseItemCosts_partial_match = 0;
-let totalSelectedExportItemCosts_partial_match = 0;
+export let totalSelectedDatabaseItemCosts_partial_match = 0;
+export let totalSelectedExportItemCosts_partial_match = 0;
 
 export function resetTotals() {
     // Reset totals for matching items
@@ -134,35 +134,28 @@ export function logResults() {
     console.log(`Average Percentage Price Difference for Partial Matching Items: ${averagePercentagePriceDifferencePartialMatch}%`);
 }
 
-
-export function updateStatisticsUI() {
-    // Calculate the averages
-    const averagePriceDifferenceMatching = totalSelectedDatabaseItems_matching > 0 ?
-        (totalSelectedExportItemPrices_matching - totalSelectedDatabaseItemPrices_matching) / totalSelectedDatabaseItems_matching : 0;
-    const averagePercentagePriceDifferenceMatching = totalSelectedDatabaseItems_matching > 0 ?
-        ((totalSelectedExportItemPrices_matching - totalSelectedDatabaseItemPrices_matching) / totalSelectedDatabaseItemPrices_matching) * 100 : 0;
-
-    const averagePriceDifferencePartialMatch = totalSelectedDatabaseItems_partial_match > 0 ?
-        (totalSelectedExportItemPrices_partial_match - totalSelectedDatabaseItemPrices_partial_match) / totalSelectedDatabaseItems_partial_match : 0;
-    const averagePercentagePriceDifferencePartialMatch = totalSelectedDatabaseItems_partial_match > 0 ?
-        ((totalSelectedExportItemPrices_partial_match - totalSelectedDatabaseItemPrices_partial_match) / totalSelectedDatabaseItemPrices_partial_match) * 100 : 0;
-
-    // Update the UI elements
-    // This assumes you have elements with these specific IDs in your HTML
-    document.getElementById('matching-average-percentage').textContent = formatDifference(averagePercentagePriceDifferenceMatching) + '%';
-    document.getElementById('matching-average-total').textContent = formatDifference(averagePriceDifferenceMatching) + '$';
-
-    document.getElementById('partial-matching-average-percentage').textContent = formatDifference(averagePercentagePriceDifferencePartialMatch) + '%';
-    document.getElementById('partial-matching-average-total').textContent = formatDifference(averagePriceDifferencePartialMatch) + '$';
-}
-
 // Function to calculate averages for matching items
 export function calculateAveragesMatching() {
     const averagePriceDifference = totalSelectedDatabaseItems_matching > 0
         ? (totalSelectedExportItemPrices_matching - totalSelectedDatabaseItemPrices_matching) / totalSelectedDatabaseItems_matching
         : 0;
-    const averagePercentagePriceDifference = totalSelectedDatabaseItems_matching > 0
+    const averagePercentagePriceDifference = (totalSelectedDatabaseItems_matching > 0 && totalSelectedDatabaseItemPrices_matching != 0)
         ? ((totalSelectedExportItemPrices_matching - totalSelectedDatabaseItemPrices_matching) / totalSelectedDatabaseItemPrices_matching) * 100 / totalSelectedDatabaseItems_matching
+        : 0;
+
+    return {
+        averagePriceDifference,
+        averagePercentagePriceDifference
+    };
+}
+
+// Function to calculate averages for partial matching items
+export function calculateAveragesPartialMatch() {
+    const averagePriceDifference = totalSelectedDatabaseItems_partial_match > 0
+        ? (totalSelectedExportItemPrices_partial_match - totalSelectedDatabaseItemPrices_partial_match) / totalSelectedDatabaseItems_partial_match
+        : 0;
+    const averagePercentagePriceDifference = (totalSelectedDatabaseItems_partial_match > 0 && totalSelectedDatabaseItemPrices_partial_match != 0)
+        ? ((totalSelectedExportItemPrices_partial_match - totalSelectedDatabaseItemPrices_partial_match) / totalSelectedDatabaseItemPrices_partial_match) * 100 / totalSelectedDatabaseItems_partial_match
         : 0;
 
     return {
@@ -175,8 +168,8 @@ export function calculateAverageCostsMatching() {
     const averageCostDifference = totalSelectedDatabaseItems_matching > 0
         ? (totalSelectedExportItemCosts_matching - totalSelectedDatabaseItemCosts_matching) / totalSelectedDatabaseItems_matching
         : 0;
-    const averagePercentageCostDifference = totalSelectedDatabaseItemCosts_matching > 0
-        ? ((totalSelectedExportItemCosts_matching - totalSelectedDatabaseItemCosts_matching) / totalSelectedDatabaseItemCosts_matching) * 100
+    const averagePercentageCostDifference = (totalSelectedDatabaseItems_matching > 0 && totalSelectedDatabaseItemCosts_matching != 0)
+        ? ((totalSelectedExportItemCosts_matching - totalSelectedDatabaseItemCosts_matching) / totalSelectedDatabaseItemCosts_matching) * 100 / totalSelectedDatabaseItems_matching
         : 0;
 
     return {
@@ -189,8 +182,8 @@ export function calculateAverageCostsPartialMatch() {
     const averageCostDifference = totalSelectedDatabaseItems_partial_match > 0
         ? (totalSelectedExportItemCosts_partial_match - totalSelectedDatabaseItemCosts_partial_match) / totalSelectedDatabaseItems_partial_match
         : 0;
-    const averagePercentageCostDifference = totalSelectedDatabaseItemCosts_partial_match > 0
-        ? ((totalSelectedExportItemCosts_partial_match - totalSelectedDatabaseItemCosts_partial_match) / totalSelectedDatabaseItemCosts_partial_match) * 100
+    const averagePercentageCostDifference = (totalSelectedDatabaseItems_partial_match > 0 && totalSelectedDatabaseItemCosts_partial_match != 0)
+        ? ((totalSelectedExportItemCosts_partial_match - totalSelectedDatabaseItemCosts_partial_match) / totalSelectedDatabaseItemCosts_partial_match) * 100 / totalSelectedDatabaseItems_partial_match
         : 0;
 
     return {
@@ -201,33 +194,43 @@ export function calculateAverageCostsPartialMatch() {
 
 
 
-// Function to calculate averages for partial matching items
-export function calculateAveragesPartialMatch() {
-    const averagePriceDifference = totalSelectedDatabaseItems_partial_match > 0
-        ? (totalSelectedExportItemPrices_partial_match - totalSelectedDatabaseItemPrices_partial_match) / totalSelectedDatabaseItems_partial_match
-        : 0;
-    const averagePercentagePriceDifference = totalSelectedDatabaseItems_partial_match > 0
-        ? ((totalSelectedExportItemPrices_partial_match - totalSelectedDatabaseItemPrices_partial_match) / totalSelectedDatabaseItemPrices_partial_match) * 100 / totalSelectedDatabaseItems_partial_match
-        : 0;
-
-    return {
-        averagePriceDifference,
-        averagePercentagePriceDifference
-    };
-}
-
-
 export function formatDifference(value, inverted = false) {
     const formattedValue = value.toFixed(2);
     const sign = value >= 0 ? "+" : "";
-    const colorClass = (value >= 0 && !inverted) ? "positive-diff" : "negative-diff";
+    let colorClass = "";
+    if (!inverted) {
+        colorClass = (value >= 0 && !inverted) ? "positive-diff" : "negative-diff";
+    }
+    else {
+        colorClass = (value >= 0) ? "negative-diff" : "positive-diff";
+    }
     return `<span class="${colorClass}">${sign}${formattedValue}</span>`;
 }
 
 // Assuming the existence of formatDifference function as defined earlier
 
+export function updatePriceAveragesUI() {
+    updateMatchingPriceAveragesUI();
+    updatePartialMatchPriceAveragesUI();
+}
+
+export function updateMatchingSectionAveragesUI() {
+    updateMatchingPriceAveragesUI();
+    updateMatchingCostAveragesUI();
+}
+
+export function updatePartialMatchSectionAveragesUI() {
+    updatePartialMatchPriceAveragesUI();
+    updatePartialMatchingCostAveragesUI();
+}
+
+export function updateCostAveragesUI() {
+    updateMatchingCostAveragesUI();
+    updatePartialMatchingCostAveragesUI();
+}
+
 // Updates the UI with the calculated averages for matching items
-export function updateMatchingAveragesUI() {
+export function updateMatchingPriceAveragesUI() {
     const { averagePriceDifference, averagePercentagePriceDifference } = calculateAveragesMatching();
 
     // Format the calculated averages
@@ -243,7 +246,7 @@ export function updateMatchingAveragesUI() {
 }
 
 // Updates the UI with the calculated averages for partial matching items
-export function updatePartialMatchingAveragesUI() {
+export function updatePartialMatchPriceAveragesUI() {
     const { averagePriceDifference, averagePercentagePriceDifference } = calculateAveragesPartialMatch();
 
     // Format the calculated averages
@@ -251,9 +254,156 @@ export function updatePartialMatchingAveragesUI() {
     const formattedPercentageDiff = formatDifference(averagePercentagePriceDifference);
 
     // Select the elements by their class names and update their HTML
-    const priceDiffElement = document.querySelector('.partial-match-average-cost-total');
-    const percentageDiffElement = document.querySelector('.partial-match-average-cost-percentage');
+    const priceDiffElement = document.querySelector('.partial-match-average-total');
+    const percentageDiffElement = document.querySelector('.partial-match-average-percentage');
 
     if (priceDiffElement) priceDiffElement.innerHTML = formattedPriceDiff;
     if (percentageDiffElement) percentageDiffElement.innerHTML = formattedPercentageDiff;
+}
+
+
+// Updates the UI with the calculated averages for matching items costs
+export function updateMatchingCostAveragesUI() {
+    const { averageCostDifference, averagePercentageCostDifference } = calculateAverageCostsMatching();
+
+    // Format the calculated averages
+    const formattedCostDiff = formatDifference(averageCostDifference, true);
+    const formattedPercentageDiff = formatDifference(averagePercentageCostDifference, true); // Invert color if needed
+
+    // Select the elements by their class names and update their HTML
+    const costDiffElement = document.querySelector('.matching-average-cost-total');
+    const percentageDiffElement = document.querySelector('.matching-average-cost-percentage');
+
+    if (costDiffElement) costDiffElement.innerHTML = formattedCostDiff;
+    if (percentageDiffElement) percentageDiffElement.innerHTML = formattedPercentageDiff;
+}
+
+// Updates the UI with the calculated averages for partial matching items costs
+export function updatePartialMatchingCostAveragesUI() {
+    const { averageCostDifference, averagePercentageCostDifference } = calculateAverageCostsPartialMatch();
+
+    // Format the calculated averages
+    const formattedCostDiff = formatDifference(averageCostDifference, true);
+    const formattedPercentageDiff = formatDifference(averagePercentageCostDifference, true); // Invert color if needed
+
+    // Select the elements by their class names and update their HTML
+    const costDiffElement = document.querySelector('.partial-match-average-cost-total');
+    const percentageDiffElement = document.querySelector('.partial-match-average-cost-percentage');
+
+    if (costDiffElement) costDiffElement.innerHTML = formattedCostDiff;
+    if (percentageDiffElement) percentageDiffElement.innerHTML = formattedPercentageDiff;
+}
+
+export function selectUnselectRow(rowData, isSelected) {
+    if (rowData.isMatching) {
+        toggleMatchingPriceSelection(rowData.databasePrice, rowData.exportPrice, isSelected);
+        toggleMatchingCostSelection(rowData.databaseCost, rowData.exportCost, isSelected);
+
+        if (isSelected) {
+            totalSelectedDatabaseItems_matching++;
+            totalSelectedExportItems_matching++;
+        } else {
+            totalSelectedDatabaseItems_matching--;
+            totalSelectedExportItems_matching--;
+        }
+    }
+
+    if (rowData.isPartialMatch) {
+        togglePartialMatchPriceSelection(rowData.databasePrice, rowData.exportPrice, isSelected);
+        togglePartialMatchCostSelection(rowData.databaseCost, rowData.exportCost, isSelected);
+
+        if (isSelected) {
+            totalSelectedDatabaseItems_partial_match++;
+            totalSelectedExportItems_partial_match++;
+        } else {
+            totalSelectedDatabaseItems_partial_match--;
+            totalSelectedExportItems_partial_match--;
+        }
+    }
+}
+
+export function toggleMatchingPriceSelection(databasePrice, exportPrice, isSelected) {
+    if (isSelected) {
+        totalSelectedDatabaseItemPrices_matching += databasePrice;
+        totalSelectedExportItemPrices_matching += exportPrice;
+    } else {
+        totalSelectedDatabaseItemPrices_matching -= databasePrice;
+        totalSelectedExportItemPrices_matching -= exportPrice;
+    }
+}
+
+export function toggleMatchingCostSelection(databaseCost, exportCost, isSelected) {
+    if (isSelected) {
+        totalSelectedDatabaseItemCosts_matching += databaseCost;
+        totalSelectedExportItemCosts_matching += exportCost;
+    } else {
+        totalSelectedDatabaseItemCosts_matching -= databaseCost;
+        totalSelectedExportItemCosts_matching -= exportCost;
+    }
+
+    // Update the UI for cost averages
+    // updateMatchingCostAveragesUI();
+}
+
+export function togglePartialMatchPriceSelection(databasePrice, exportPrice, isSelected) {
+    if (isSelected) {
+        totalSelectedDatabaseItemPrices_partial_match += databasePrice;
+        totalSelectedExportItemPrices_partial_match += exportPrice;
+    } else {
+        totalSelectedDatabaseItemPrices_partial_match -= databasePrice;
+        totalSelectedExportItemPrices_partial_match -= exportPrice;
+    }
+
+    // Optionally, update the UI for partial match price averages
+    // updatePartialMatchPriceAveragesUI();
+}
+
+export function togglePartialMatchCostSelection(databaseCost, exportCost, isSelected) {
+    if (isSelected) {
+        totalSelectedDatabaseItemCosts_partial_match += databaseCost;
+        totalSelectedExportItemCosts_partial_match += exportCost;
+    } else {
+        totalSelectedDatabaseItemCosts_partial_match -= databaseCost;
+        totalSelectedExportItemCosts_partial_match -= exportCost;
+    }
+}
+
+export function updateMatchingPriceTotals(databasePrice, userOldPrice, userNewPrice) {
+    const validatedOldPrice = validateAndParseNumber(userOldPrice, 'User old price', 'price');
+    const validatedNewPrice = validateAndParseNumber(userNewPrice, 'User new price', 'price');
+
+    // Remove the old user price from the totals
+    totalSelectedExportItemPrices_matching -= validatedOldPrice;
+    // Add the new user price to the totals
+    totalSelectedExportItemPrices_matching += validatedNewPrice;
+}
+
+export function updateMatchingCostTotals(databaseCost, userOldCost, userNewCost) {
+    const validatedOldCost = validateAndParseNumber(userOldCost, 'User old cost', 'cost');
+    const validatedNewCost = validateAndParseNumber(userNewCost, 'User new cost', 'cost');
+
+    // Remove the old user cost from the totals
+    totalSelectedExportItemCosts_matching -= validatedOldCost;
+    // Add the new user cost to the totals
+    totalSelectedExportItemCosts_matching += validatedNewCost;
+}
+
+export function updatePartialMatchPriceTotals(databasePrice, userOldPrice, userNewPrice) {
+    const validatedOldPrice = validateAndParseNumber(userOldPrice, 'User old price', 'price');
+    const validatedNewPrice = validateAndParseNumber(userNewPrice, 'User new price', 'price');
+
+    // Remove the old user price from the totals
+    totalSelectedExportItemPrices_partial_match -= validatedOldPrice;
+    // Add the new user price to the totals
+    totalSelectedExportItemPrices_partial_match += validatedNewPrice;
+}
+
+export function updatePartialMatchCostTotals(databaseCost, userOldCost, userNewCost) {
+    const validatedOldCost = validateAndParseNumber(userOldCost, 'User old cost', 'cost');
+    const validatedNewCost = validateAndParseNumber(userNewCost, 'User new cost', 'cost');
+
+    // Remove the old user cost from the totals
+    totalSelectedExportItemCosts_partial_match -= validatedOldCost;
+    // Add the new user cost to the totals
+    totalSelectedExportItemCosts_partial_match += validatedNewCost;
 }

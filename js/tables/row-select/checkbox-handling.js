@@ -1,6 +1,7 @@
-import { RowSource } from '../../file-constants.js';
+import { RowSource, RowTypes } from '../../file-constants.js';
 import { updateSelectedRows, deleteSelectedRows } from '../../export/export-manager.js';
 import { toggleSelection } from '../../table-builders/comparison/comparison.js';
+import { selectUnselectRow, updateMatchingSectionAveragesUI, updatePartialMatchSectionAveragesUI } from '../../table-builders/comparison/price-comparison.js';
 
 export function setupCheckboxes() {
     // Add event listeners to all checkboxes
@@ -14,18 +15,45 @@ export function handleCheckboxChange(event) {
     const currentCheckbox = event.target;
     const isChecked = currentCheckbox.checked;
     const currentRow = currentCheckbox.closest('tr');
-    // const dataID = currentRow.dataset.id; // Assuming 'data-id' holds the unique identifier for the row
     const dataID = currentRow.dataset.scanCode; // Assuming 'data-scan-code' holds the unique identifier for the row
 
     // Toggle the selection status in exportRowsMap
     toggleSelection(dataID);
 
+    processRowSelection(currentRow, isChecked);
+
     // Additional logic for handling paired rows, if necessary
     const pairId = currentCheckbox.dataset.pairId;
-    if (isChecked && pairId) {
-        // Logic to handle paired rows, uncheck the paired checkbox, etc.
-        // This might include calling toggleSelection for the paired row as well
-        // Ensure that the logic here is consistent with your application's requirements
+}
+
+// This function fetches row data using attributes and calls selectUnselectRow
+function processRowSelection(rowElement, isChecked) {
+    debugger
+    // Fetch necessary attributes from the row
+    const isMatching = rowElement.classList.contains(RowTypes.MATCHING); // Adjust according to your actual logic
+    const isPartialMatch = rowElement.classList.contains(RowTypes.PARTIAL); // Adjust according to your actual logic
+    const databasePrice = parseFloat(rowElement.dataset.databasePrice || 0);
+    const exportPrice = parseFloat(rowElement.dataset.userPrice || 0);
+    const databaseCost = parseFloat(rowElement.dataset.databaseCost || 0);
+    const exportCost = parseFloat(rowElement.dataset.userCost || 0);
+
+    // Prepare row data for selectUnselectRow
+    const rowData = {
+        isMatching,
+        isPartialMatch,
+        databasePrice,
+        exportPrice,
+        databaseCost,
+        exportCost
+    };
+
+    // Use selectUnselectRow with the gathered data
+    selectUnselectRow(rowData, isChecked);
+    if (isMatching) {
+        updateMatchingSectionAveragesUI();
+    }
+    else if (isPartialMatch) {
+        updatePartialMatchSectionAveragesUI();
     }
 }
 

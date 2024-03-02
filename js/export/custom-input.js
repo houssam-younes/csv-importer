@@ -1,6 +1,7 @@
 // custom-input.js
 import { CELL_INDICES } from "../file-constants.js";
 import { getExportRowsMap } from "../table-builders/comparison/comparison.js";
+import { updateRowAndTotalsForNewPrice, validateAndParseNumber } from "./dropdown-listeners.js";
 
 // let isEditing = false; // Flag to indicate if any field is being edited
 
@@ -69,7 +70,21 @@ function handleCustomPriceInput(currentScanCode, eventTarget) {
 function finalizeCustomInput(currentScanCode, editableDiv, flexContainer, jsUiValueContainer) {
     const newValue = editableDiv.textContent.trim();
     if (!isNaN(parseFloat(newValue)) && isFinite(newValue)) {
-        updatePriceInExportRowsMap(currentScanCode, newValue);
+
+        //updateRowAndTotalsForNewPrice()
+        // updatePriceInExportRowsMap(currentScanCode, newValue);
+        debugger
+        const exportRowsMap = getExportRowsMap();
+        if (exportRowsMap.has(currentScanCode)) {
+            let exportData = exportRowsMap.get(currentScanCode);
+            let oldPrice = validateAndParseNumber(exportData.price, 'old price custom', 'price custom');
+            //if editing a no match row, wont execute and will return
+            updateRowAndTotalsForNewPrice(flexContainer, oldPrice, newValue);
+            exportData.price = newValue; // Update the price in the map
+        } else {
+            console.error(`No entry found for the scan code: ${currentScanCode}`);
+        }
+
 
         // Set the div as non-editable and update its appearance for readonly mode
         editableDiv.contentEditable = false;

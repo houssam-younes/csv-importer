@@ -47,7 +47,7 @@ export function areHeadersMatching(userHeaders) {
  */
 export function generateRowHtml(cells, rowClass, pair_id, index, type, isExportRow = false, dbCells = []) {
   const row = document.createElement('tr');
-  row.className = `${rowClass} ${getRowColorClass(index, type, isExportRow)}`;
+  row.className = `${rowClass} ${type} ${getRowColorClass(index, type, isExportRow)}`;
   let userItemId = cells[0]; //scan code set up to be first, even if not first in user csv file
   row.setAttribute('data-id', userItemId);
   row.setAttribute('data-pair-id', pair_id || "");
@@ -79,10 +79,10 @@ export function generateRowHtml(cells, rowClass, pair_id, index, type, isExportR
       const isPriceOrCostCell = cellIndex === CELL_INDICES.price || cellIndex === CELL_INDICES.cost;
       isPriceOrCostCell ? td.classList.add('fixed-width-cell') : null;
       if (isExportRowWithMatchingPair(pair_id, rowClass) && isPriceOrCostCell) {
-        const comparisonResultDom = cellIndex === CELL_INDICES.price
-          ? addPriceCompareToTD(cell, pair_id)
-          : addCostCompareToTD(cell, pair_id);
-        cellContentWrapper.appendChild(comparisonResultDom);
+        let comparisonResultDom = handleCellAttributesAndComparison(row, cell, cellIndex, pairId);
+        if (comparisonResultDom) {
+          cellContentWrapper.appendChild(comparisonResultDom);  // Append the element where needed
+        }
       }
 
       // Append the dropdown for export rows
@@ -97,6 +97,45 @@ export function generateRowHtml(cells, rowClass, pair_id, index, type, isExportR
   return row;
 }
 
+function handleCellAttributesAndComparison(row, cell, cellIndex, pairId) {
+  if (cellIndex === CELL_INDICES.price) {
+    const userPrice = validateNumberElseZero(cell);
+    const databasePrice = validateNumberElseZero(getPriceFromDatabaseMap(pairId));
+    addPriceAttributesToRow(row, userPrice, databasePrice);
+    return addPriceCompareToTD(cell, pairId);  // Return the DOM element for price comparison
+  } else if (cellIndex === CELL_INDICES.cost) {
+    const userCost = validateNumberElseZero(cell);
+    const databaseCost = validateNumberElseZero(getCostFromDatabaseMap(pairId));
+    addCostAttributesToRow(row, userCost, databaseCost);
+    return addCostCompareToTD(cell, pairId);  // Return the DOM element for cost comparison
+  }
+
+  return null;
+}
+
+
+function addPriceAttributesToRow(row, userPrice, databasePrice) {
+  userPrice = validateNumberElseZero(userPrice);
+  databasePrice = validateNumberElseZero(databasePrice);
+
+  row.dataset.userPrice = userPrice;
+  row.dataset.databasePrice = databasePrice;
+}
+
+function addCostAttributesToRow(row, userCost, databaseCost) {
+  userCost = validateNumberElseZero(userCost);
+  databaseCost = validateNumberElseZero(databaseCost);
+
+  row.dataset.userCost = userCost;
+  row.dataset.databaseCost = databaseCost;
+}
+
+function validateNumberElseZero(value) {
+  const parsedValue = parseFloat(value);
+  return isNaN(parsedValue) ? 0 : parsedValue;
+}
+
+
 /**
  * Generates a table row (tr element) for export, including source column content and dynamic cells with dropdowns.
  * 
@@ -110,10 +149,11 @@ export function generateRowHtml(cells, rowClass, pair_id, index, type, isExportR
  */
 export function generateExportRowHtml(userCells, rowClass, userItemId, pairId, index, type) {
   const row = document.createElement('tr');
-  row.className = `${rowClass} ${getRowColorClass(index, type, true)}`;
+  row.className = `${rowClass} ${type} ${getRowColorClass(index, type, true)}`;
   row.setAttribute('data-id', userItemId);
   row.setAttribute('data-pair-id', pairId);
   row.setAttribute('data-scan-code', userItemId); // Use userItemId as the initial scan code
+  //row.setAttribute('data-database-price', pairId);
 
   const sourceColumnDom = createSourceColumnContent(rowClass, type, index, true);
   const tdSourceColumn = document.createElement('td');
@@ -133,10 +173,10 @@ export function generateExportRowHtml(userCells, rowClass, userItemId, pairId, i
 
     // Handle price or cost cell comparison
     if (isExportRowWithMatchingPair(pairId, rowClass) && isPriceOrCostCell) {
-      const comparisonResultDom = cellIndex === CELL_INDICES.price
-        ? addPriceCompareToTD(cell, pairId)
-        : addCostCompareToTD(cell, pairId); // Assuming addCostCompareToTD is similarly updated
-      cellContentWrapper.appendChild(comparisonResultDom);
+      let comparisonResultDom = handleCellAttributesAndComparison(row, cell, cellIndex, pairId);
+      if (comparisonResultDom) {
+        cellContentWrapper.appendChild(comparisonResultDom);  // Append the element where needed
+      }
     } else {
       // Create a div for the cell content instead of a text node
       const contentDiv = document.createElement('div');
