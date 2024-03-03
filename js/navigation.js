@@ -1,7 +1,8 @@
 import { handleFileSelect, resetFileInput } from "./csv-file-helpers/file-select.js";
-import { clearSelectedRowsMap, exportSelectedRowsToCsv } from "./export/export-manager.js";
+import { clearSelectedRowsMap, exportSelectedRowsToCsvWithExportHeaders } from "./export/export-manager.js";
 import { clearGlobalErrorMessage } from './csv-file-helpers/file-error.js'; // Ensure the path is correct
 import { resetTotals } from "./table-builders/comparison/price-comparison.js";
+import { clearExportRowsMap } from "./table-builders/comparison/comparison.js";
 
 export function switchView(viewId) {
   const importView = document.getElementById("importView");
@@ -24,6 +25,7 @@ export function switchView(viewId) {
     legend.style.display = "none";
     clearGlobalErrorMessage(); // Clear the error message when switching back to the import view
     resetTotals();
+    clearExportRowsMap();
   } else if (viewId === "tableView") {
     tableView.style.display = "flex";
     importView.style.display = "none";
@@ -51,7 +53,8 @@ export function setupNavigation(databaseCsv) {
   fileInput.onchange = (event) => handleFileSelect(event, databaseCsv);
 
   exportButton.onclick = () => {
-    exportSelectedRowsToCsv();
+    //exportSelectedRowsToCsv();
+    exportSelectedRowsToCsvWithExportHeaders();
   };
 
   backBtn.onclick = () => {

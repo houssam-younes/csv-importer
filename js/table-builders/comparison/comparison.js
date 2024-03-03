@@ -17,6 +17,9 @@ export const isSelectedKey = Symbol('isSelected');
 export function getExportRowsMap() {
   return exportRowsMap;
 }
+export function clearExportRowsMap() {
+  exportRowsMap = new Map();
+}
 
 export function getUserMap() {
   return userMap;
@@ -312,6 +315,7 @@ function findPartialMatch(userItem, partialMatches, userItemCsv, dbHeaders) {
 // }
 
 // Function to convert object to CSV string
+//uses db headers mostly
 export function objectToCsvString(obj, headers) {
   // Create an empty array to store the CSV values
   const csvValues = [];

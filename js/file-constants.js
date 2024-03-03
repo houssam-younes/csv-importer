@@ -10,14 +10,24 @@ export const RowSource = {
   EXPORT: "export-row"
 };
 
+//for header flexibility
 export const userHeaderMappings = {
-  'scan_code': ['Scan Code', 'scan code', 'Scan_Code', 'ScanCode'],
-  'item_name': ['Item Name', 'item name', 'Scan_Code', 'ItemName', 'Description'],
-  'department': ['Department', 'Department # In register'],
-  'cost': ['Cost'],
-  'price': ['Price'],
+  'scan_code': ['Scan Code', 'scan code', 'Scan_Code', 'scan_code', 'scancode'],
+  'item_name': ['Item Name', 'item name', 'itemname', 'description'],
+  'department': ['Department', 'department', 'Department # In register', 'department # in register'],
+  'cost': ['Cost', 'cost'],
+  'price': ['Price', 'price'],
+  'vendor_name': ['vendor name', 'vendor'],
+  'modifier': ['modifier'],
+  'units_per_case': ['units/case', 'units per case'],
+  'tax_type_number': ['tax type # in register', 'tax type in register'],
+  'is_food_stampable': ['is food stampable'],
+  'current_inventory': ['current inventory'],
+  'price_group_name': ['price group name'],
+  'linked_item': ['linked item']
 };
 
+//what will be displayed, will be used in objToCsvString to keep same order
 export const databaseHeaders = [
   'scan_code',
   'item_name',
@@ -25,6 +35,27 @@ export const databaseHeaders = [
   'cost',
   'price',
 ];
+
+// Define the headers that should be included in the exported CSV, along with their custom export names and default values.
+//the key is the transformed header (normalized) see above
+export const exportHeaders = {
+  'scan_code': { exportName: 'Scan Code', defaultValue: null },
+  'modifier': { exportName: 'Modifier', defaultValue: '0' },
+  'item_name': { exportName: 'Description', defaultValue: null },
+  'price': { exportName: 'Price', defaultValue: null },
+  'cost': { exportName: 'Cost', defaultValue: null },
+  'units_per_case': { exportName: 'Units/Case', defaultValue: '0' },
+  'department': { exportName: 'Department # In register', defaultValue: '' },
+  'tax_type_number': { exportName: 'Tax Type # in Register', defaultValue: '' },
+  'is_food_stampable': { exportName: 'Is food stampable', defaultValue: '0' },
+  'current_inventory': { exportName: 'Current Inventory', defaultValue: '0' },
+  'price_group_name': { exportName: 'Price Group Name', defaultValue: '' },
+  'vendor_name': { exportName: 'Vendor Name', defaultValue: '' },
+  'linked_item': { exportName: 'Linked Item', defaultValue: '0' }
+};
+
+
+
 
 // Initialize CELL_INDICES to dynamically fill in indices
 // example:

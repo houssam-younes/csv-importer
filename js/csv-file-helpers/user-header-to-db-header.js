@@ -2,14 +2,15 @@ import { userHeaderMappings } from "../file-constants.js";
 
 export let originalUserHeaders = [];
 
-export function setOriginalUserHeaders(headers){
-    originalUserHeaders=headers;
+export function setOriginalUserHeaders(headers) {
+    originalUserHeaders = headers;
 }
 
 // Function to normalize a single header
 export function normalizeHeader(header) {
+    let lowerCaseHeader = header.toLowerCase();
     for (const dbHeader in userHeaderMappings) {
-        if (userHeaderMappings[dbHeader].includes(header)) {
+        if (userHeaderMappings[dbHeader].includes(lowerCaseHeader)) {
             return dbHeader; // Return the database header that matches the user header
         }
     }

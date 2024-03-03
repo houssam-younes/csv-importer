@@ -107,6 +107,7 @@ function handleCellAttributesAndComparison(row, cell, cellIndex, pairId) {
     const userCost = validateNumberElseZero(cell);
     const databaseCost = validateNumberElseZero(getCostFromDatabaseMap(pairId));
     addCostAttributesToRow(row, userCost, databaseCost);
+    debugger
     return addCostCompareToTD(cell, pairId);  // Return the DOM element for cost comparison
   }
 
@@ -366,7 +367,7 @@ function isExportRowWithMatchingPair(pair_id, rowClass) {
  * @param {string} pair_id - The pair ID used to retrieve the corresponding database cost.
  * @return {HTMLElement} The DOM element with the comparison result.
  */
-function addCostCompareToTD(cellValue, pair_id) {
+function addCostCompareToTDOld(cellValue, pair_id) {
   const userCost = parseFloat(cellValue);
   const databaseCost = parseFloat(getCostFromDatabaseMap(pair_id));
 
@@ -418,6 +419,58 @@ function addCostCompareToTD(cellValue, pair_id) {
   return compareContainer;
 }
 
+function addCostCompareToTD(cellValue, pair_id) {
+  const userCost = parseFloat(cellValue);
+  const databaseCost = parseFloat(getCostFromDatabaseMap(pair_id));
+
+  const compareContainer = document.createElement('div');
+  compareContainer.className = 'compare-td-container';
+
+  const costContainer = document.createElement('div');
+  costContainer.className = 'cost-container js-ui-value';
+  costContainer.textContent = cellValue; // Display the user-provided cost
+  compareContainer.appendChild(costContainer);
+
+  const infoContainer = document.createElement('div');
+  infoContainer.className = 'cost-info-container';
+  compareContainer.appendChild(infoContainer);
+
+  const differenceSpan = document.createElement('span');
+  differenceSpan.className = 'cost-difference'; // Class name applied regardless of NaN
+  infoContainer.appendChild(differenceSpan);
+
+  const infoText = document.createElement('span');
+  infoText.className = 'cost-info'; // Class name applied regardless of NaN
+  infoContainer.appendChild(infoText);
+
+  // Proceed with calculations and modifications only if both costs are valid numbers
+  if (!isNaN(userCost) && !isNaN(databaseCost)) {
+    const costDifference = userCost - databaseCost;
+    let percentageDifference = databaseCost === 0 ? "N/A" : (costDifference / databaseCost) * 100;
+
+    const sign = value => value >= 0 ? "+" : "";
+    const costDifferenceDisplay = `${sign(costDifference)}${costDifference.toFixed(2)}$`;
+    let percentageDisplay = percentageDifference === "N/A" ? "N/A" : `${sign(percentageDifference)}${percentageDifference.toFixed(2)}%`;
+
+    const colorClass = costDifference >= 0 ? 'red-color-class' : 'green-color-class';
+    differenceSpan.textContent = costDifferenceDisplay;
+    infoText.textContent = percentageDisplay;
+
+    // Apply color class based on the cost difference
+    differenceSpan.classList.add(colorClass);
+    infoText.classList.add(colorClass);
+
+    if (userCost === databaseCost) {
+      infoText.textContent = 'Match';
+      infoText.classList.add('cost-match');
+    }
+  }
+
+  return compareContainer;
+}
+
+
+
 function getCostFromDatabaseMap(pair_id) {
   let cost = getDatabaseMap().get(pair_id)?.cost;
   return cost || "N/A";
@@ -430,7 +483,7 @@ function getCostFromDatabaseMap(pair_id) {
  * @param {string} pair_id - The pair ID used to retrieve the corresponding database price.
  * @return {HTMLElement} The DOM element with the comparison result.
  */
-function addPriceCompareToTD(cellValue, pair_id) {
+function addPriceCompareToTDOld(cellValue, pair_id) {
   const userPrice = parseFloat(cellValue);
   const databasePrice = parseFloat(getPriceFromDatabaseMap(pair_id));
 
@@ -477,6 +530,52 @@ function addPriceCompareToTD(cellValue, pair_id) {
     }
 
     compareContainer.appendChild(infoContainer);
+  }
+
+  return compareContainer;
+}
+
+function addPriceCompareToTD(cellValue, pair_id) {
+  const userPrice = parseFloat(cellValue);
+  const databasePrice = parseFloat(getPriceFromDatabaseMap(pair_id));
+
+  const compareContainer = document.createElement('div');
+  compareContainer.className = 'compare-td-container js-price';
+
+  const priceContainer = document.createElement('div');
+  priceContainer.className = 'price-container js-ui-value';
+  priceContainer.textContent = cellValue; // Display the user-provided price
+  compareContainer.appendChild(priceContainer);
+
+  const infoContainer = document.createElement('div');
+  infoContainer.className = 'price-info-container js-hide-on-custom';
+  compareContainer.appendChild(infoContainer);
+
+  const infoText = document.createElement('span');
+  infoText.className = 'price-info'; // Base class, additional classes might be added later
+  infoContainer.appendChild(infoText);
+
+  const differenceText = document.createElement('span');
+  differenceText.className = 'price-difference'; // Base class, additional classes might be added later
+  infoContainer.appendChild(differenceText);
+
+  // Perform the comparison and populate the elements if both prices are valid numbers
+  if (!isNaN(userPrice) && !isNaN(databasePrice)) {
+    const priceDifference = userPrice - databasePrice;
+    const percentageDifference = databasePrice === 0 ? 0 : (priceDifference / databasePrice) * 100;
+
+    const sign = value => value >= 0 ? "+" : "";
+    const priceDifferenceDisplay = `${sign(priceDifference)}${priceDifference.toFixed(2)}`;
+    const percentageDisplay = percentageDifference ? `${sign(percentageDifference)}${percentageDifference.toFixed(2)}%` : "N/A";
+
+    const colorClass = priceDifference >= 0 ? 'green-color-class' : 'red-color-class';
+    infoText.textContent = userPrice === databasePrice ? 'Match' : `${percentageDisplay}`;
+    infoText.classList.add(colorClass);
+
+    if (userPrice !== databasePrice) {
+      differenceText.textContent = `${priceDifferenceDisplay}$`;
+      differenceText.classList.add(colorClass);
+    }
   }
 
   return compareContainer;
