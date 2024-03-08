@@ -86,6 +86,6 @@ export const columnsForUpdate = [
 
 
 export const featureFlags = {
-  showCostComparisons: true,
-  showPercentages: true
+  showCostComparisons: false,
+  showPercentages: false
 };
