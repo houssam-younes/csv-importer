@@ -1,4 +1,5 @@
-import { RowTypes } from "../../file-constants.js";
+import { RowTypes, featureFlags } from "../../file-constants.js";
+import { hideElement } from "../table-builder.js";
 import { toggleMatchingCostSelection, toggleMatchingPriceSelection, togglePartialMatchCostSelection, togglePartialMatchPriceSelection, updateMatchingCostAveragesUI, updateMatchingCostTotals, updateMatchingPriceAveragesUI, updateMatchingPriceTotals, updatePartialMatchCostTotals, updatePartialMatchPriceAveragesUI, updatePartialMatchPriceTotals, updatePartialMatchingCostAveragesUI } from "./price-comparison.js";
 
 export const ValueType = {
@@ -49,6 +50,7 @@ export function updateTotalsAndInfoForRow(databaseValue, oldUserValue, newUserVa
 }
 
 function compareAndUpdateUI(tdElement, databaseValue, exportValue, valueType) {
+    debugger
     const isPrice = valueType === ValueType.PRICE;
     const isCost = valueType === ValueType.COST;
 
@@ -61,26 +63,34 @@ function compareAndUpdateUI(tdElement, databaseValue, exportValue, valueType) {
     const percentageDifference = (databaseValue === 0) ? 0 : (valueDifference / databaseValue) * 100;
     const colorClass = getColorClass(valueDifference, isCost);
 
+    const infoContent = formatValue(percentageDifference, true);
+    const differenceContent = formatValue(valueDifference);
+
     // Check if there's any difference
     if (exportValue !== databaseValue) {
         // If there's a difference, display the percentage difference in 'info' and value difference in 'difference'
-        const infoContent = formatValue(percentageDifference, true);
-        const differenceContent = formatValue(valueDifference);
-        updateUIElement(tdElement, infoClass, infoContent, colorClass);
+        let show = featureFlags.showPercentages ? true : false;
+        updateUIElement(tdElement, infoClass, infoContent, colorClass, show);
         updateUIElement(tdElement, differenceClass, differenceContent, colorClass);
     } else {
         // If there's no difference, display "Match" in 'info' and hide the 'difference' element
-        updateUIElement(tdElement, infoClass, "Match", colorClass);
-        hideUIElement(tdElement, differenceClass);
+        updateUIElement(tdElement, differenceClass, "Match", colorClass);
+        updateUIElement(tdElement, infoClass, infoContent, colorClass, false);
+        // hideUIElement(tdElement, infoClass);
+        // const element = tdElement.querySelector(`.${infoClass}`);
+        // if (element !== null) {
+        // hideElement(element);
+        // }
     }
 }
 
-function hideUIElement(tdElement, valueType) {
-    const element = tdElement.querySelector(`.${valueType}`);
-    if (element !== null) {
-        element.style.display = 'none'; // Hide the element
-    }
-}
+// function hideUIElement(tdElement, valueType) {
+//     const element = tdElement.querySelector(`.${valueType}`);
+//     if (element !== null) {
+//         //element.style.display = 'none'; // Hide the element
+//         hideElement(element);
+//     }
+// }
 
 
 function getColorClass(valueDifference, inverted = false) {
@@ -96,12 +106,15 @@ function formatValue(value, isPercentage = false) {
     return `${sign}${Math.abs(value).toFixed(2)}${isPercentage ? '%' : ''}`;
 }
 
-function updateUIElement(tdElement, valueType, content, colorClass) {
+function updateUIElement(tdElement, valueType, content, colorClass, show = true) {
     const element = tdElement.querySelector(`.${valueType}`);
     if (element !== null) {
         element.style.display = ''; // Reset any display style to default, making the element visible if it was hidden
         element.textContent = content;
         element.className = `${valueType} ${colorClass}`;
+        if (!show) {
+            hideElement(element);
+        }
     } else {
         console.error(`Element with class ${valueType} not found in the td element`);
     }

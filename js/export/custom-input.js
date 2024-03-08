@@ -73,7 +73,6 @@ function finalizeCustomInput(currentScanCode, editableDiv, flexContainer, jsUiVa
 
         //updateRowAndTotalsForNewPrice()
         // updatePriceInExportRowsMap(currentScanCode, newValue);
-        debugger
         const exportRowsMap = getExportRowsMap();
         if (exportRowsMap.has(currentScanCode)) {
             let exportData = exportRowsMap.get(currentScanCode);

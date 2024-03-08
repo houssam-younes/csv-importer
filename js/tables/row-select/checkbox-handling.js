@@ -12,6 +12,7 @@ export function setupCheckboxes() {
 
 export function handleCheckboxChange(event) {
     // Get the current checkbox and its state
+    debugger
     const currentCheckbox = event.target;
     const isChecked = currentCheckbox.checked;
     const currentRow = currentCheckbox.closest('tr');

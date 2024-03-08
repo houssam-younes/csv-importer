@@ -457,3 +457,7 @@ option:hover {
 td img {
   overflow: visible;
 }
+
+.display-none {
+  display: none;
+}

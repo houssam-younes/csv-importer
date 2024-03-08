@@ -1,7 +1,7 @@
 import { RowSource, RowTypes } from "../file-constants.js";
 import { databaseHeaders } from "../file-constants.js";
 import { getDatabaseMap } from "./comparison/comparison.js";
-import { CELL_INDICES } from "../file-constants.js";
+import { CELL_INDICES, featureFlags } from "../file-constants.js";
 import { handleDropdownChange, handleSourceChange } from "../export/dropdown-listeners.js";
 
 export let PricePercentageArray = [];
@@ -107,7 +107,6 @@ function handleCellAttributesAndComparison(row, cell, cellIndex, pairId) {
     const userCost = validateNumberElseZero(cell);
     const databaseCost = validateNumberElseZero(getCostFromDatabaseMap(pairId));
     addCostAttributesToRow(row, userCost, databaseCost);
-    debugger
     return addCostCompareToTD(cell, pairId);  // Return the DOM element for cost comparison
   }
 
@@ -251,6 +250,7 @@ function createCheckboxForRow(prefix, index) {
   checkbox.className = "row-checkbox";
   checkbox.setAttribute("data-pair-id", `${prefix}_${index}`);
   checkbox.name = `${prefix}Checkbox${index}`;
+  checkbox.checked = true; // Start with the checkbox checked
 
   return checkbox; // Return the checkbox input element
 }
@@ -434,6 +434,10 @@ function addCostCompareToTD(cellValue, pair_id) {
   const infoContainer = document.createElement('div');
   infoContainer.className = 'cost-info-container';
   compareContainer.appendChild(infoContainer);
+  if (!featureFlags.showCostComparisons) {
+    hideElement(infoContainer);
+    // infoContainer.classList.add('display-none');
+  }
 
   const differenceSpan = document.createElement('span');
   differenceSpan.className = 'cost-difference'; // Class name applied regardless of NaN
@@ -442,6 +446,10 @@ function addCostCompareToTD(cellValue, pair_id) {
   const infoText = document.createElement('span');
   infoText.className = 'cost-info'; // Class name applied regardless of NaN
   infoContainer.appendChild(infoText);
+  if (!featureFlags.showCostComparisons || (!featureFlags.showPercentages)) {
+    //infoText.classList.add('display-none');
+    hideElement(infoText);
+  }
 
   // Proceed with calculations and modifications only if both costs are valid numbers
   if (!isNaN(userCost) && !isNaN(databaseCost)) {
@@ -461,8 +469,10 @@ function addCostCompareToTD(cellValue, pair_id) {
     infoText.classList.add(colorClass);
 
     if (userCost === databaseCost) {
-      infoText.textContent = 'Match';
-      infoText.classList.add('cost-match');
+      differenceSpan.textContent = 'Match';
+      differenceSpan.classList.add('cost-match');
+      // infoText.classList.add('display-none');
+      hideElement(infoText);
     }
   }
 
@@ -554,6 +564,10 @@ function addPriceCompareToTD(cellValue, pair_id) {
   const infoText = document.createElement('span');
   infoText.className = 'price-info'; // Base class, additional classes might be added later
   infoContainer.appendChild(infoText);
+  if (!featureFlags.showPercentages) {
+    // infoText.classList.add('display-none');
+    hideElement(infoText);
+  }
 
   const differenceText = document.createElement('span');
   differenceText.className = 'price-difference'; // Base class, additional classes might be added later
@@ -569,13 +583,20 @@ function addPriceCompareToTD(cellValue, pair_id) {
     const percentageDisplay = percentageDifference ? `${sign(percentageDifference)}${percentageDifference.toFixed(2)}%` : "N/A";
 
     const colorClass = priceDifference >= 0 ? 'green-color-class' : 'red-color-class';
-    infoText.textContent = userPrice === databasePrice ? 'Match' : `${percentageDisplay}`;
-    infoText.classList.add(colorClass);
 
-    if (userPrice !== databasePrice) {
-      differenceText.textContent = `${priceDifferenceDisplay}$`;
-      differenceText.classList.add(colorClass);
+    differenceText.textContent = userPrice === databasePrice ? 'Match' : `${priceDifferenceDisplay}$`;
+    differenceText.classList.add(colorClass);
+
+    infoText.textContent = `${percentageDisplay}`;
+    infoText.classList.add(colorClass);
+    if (userPrice == databasePrice) {
+      // infoText.classList.add('display-none');
+      hideElement(infoText);
     }
+    // if (userPrice !== databasePrice) {
+    // infoText.textContent = `${percentageDisplay}`;
+    // infoText.classList.add(colorClass);
+    // }
   }
 
   return compareContainer;
@@ -586,4 +607,16 @@ function getPriceFromDatabaseMap(pair_id) {
   // Assuming databaseMap is a JavaScript object where key is pair_id
   let price = getDatabaseMap().get(pair_id)?.price;
   return price || "N/A";
+}
+
+export function hideElement(element) {
+  // Ensure 'display-none' is added only if it's not already present
+  if (!element.classList.contains('display-none')) {
+    element.classList.add('display-none');
+  }
+}
+
+export function showElement(element) {
+  // Remove 'display-none' class if it's present
+  element.classList.remove('display-none');
 }

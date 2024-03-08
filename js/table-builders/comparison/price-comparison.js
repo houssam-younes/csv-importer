@@ -139,9 +139,14 @@ export function calculateAveragesMatching() {
     const averagePriceDifference = totalSelectedDatabaseItems_matching > 0
         ? (totalSelectedExportItemPrices_matching - totalSelectedDatabaseItemPrices_matching) / totalSelectedDatabaseItems_matching
         : 0;
+    // const averagePercentagePriceDifference = (totalSelectedDatabaseItems_matching > 0 && totalSelectedDatabaseItemPrices_matching != 0)
+    //     ? ((totalSelectedExportItemPrices_matching - totalSelectedDatabaseItemPrices_matching) / totalSelectedDatabaseItemPrices_matching) * 100 / totalSelectedDatabaseItems_matching
+    //     : 0;
+
     const averagePercentagePriceDifference = (totalSelectedDatabaseItems_matching > 0 && totalSelectedDatabaseItemPrices_matching != 0)
-        ? ((totalSelectedExportItemPrices_matching - totalSelectedDatabaseItemPrices_matching) / totalSelectedDatabaseItemPrices_matching) * 100 / totalSelectedDatabaseItems_matching
+        ? ((totalSelectedExportItemPrices_matching - totalSelectedDatabaseItemPrices_matching) / totalSelectedDatabaseItemPrices_matching) * 100
         : 0;
+
 
     return {
         averagePriceDifference,
@@ -154,9 +159,14 @@ export function calculateAveragesPartialMatch() {
     const averagePriceDifference = totalSelectedDatabaseItems_partial_match > 0
         ? (totalSelectedExportItemPrices_partial_match - totalSelectedDatabaseItemPrices_partial_match) / totalSelectedDatabaseItems_partial_match
         : 0;
+    // const averagePercentagePriceDifference = (totalSelectedDatabaseItems_partial_match > 0 && totalSelectedDatabaseItemPrices_partial_match != 0)
+    //     ? ((totalSelectedExportItemPrices_partial_match - totalSelectedDatabaseItemPrices_partial_match) / totalSelectedDatabaseItemPrices_partial_match) * 100 / totalSelectedDatabaseItems_partial_match
+    //     : 0;
+
     const averagePercentagePriceDifference = (totalSelectedDatabaseItems_partial_match > 0 && totalSelectedDatabaseItemPrices_partial_match != 0)
-        ? ((totalSelectedExportItemPrices_partial_match - totalSelectedDatabaseItemPrices_partial_match) / totalSelectedDatabaseItemPrices_partial_match) * 100 / totalSelectedDatabaseItems_partial_match
+        ? ((totalSelectedExportItemPrices_partial_match - totalSelectedDatabaseItemPrices_partial_match) / totalSelectedDatabaseItemPrices_partial_match) * 100
         : 0;
+
 
     return {
         averagePriceDifference,
@@ -168,8 +178,12 @@ export function calculateAverageCostsMatching() {
     const averageCostDifference = totalSelectedDatabaseItems_matching > 0
         ? (totalSelectedExportItemCosts_matching - totalSelectedDatabaseItemCosts_matching) / totalSelectedDatabaseItems_matching
         : 0;
+    // const averagePercentageCostDifference = (totalSelectedDatabaseItems_matching > 0 && totalSelectedDatabaseItemCosts_matching != 0)
+    //     ? ((totalSelectedExportItemCosts_matching - totalSelectedDatabaseItemCosts_matching) / totalSelectedDatabaseItemCosts_matching) * 100 / totalSelectedDatabaseItems_matching
+    //     : 0;
+
     const averagePercentageCostDifference = (totalSelectedDatabaseItems_matching > 0 && totalSelectedDatabaseItemCosts_matching != 0)
-        ? ((totalSelectedExportItemCosts_matching - totalSelectedDatabaseItemCosts_matching) / totalSelectedDatabaseItemCosts_matching) * 100 / totalSelectedDatabaseItems_matching
+        ? ((totalSelectedExportItemCosts_matching - totalSelectedDatabaseItemCosts_matching) / totalSelectedDatabaseItemCosts_matching) * 100
         : 0;
 
     return {
@@ -182,8 +196,12 @@ export function calculateAverageCostsPartialMatch() {
     const averageCostDifference = totalSelectedDatabaseItems_partial_match > 0
         ? (totalSelectedExportItemCosts_partial_match - totalSelectedDatabaseItemCosts_partial_match) / totalSelectedDatabaseItems_partial_match
         : 0;
+    // const averagePercentageCostDifference = (totalSelectedDatabaseItems_partial_match > 0 && totalSelectedDatabaseItemCosts_partial_match != 0)
+    //     ? ((totalSelectedExportItemCosts_partial_match - totalSelectedDatabaseItemCosts_partial_match) / totalSelectedDatabaseItemCosts_partial_match) * 100 / totalSelectedDatabaseItems_partial_match
+    //     : 0;
+
     const averagePercentageCostDifference = (totalSelectedDatabaseItems_partial_match > 0 && totalSelectedDatabaseItemCosts_partial_match != 0)
-        ? ((totalSelectedExportItemCosts_partial_match - totalSelectedDatabaseItemCosts_partial_match) / totalSelectedDatabaseItemCosts_partial_match) * 100 / totalSelectedDatabaseItems_partial_match
+        ? ((totalSelectedExportItemCosts_partial_match - totalSelectedDatabaseItemCosts_partial_match) / totalSelectedDatabaseItemCosts_partial_match) * 100
         : 0;
 
     return {

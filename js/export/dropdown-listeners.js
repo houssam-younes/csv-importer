@@ -215,7 +215,6 @@ export function updateRowAndTotalsForNewPrice(eventTarget, oldPrice, newPrice) {
         console.error('No row element found for the event target');
         return;
     }
-    debugger
     if (rowElement.classList.contains(RowTypes.NO_MATCH)) {
         return;
     }
