@@ -2,7 +2,7 @@ import { databaseHeaders, CELL_INDICES, RowTypes } from "../file-constants.js";
 import { getUserMap, getDatabaseMap, getExportRowsMap } from "../table-builders/comparison/comparison.js";
 import { updatePriceAveragesUI, updateCostAveragesUI, toggleMatchingPriceSelection, togglePartialMatchPriceSelection, updatePartialMatchPriceAveragesUI, updateMatchingPriceAveragesUI } from "../table-builders/comparison/price-comparison.js";
 import { ValueType, updateTotalsAndInfoForRow } from "../table-builders/comparison/price-cost-update-helpers.js";
-import { handleCustomInput } from "./custom-input.js";
+import { handleCustomInput, parseToTwoDecimals } from "./custom-input.js";
 /**
  * Handles the change event for dropdowns, updating the respective field based on the selected value.
  */
@@ -180,7 +180,6 @@ function updateRowAndTotalsForNewCost(eventTarget, oldCost, newCost) {
 
     // Update the dataset of the row with the new cost (export cost)
     const validatedNewCost = validateAndParseNumber(newCost, 'Export item', 'cost');
-    console.log('what was old cost in row dataset? ' + rowElement.dataset.userCost);
     rowElement.dataset.userCost = validatedNewCost;
 
     // Call a function to update the totals based on the new cost
@@ -195,11 +194,12 @@ export function changePrice(currentScanCode, newValue, eventTarget) {
     if (exportRowsMap.has(currentScanCode)) {
         let exportData = exportRowsMap.get(currentScanCode);
         let oldPrice = validateAndParseNumber(exportData.price, 'old price', 'price');
-        exportData.price = newValue;
-        updateUIValueInClosestTd(eventTarget, newValue);
+        let newValueParsed = parseToTwoDecimals(newValue);
+        exportData.price = newValueParsed;
+        updateUIValueInClosestTd(eventTarget, newValueParsed);
 
         // Now call the new function to update the row's dataset and totals
-        updateRowAndTotalsForNewPrice(eventTarget, oldPrice, newValue);
+        updateRowAndTotalsForNewPrice(eventTarget, oldPrice, newValueParsed);
 
     } else {
         console.log(`No entry found for the scan code: ${currentScanCode}`);

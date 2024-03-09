@@ -9,21 +9,21 @@ export function createSelectionControls(type) {
     return `
       <div class="selection-controls">
         <div class="selection-buttons">
-          <input type="radio" id="selectFile_${type}" name="selectionControl_${type}">
+          <input type="radio" id="selectFile_${type}" name="selectionControl_${type}" disabled>
           <label for="selectFile_${type}">Select All File Entries</label>
         </div>
-        <button id="unselectAll_${type}" class="unselect-button">Unselect All</button>
+        <button id="unselectAll_${type}" class="unselect-button" disabled>Unselect All</button>
       </div>`;
   }
   return `
     <div class="selection-controls">
       <div class="selection-buttons">
-        <input type="radio" id="selectDb_${type}" name="selectionControl_${type}">
+        <input type="radio" id="selectDb_${type}" name="selectionControl_${type}" disabled>
         <label for="selectDb_${type}">Select All Database Entries</label>
-        <input type="radio" id="selectFile_${type}" name="selectionControl_${type}">
+        <input type="radio" id="selectFile_${type}" name="selectionControl_${type}" disabled>
         <label for="selectFile_${type}">Select All File Entries</label>
       </div>
-      <button id="unselectAll_${type}" class="unselect-button">Unselect All</button>
+      <button id="unselectAll_${type}" class="unselect-button" disabled>Unselect All</button>
     </div>`;
 }
 

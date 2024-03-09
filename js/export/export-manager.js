@@ -85,7 +85,6 @@ export function deleteSelectedRows(id) {
 }
 
 export function exportSelectedRowsToCsv() {
-  debugger
   const exportData = dataToExport(); // Use the modified prepareForExport function
 
   if (exportData.length === 0) {
