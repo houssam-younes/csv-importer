@@ -11,6 +11,9 @@
     <link rel="stylesheet" href="styles/dropdown.css">
     <link rel="stylesheet" href="styles/select-radio-buttons.css">
     <link rel="stylesheet" href="styles/custom-input.css">
+    <link rel="stylesheet" href="styles/settings-dropdown.css">
+    <link rel="stylesheet" href="styles/add-all.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 </head>
 
 <body>
@@ -51,8 +54,32 @@
             <div class="expandable" id="matchingItems">
                 <button class="expandable-title">Matching Items <span
                         class="matching-total complementary-info"></span></button>
-                <div class="expandable-content">
-                    <div class="table-container">
+                <div class="expandable-content js-expandable-content js-matching">
+                    <div class="container settings-container-matching">
+                        <div class="select-btn">
+                            <span class="btn-text"><i class="fa-solid fa-gear"></i></span>
+                            <span class="arrow-dwn">
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </span>
+                        </div>
+                        <ul class="list-items">
+                            <li class="item" data-feature="showCostInfo">
+                                <span class="checkbox">
+                                    <i class="fa-solid fa-check check-icon"></i>
+                                </span>
+                                <span class="item-text">Show Cost Info</span>
+                            </li>
+                            <li class="item" data-feature="showPercentages">
+                                <span class="checkbox">
+                                    <i class="fa-solid fa-check check-icon"></i>
+                                </span>
+                                <span class="item-text">Show Percentages</span>
+                            </li>
+                        </ul>
+                    </div>
+
+
+                    <div class="table-container table-container-matching">
                         <!-- <div class="table-div"> -->
                         <!-- table div goes here -->
                         <!-- </div> -->
@@ -62,8 +89,30 @@
             <div class="expandable" id="partialMatches">
                 <button class="expandable-title">Partial Matches <span
                         class="partial-total complementary-info"></span></button>
-                <div class="expandable-content">
-                    <div class="table-container">
+                <div class="expandable-content  js-expandable-content js-partial-match">
+                    <div class="container settings-container-partial-match">
+                        <div class="select-btn">
+                            <span class="btn-text"><i class="fa-solid fa-gear"></i></span>
+                            <span class="arrow-dwn">
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </span>
+                        </div>
+                        <ul class="list-items">
+                            <li class="item" data-feature="showCostInfo">
+                                <span class="checkbox">
+                                    <i class="fa-solid fa-check check-icon"></i>
+                                </span>
+                                <span class="item-text">Show Cost Info</span>
+                            </li>
+                            <li class="item" data-feature="showPercentages">
+                                <span class="checkbox">
+                                    <i class="fa-solid fa-check check-icon"></i>
+                                </span>
+                                <span class="item-text">Show Percentages</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="table-container table-container-partial-match">
                         <!-- <div class="table-div"> -->
                         <!--table div goes here -->
                         <!-- </div> -->
@@ -74,7 +123,7 @@
                 <button class="expandable-title">No Matches <span
                         class="no-match-total complementary-info"></span></button>
                 <div class="expandable-content">
-                    <div class="table-container">
+                    <div class="table-container table-container-no-match">
                         <!-- <div class="table-div"> -->
                         <!--table div goes here -->
                         <!-- </div> -->
@@ -92,6 +141,7 @@
     </footer>
     <script type="module" src="js/main.js"></script>
     <script type="module" src="js/home/how-to-use/how-to-use.js"></script>
+    <script type="module" src="js/settings-dropdown.js"></script>
 </body>
 
 </html>

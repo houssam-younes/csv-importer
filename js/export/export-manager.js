@@ -95,8 +95,6 @@ export function exportSelectedRowsToCsv() {
 
   let csvContent = "data:text/csv;charset=utf-8,\uFEFF"; // Include UTF-8 BOM for Excel compatibility
 
-  console.log('whats export data ');
-  console.log(exportData);
   // Assuming the first item in exportData has all the headers
   const headers = Object.keys(exportData[0]);
 

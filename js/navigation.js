@@ -3,6 +3,8 @@ import { clearSelectedRowsMap, exportSelectedRowsToCsvWithExportHeaders } from "
 import { clearGlobalErrorMessage } from './csv-file-helpers/file-error.js'; // Ensure the path is correct
 import { resetTotals } from "./table-builders/comparison/price-comparison.js";
 import { clearExportRowsMap } from "./table-builders/comparison/comparison.js";
+import { resetFeatureFlags } from "./file-constants.js";
+import { clearCheckboxes } from "./settings-dropdown.js";
 
 export function switchView(viewId) {
   const importView = document.getElementById("importView");
@@ -10,6 +12,7 @@ export function switchView(viewId) {
   const legend = document.getElementsByClassName("legend")[0];
 
   clearSelectedRowsMap();
+  resetFeatureFlags();
 
   // Function to clear inner HTML of all elements with a given class
   const clearTableContainers = () => {
@@ -26,6 +29,7 @@ export function switchView(viewId) {
     clearGlobalErrorMessage(); // Clear the error message when switching back to the import view
     resetTotals();
     clearExportRowsMap();
+    clearCheckboxes();
   } else if (viewId === "tableView") {
     tableView.style.display = "flex";
     importView.style.display = "none";

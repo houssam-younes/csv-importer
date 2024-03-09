@@ -85,7 +85,27 @@ export const columnsForUpdate = [
 
 
 
+
+
+
+
+
+
+// Define variables for default values
+const defaultShowCostComparisons = false;
+const defaultShowPercentages = false;
+const defaultShowAveragePercentages = false;
+
+// Initialize featureFlags object with default values
 export const featureFlags = {
-  showCostComparisons: false,
-  showPercentages: false
+  showCostComparisons: defaultShowCostComparisons,
+  showPercentages: defaultShowPercentages,
+  showAveragePercentages: defaultShowAveragePercentages
 };
+
+// Function to reset featureFlags to default values
+export function resetFeatureFlags() {
+  featureFlags.showCostComparisons = defaultShowCostComparisons;
+  featureFlags.showPercentages = defaultShowPercentages;
+  featureFlags.showAveragePercentages = defaultShowAveragePercentages;
+}

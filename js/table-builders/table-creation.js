@@ -148,11 +148,11 @@ export function appendMatchingStatisticsInfo() {
   const formattedAvgPercentageDiff = (averagePercentagePriceDifference >= 0 ? "+" : "") + averagePercentagePriceDifference.toFixed(2);
   const formattedAvgPriceDiff = (averagePriceDifference >= 0 ? "+" : "") + averagePriceDifference.toFixed(2);
 
-  const percentageVisibilityClass = featureFlags.showPercentages ? '' : 'display-none';
+  const percentageVisibilityClass = featureFlags.showAveragePercentages ? '' : 'display-none';
 
   priceStatsDiv.innerHTML = `
-        <p class="${percentageVisibilityClass} info-price-matching-average-percentage">Average % Price difference: <span class="${pricePercentageClass}">${formattedAvgPercentageDiff}</span>%</p>
-        <p class="info-price-matching-average-difference">Average Price Difference: <span class="${priceTotalClass}">${formattedAvgPriceDiff}</span> $</p>
+        <p class="${percentageVisibilityClass} info-price-matching-average-percentage info-price-avg-percentage">Average % Price difference: <span class="${pricePercentageClass}">${formattedAvgPercentageDiff}</span>%</p>
+        <p class="info-price-matching-average-difference info-price-avg-difference">Average Price Difference: <span class="${priceTotalClass}">${formattedAvgPriceDiff}</span> $</p>
     `;
 
   const { averageCostDifference, averagePercentageCostDifference } = calculateAverageCostsMatching();
@@ -171,8 +171,8 @@ export function appendMatchingStatisticsInfo() {
   const costStatsDiv = document.createElement('div');
   costStatsDiv.className = `stats-group cost-stats ${costVisibilityClass}`;
   costStatsDiv.innerHTML = `
-      <p class="${percentageVisibilityClass} info-cost-matching-average-percentage">Average % Cost Percentage: <span class="${costPercentageClass}">${formattedAvgPercentageCostDiff}</span>%</p>
-      <p class="info-cost-matching-average-difference">Average Cost Difference: <span class="${costTotalClass}">${formattedAvgCostDiff}</span> $</p>
+      <p class="${percentageVisibilityClass} info-cost-matching-average-percentage info-cost-avg-percentage">Average % Cost Percentage: <span class="${costPercentageClass}">${formattedAvgPercentageCostDiff}</span>%</p>
+      <p class="info-cost-matching-average-difference info-cost-avg-difference">Average Cost Difference: <span class="${costTotalClass}">${formattedAvgCostDiff}</span> $</p>
   `;
 
   statsDiv.appendChild(priceStatsDiv);
@@ -187,7 +187,7 @@ export function appendPartialMatchStatisticsInfo() {
 
   const { averagePriceDifference, averagePercentagePriceDifference } = calculateAveragesPartialMatch();
 
-  const percentageVisibilityClass = featureFlags.showPercentages ? '' : 'display-none';
+  const percentageVisibilityClass = featureFlags.showAveragePercentages ? '' : 'display-none';
 
   // Price statistics
   const pricePercentageClass = `partial-match-average-percentage` + (averagePercentagePriceDifference >= 0 ? ' positive-diff' : ' negative-diff');
@@ -200,8 +200,8 @@ export function appendPartialMatchStatisticsInfo() {
   const formattedAvgPriceDiff = (averagePriceDifference >= 0 ? "+" : "") + averagePriceDifference.toFixed(2);
 
   priceStatsDiv.innerHTML = `
-       <p class=" ${percentageVisibilityClass} info-price-partial-match-average-percentage">Average % Price Difference: <span class="${pricePercentageClass}">${formattedAvgPercentageDiff}</span>%</p>
-       <p class="info-price-partial-match-average-difference">Average Price Difference: <span class="${priceTotalClass}">${formattedAvgPriceDiff}</span> $</p>
+       <p class=" ${percentageVisibilityClass} info-price-partial-match-average-percentage info-price-avg-percentage">Average % Price Difference: <span class="${pricePercentageClass}">${formattedAvgPercentageDiff}</span>%</p>
+       <p class="info-price-partial-match-average-difference info-price-avg-difference">Average Price Difference: <span class="${priceTotalClass}">${formattedAvgPriceDiff}</span> $</p>
    `;
 
 
@@ -224,8 +224,8 @@ export function appendPartialMatchStatisticsInfo() {
   costStatsDiv.className = `stats-group cost-stats ${costVisibilityClass}`;
 
   costStatsDiv.innerHTML = `
-      <p class="${percentageVisibilityClass} info-cost-partial-match-average-percentage">Average % Cost % Difference: <span class="${costPercentageClass}">${formattedAvgPercentageCostDiff}</span>%</p>
-      <p class="info-cost-partial-match-average-difference">Average Cost Difference: <span class="${costTotalClass}">${formattedAvgCostDiff}</span> $</p>
+      <p class="${percentageVisibilityClass} info-cost-partial-match-average-percentage info-cost-avg-percentage">Average % Cost % Difference: <span class="${costPercentageClass}">${formattedAvgPercentageCostDiff}</span>%</p>
+      <p class="info-cost-partial-match-average-difference info-cost-avg-difference">Average Cost Difference: <span class="${costTotalClass}">${formattedAvgCostDiff}</span> $</p>
   `;
 
   statsDiv.appendChild(priceStatsDiv);

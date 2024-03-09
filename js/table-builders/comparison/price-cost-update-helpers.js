@@ -69,6 +69,7 @@ function compareAndUpdateUI(tdElement, databaseValue, exportValue, valueType) {
     // Check if there's any difference
     if (exportValue !== databaseValue) {
         // If there's a difference, display the percentage difference in 'info' and value difference in 'difference'
+        debugger
         let show = featureFlags.showPercentages ? true : false;
         updateUIElement(tdElement, infoClass, infoContent, colorClass, show);
         updateUIElement(tdElement, differenceClass, differenceContent, colorClass);

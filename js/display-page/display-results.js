@@ -5,6 +5,7 @@ import { createCsvTableNew, appendMatchingStatisticsInfo, appendPartialMatchStat
 import { createSelectionControls, setupSelectionControls } from '../tables/row-select/selection-controls.js';
 import { toggleExpand } from './toggle-expand.js';
 import { setupCheckboxes } from '../tables/row-select/checkbox-handling.js';
+import { addPriceAdjustmentFeature } from '../table-builders/add-all-price.js';
 
 export let total = 0;
 
@@ -85,8 +86,10 @@ function insertTables(type, items) {
     let statsElement = document.createElement('div');
     if (type === RowTypes.MATCHING) {
         statsElement = appendMatchingStatisticsInfo(); // For matching items
+        // Add the price adjustment feature here, passing the container element directly
     } else if (type === RowTypes.PARTIAL) {
         statsElement = appendPartialMatchStatisticsInfo(); // For partial matching items
+        // Add the price adjustment feature here, passing the container element directly
     }
 
 
@@ -101,6 +104,9 @@ function insertTables(type, items) {
     tableDiv.appendChild(tableDOMElement);
     container.appendChild(tableDiv);
     container.appendChild(statsElement);
+    if (type !== RowTypes.NO_MATCH) {
+        addPriceAdjustmentFeature(container);
+    }
 
     // Use requestAnimationFrame to ensure the DOM is updated
     requestAnimationFrame(() => {

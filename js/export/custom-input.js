@@ -37,7 +37,7 @@ export function handleCustomInput(userItemId, pairId, cellIndex, currentScanCode
 /**
  * Handles custom input specifically for the price field.
  */
-function handleCustomPriceInput(currentScanCode, eventTarget) {
+export function handleCustomPriceInput(currentScanCode, eventTarget) {
     // isEditing = true; // Set the flag as editing started
 
     const parentTd = eventTarget.closest('td');
@@ -45,17 +45,15 @@ function handleCustomPriceInput(currentScanCode, eventTarget) {
 
     const currentValue = getCurrentPriceValue(currentScanCode);
 
-    jsUiValueContainer.innerHTML = ''; // Clear the container
+    clearHtml(jsUiValueContainer);
+    // jsUiValueContainer.innerHTML = ''; // Clear the container
 
     // Create a flex container for the editable div and buttons
-    const flexContainer = document.createElement('div');
-    flexContainer.style.display = 'flex';
-    flexContainer.style.alignItems = 'center';
-    flexContainer.style.justifyContent = 'flex-start';
-    flexContainer.style.gap = '10px'; // Spacing between elements
+    const flexContainer = createCustomInputFlex();
 
     // Create and append the editable div to the flex container
-    const editableDiv = createEditableDiv(currentValue);
+    //const editableDiv = createEditableDiv(currentValue);
+    const editableDiv = createEditableDivShared(currentValue);
     flexContainer.appendChild(editableDiv);
 
     // Create and append the "Done" button to the flex container
@@ -65,11 +63,78 @@ function handleCustomPriceInput(currentScanCode, eventTarget) {
     jsUiValueContainer.appendChild(flexContainer); // Append the flex container to the jsUiValueContainer
 }
 
+export function clearHtml(element) {
+    element.innerHTML = '';
+}
+
+export function createCustomInputFlex() {
+    // Create a flex container for the editable div and buttons
+    const flexContainer = document.createElement('div');
+    flexContainer.style.display = 'flex';
+    flexContainer.style.alignItems = 'center';
+    flexContainer.style.justifyContent = 'flex-start';
+    flexContainer.style.gap = '10px'; // Spacing between elements
+    return flexContainer;
+}
+
+export function createEditableDivShared(currentValue, isEditable = true) {
+    const editableDiv = document.createElement('div');
+    editableDiv.className = 'custom-price-editable editable-div';
+    editableDiv.contentEditable = isEditable; // Set contentEditable based on isEditable parameter
+
+    currentValue = parseToTwoDecimals(currentValue, 'custom price');
+
+    editableDiv.textContent = currentValue;
+
+    // Apply styles individually
+    editableDiv.style.border = '1px solid #ccc';
+    editableDiv.style.padding = '5px 8px';
+    editableDiv.style.width = 'fit-content';
+    editableDiv.style.minWidth = '50px';
+    editableDiv.style.maxWidth = '80px';
+    editableDiv.style.display = 'inline-block';
+    editableDiv.style.borderRadius = '4px';
+    editableDiv.style.backgroundColor = '#fff';
+    editableDiv.style.outline = 'none';
+
+    // Optional: Add keypress event listener to check for Enter key if editable
+    // if (isEditable) {
+    editableDiv.addEventListener('keypress', function (event) {
+        if (event.key === 'Enter') {
+            event.preventDefault(); // Prevent the default Enter key action
+            const parentTd = this.closest('td');
+            const doneButton = parentTd.querySelector('.done-button');
+            if (doneButton) {
+                doneButton.click(); // Simulate clicking the Done button
+            }
+        }
+    });
+    // }
+
+    return editableDiv;
+}
+
+export function parseToTwoDecimals(currentValue, contextDescription = '') {
+    const parsedValue = parseFloat(currentValue);
+    if (isNaN(parsedValue)) {
+        // Warn if the input value isn't a valid number
+        console.warn(`Invalid number input for ${contextDescription}. Received: ${currentValue}`);
+        return null; // Return null or any other indicative value of failure
+    }
+
+    // Return the number formatted to two decimal places
+    return parsedValue.toFixed(2);
+}
+
+
+
 
 // Adjustments for when the div becomes non-editable (read-only mode)
 function finalizeCustomInput(currentScanCode, editableDiv, flexContainer, jsUiValueContainer) {
-    const newValue = editableDiv.textContent.trim();
-    if (!isNaN(parseFloat(newValue)) && isFinite(newValue)) {
+    const newVal = editableDiv.textContent.trim();
+    if (!isNaN(parseFloat(newVal)) && isFinite(newVal)) {
+
+        const newValue = parseToTwoDecimals(newVal);
 
         //updateRowAndTotalsForNewPrice()
         // updatePriceInExportRowsMap(currentScanCode, newValue);
@@ -85,14 +150,15 @@ function finalizeCustomInput(currentScanCode, editableDiv, flexContainer, jsUiVa
         }
 
 
-        // Set the div as non-editable and update its appearance for readonly mode
-        editableDiv.contentEditable = false;
-        editableDiv.style.backgroundColor = '#e9ecef'; // Light grey background indicates readonly
-        editableDiv.style.color = '#495057'; // Darker text for contrast
-        editableDiv.style.border = '1px solid #ced4da'; // Solid border to mimic input field in readonly state
+        closeEditableDiv(editableDiv);
+        // // Set the div as non-editable and update its appearance for readonly mode
+        // editableDiv.contentEditable = false;
+        // editableDiv.style.backgroundColor = '#e9ecef'; // Light grey background indicates readonly
+        // editableDiv.style.color = '#495057'; // Darker text for contrast
+        // editableDiv.style.border = '1px solid #ced4da'; // Solid border to mimic input field in readonly state
 
-        // Optionally, if you wish to keep the cursor as default instead of text selection
-        editableDiv.style.cursor = 'default';
+        // // Optionally, if you wish to keep the cursor as default instead of text selection
+        // editableDiv.style.cursor = 'default';
 
         // Reset editing flag to allow new edits
         // isEditing = false;
@@ -104,6 +170,17 @@ function finalizeCustomInput(currentScanCode, editableDiv, flexContainer, jsUiVa
     } else {
         alert("Please enter a valid number for the price.");
     }
+}
+
+export function closeEditableDiv(editableDiv) {
+    // Set the div as non-editable and update its appearance for readonly mode
+    editableDiv.contentEditable = false;
+    editableDiv.style.backgroundColor = '#e9ecef'; // Light grey background indicates readonly
+    editableDiv.style.color = '#495057'; // Darker text for contrast
+    editableDiv.style.border = '1px solid #ced4da'; // Solid border to mimic input field in readonly state
+
+    // Optionally, if you wish to keep the cursor as default instead of text selection
+    editableDiv.style.cursor = 'default';
 }
 
 function removeButtonFromContainer(container, selector) {
@@ -131,6 +208,7 @@ function createEditableDiv(currentValue) {
 
     // Add keypress event listener to check for Enter key
     editableDiv.addEventListener('keypress', function (event) {
+        debugger
         if (event.key === 'Enter') {
             event.preventDefault(); // Prevent the default Enter key action
 
@@ -156,7 +234,7 @@ function createDoneButton(onClick) {
     return button;
 }
 
-function createEditButton(currentScanCode, editableDiv, flexContainer, jsUiValueContainer) {
+export function createEditButton(currentScanCode, editableDiv, flexContainer, jsUiValueContainer) {
     const button = document.createElement('button');
     button.innerHTML = '<img src="../resources/img/edit.png" alt="Edit" style="width: 24px; height: 24px;">';
     styleIconButton(button);
@@ -187,7 +265,7 @@ function createEditButton(currentScanCode, editableDiv, flexContainer, jsUiValue
 }
 
 
-function styleIconButton(button) {
+export function styleIconButton(button) {
     button.style.width = '24px'; // Set width to match your editable div's height
     button.style.height = '24px'; // Set height to match
     button.style.border = 'none'; // Remove border

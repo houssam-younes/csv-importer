@@ -4,7 +4,6 @@ import { handleFetchError } from "./api/error-handling.js";
 import { setDatabaseCsvHeaders } from "./data-manager.js";
 
 document.addEventListener("DOMContentLoaded", async function () {
-  console.log('Called');
   let databaseCsv = await fetchInventory();
   if (databaseCsv) {
     setDatabaseCsvHeaders(Object.keys(databaseCsv[0]));

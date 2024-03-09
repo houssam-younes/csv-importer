@@ -151,7 +151,6 @@ function changeCost(currentScanCode, newValue, eventTarget) {
     if (exportRowsMap.has(currentScanCode)) {
         let exportData = exportRowsMap.get(currentScanCode);
         let oldCost = validateAndParseNumber(exportData.cost, 'old cost', 'cost');
-        console.log('old cost? ' + oldCost);
         exportData.cost = newValue;
         updateUIValueInClosestTd(eventTarget, newValue);
 
@@ -191,12 +190,11 @@ function updateRowAndTotalsForNewCost(eventTarget, oldCost, newCost) {
 /**
  * Updates the price in the export data for a given scan code and updates the UI.
  */
-function changePrice(currentScanCode, newValue, eventTarget) {
+export function changePrice(currentScanCode, newValue, eventTarget) {
     const exportRowsMap = getExportRowsMap();
     if (exportRowsMap.has(currentScanCode)) {
         let exportData = exportRowsMap.get(currentScanCode);
         let oldPrice = validateAndParseNumber(exportData.price, 'old price', 'price');
-        console.log('old price ' + oldPrice);
         exportData.price = newValue;
         updateUIValueInClosestTd(eventTarget, newValue);
 
@@ -228,7 +226,6 @@ export function updateRowAndTotalsForNewPrice(eventTarget, oldPrice, newPrice) {
 
     // Update the dataset of the row with the new price (export price)
     const validatedNewPrice = validateAndParseNumber(newPrice, 'Export item', 'price');
-    console.log(' in row dataset old price ' + rowElement.dataset.userPrice);
     rowElement.dataset.userPrice = validatedNewPrice;
 
     // Call a function to update the totals based on the new price

@@ -29,6 +29,12 @@ export function getUserMap() {
 function addToExportRowsMap(userItem) {
   // Clone userItem to avoid modifying the original object
   const userItemWithSelection = { ...userItem };
+
+  // Check if the ID already exists in exportRowsMap
+  if (exportRowsMap.has(userItem.scan_code)) {
+    console.warn("Duplicate Scan Code detected: " + userItem.scan_code);
+  }
+
   // Use the Symbol as a key for the selection status
   //userItemWithSelection[isSelectedKey] = false;
   userItemWithSelection[isSelectedKey] = true;

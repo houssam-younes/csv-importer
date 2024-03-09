@@ -47,7 +47,8 @@
   cursor: pointer;
   color: #333;
   position: absolute;
-  right: 0;
+  /* right: 0; */
+  right: var(--padding-right);
   transition: color 0.3s, background-color 0.3s;
 }
 .unselect-button:hover {
