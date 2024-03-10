@@ -24,7 +24,7 @@ export function addPriceAdjustmentFeature(containerElement) {
     contentContainer.appendChild(input);
 
     // Text node for 'to all item prices'
-    const textAfterInput = document.createTextNode('$ to all item prices');
+    const textAfterInput = document.createTextNode('$ to all prices');
     contentContainer.appendChild(textAfterInput);
 
     // Confirm button
