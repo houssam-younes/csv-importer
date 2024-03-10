@@ -2,6 +2,7 @@ import { RowSource, RowTypes } from '../../file-constants.js';
 import { updateSelectedRows, deleteSelectedRows } from '../../export/export-manager.js';
 import { toggleSelection } from '../../table-builders/comparison/comparison.js';
 import { selectUnselectRow, updateMatchingSectionAveragesUI, updatePartialMatchSectionAveragesUI } from '../../table-builders/comparison/price-comparison.js';
+import { decreaseTotalSelected, increaseTotalSelected } from '../../table-builders/comparison/totals-legend.js';
 
 export function setupCheckboxes() {
     // Add event listeners to all checkboxes
@@ -12,7 +13,6 @@ export function setupCheckboxes() {
 
 export function handleCheckboxChange(event) {
     // Get the current checkbox and its state
-    debugger
     const currentCheckbox = event.target;
     const isChecked = currentCheckbox.checked;
     const currentRow = currentCheckbox.closest('tr');
@@ -29,7 +29,6 @@ export function handleCheckboxChange(event) {
 
 // This function fetches row data using attributes and calls selectUnselectRow
 function processRowSelection(rowElement, isChecked) {
-    debugger
     // Fetch necessary attributes from the row
     const isMatching = rowElement.classList.contains(RowTypes.MATCHING); // Adjust according to your actual logic
     const isPartialMatch = rowElement.classList.contains(RowTypes.PARTIAL); // Adjust according to your actual logic
@@ -47,6 +46,13 @@ function processRowSelection(rowElement, isChecked) {
         databaseCost,
         exportCost
     };
+
+    // Increase or decrease the total selected items count based on isChecked
+    if (isChecked) {
+        increaseTotalSelected(); // Increment the counter for selected items
+    } else {
+        decreaseTotalSelected(); // Decrement the counter for selected items
+    }
 
     // Use selectUnselectRow with the gathered data
     selectUnselectRow(rowData, isChecked);

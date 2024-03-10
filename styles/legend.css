@@ -8,6 +8,12 @@
   right: 100px;
   top: 0%;
   display: none;
+  width: 175px;
+  background-color: #f9f9f9; /* Light background for better readability */
+  border: 1px solid #ddd; /* Subtle border */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+  margin-top: 12px;
 }
 
 .legend p {
@@ -21,17 +27,17 @@
 }
 
 /* Media query for tablets and mobile phones */
-@media (max-width: 768px) {
-  .legend {
-    /* position: static; Reset the position to default */
-    position: unset;
-    bottom: 0;
-    right: 0;
-    left: 0; /* Center horizontally */
-    width: 90%; /* Adjust the width as needed */
-    text-align: center; /* Center the text inside the legend */
-  }
-}
+/* @media (max-width: 768px) { */
+/* .legend { */
+/* position: static; Reset the position to default */
+/* position: unset; */
+/* bottom: 0; */
+/* right: 0; */
+/* left: 0; Center horizontally */
+/* width: 90%; Adjust the width as needed */
+/* text-align: center; Center the text inside the legend */
+/* } */
+/* } */
 
 .complementary-info {
   font-size: 0.85em; /* Smaller font size */
@@ -40,4 +46,26 @@
   margin-left: 10px; /* Space from the main content */
   display: inline-block; /* Ensures it sits next to other inline elements */
   vertical-align: middle; /* Aligns with the middle of adjacent elements */
+}
+
+.total-items,
+.selected-items {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+}
+
+/* Media query for tablets and mobile phones */
+@media (max-width: 768px) {
+  .legend {
+    position: unset; /* Fixed position at the bottom on small screens */
+    bottom: 10px; /* Spacing from the bottom */
+    right: 10px; /* Spacing from the right */
+    left: 10px; /* Spacing from the left for full-width appearance */
+    border-radius: 10px; /* Slightly larger border radius for a softer look */
+    padding: 15px; /* Adjusted padding */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Slightly stronger shadow for visibility */
+    /* z-index: 1000; Ensure it's above other content */
+    width: 90%;
+  }
 }

@@ -4,6 +4,7 @@ import { databaseHeaders, userHeaderMappings } from "../../file-constants.js";
 import { setGlobalErrorMessage, clearGlobalErrorMessage } from '../../csv-file-helpers/file-error.js'; // Adjust the path as needed
 import { normalizeUserItemKeys, originalUserHeaders, setOriginalUserHeaders } from "../../csv-file-helpers/user-header-to-db-header.js";
 import { incrementMatchingTotals, incrementPartialMatchTotals } from './price-comparison.js';
+import { setTotalItems, setTotalSelectedItems } from "./totals-legend.js";
 
 // External variable for database items map
 let databaseMap = new Map();
@@ -212,6 +213,10 @@ export async function compareCsvDataToDB(databaseCsv, userCsv) {
       // Optionally handle the error, e.g., by adding the item to a separate error list
     }
   });
+  // After the loop, use setTotalItems and setTotalSelectedItems
+  // Assuming all items in exportRowsMap are considered selected
+  setTotalItems(exportRowsMap.size);
+  setTotalSelectedItems(exportRowsMap.size);
 
   console.log('User export map:', exportRowsMap);
 

@@ -238,7 +238,8 @@ option:hover {
 
 .table-container {
   padding: 20px 0px;
-  overflow: scroll;
+  /* overflow: scroll; */
+  overflow: auto;
   max-height: 100vh;
   width: 100%;
   display: flex;
@@ -251,7 +252,8 @@ option:hover {
 }
 
 .table-div {
-  overflow: scroll;
+  /* overflow: scroll; */
+  overflow: auto;
   padding-right: var(--checkbox-width);
   max-height: 100vh;
 }

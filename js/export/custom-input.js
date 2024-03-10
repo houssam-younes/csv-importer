@@ -208,7 +208,6 @@ function createEditableDiv(currentValue) {
 
     // Add keypress event listener to check for Enter key
     editableDiv.addEventListener('keypress', function (event) {
-        debugger
         if (event.key === 'Enter') {
             event.preventDefault(); // Prevent the default Enter key action
 

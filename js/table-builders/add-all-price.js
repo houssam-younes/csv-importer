@@ -39,7 +39,6 @@ export function addPriceAdjustmentFeature(containerElement) {
 
     // Add click event listener to the button
     button.addEventListener('click', function () {
-        debugger
         const additionAmount = parseFloat(input.value);
         if (isNaN(additionAmount) || additionAmount === 0) {
             alert('Please enter a valid amount.');
@@ -131,7 +130,6 @@ function createEditableDivNoListener(currentValue) {
 
     // Add keypress event listener to check for Enter key
     editableDiv.addEventListener('keypress', function (event) {
-        debugger
         if (event.key === 'Enter') {
             event.preventDefault(); // Prevent the default Enter key action
 

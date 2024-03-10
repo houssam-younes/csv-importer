@@ -1,6 +1,8 @@
 // import { formatDifference } from "../table-creation";
 // price-comparison.js
 
+import { decreaseTotalSelected, increaseTotalSelected } from "./totals-legend.js";
+
 
 
 //rewrite to sum up percentages not just total
@@ -320,9 +322,13 @@ export function selectUnselectRow(rowData, isSelected) {
         if (isSelected) {
             totalSelectedDatabaseItems_matching++;
             totalSelectedExportItems_matching++;
+            // increaseTotalSelected(); // Increment the counter for selected items
+
         } else {
             totalSelectedDatabaseItems_matching--;
             totalSelectedExportItems_matching--;
+            // decreaseTotalSelected(); // Decrement the counter for selected items
+
         }
     }
 
