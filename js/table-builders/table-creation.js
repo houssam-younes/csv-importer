@@ -1,7 +1,7 @@
 import { generateRowHtml, generateExportRowHtml } from "./table-builder.js";
 import { getDatabaseMap } from "./comparison/comparison.js";
 import { objectToCsvString } from "./comparison/comparison.js";
-import { RowTypes, featureFlags } from "../file-constants.js";
+import { RowTypes, featureFlags, headersToDisplayUI } from "../file-constants.js";
 import { databaseHeaders } from "../file-constants.js";
 import { resetPriceCostTables, calculateAverage, PricePercentageArray, PriceDifferenceArrayTypeMatching, CostDifferenceArrayTypeMatching, CostPercentageArray } from "./table-builder.js";
 import { originalUserHeaders } from "../csv-file-helpers/user-header-to-db-header.js";
@@ -33,13 +33,19 @@ export function createCsvTableNew(rows, type) {
   table.className = 'csvTable';
 
   // Assume getDatabaseMap and other utility functions are defined elsewhere
-  let headers;
+  // let headers;
   // if (type === RowTypes.NO_MATCH) {
   // For NO_MATCH type, use a predefined set of headers with "Source" at the start
   // headers = ["Source", ...originalUserHeaders];
   // } else {
   // For other types, use the first row as headers with "Source" prepended
-  headers = rows[0].split(",").map(header => header.trim());
+  // headers = rows[0].split(",").map(header => header.trim());
+
+  let originalHeaders = rows[0].split(",").map(header => header.trim());
+
+  // Use the new function to get the mapped headers
+  let headers = mapHeadersForDisplay(originalHeaders);
+
   headers.unshift("Source");
   // }
 
@@ -91,6 +97,10 @@ export function createCsvTableNew(rows, type) {
   // return tableDiv
 }
 
+// Function to map CSV headers to their display names
+function mapHeadersForDisplay(originalHeaders) {
+  return originalHeaders.map(header => headersToDisplayUI[header] || header);
+}
 
 // export function appendStatisticsInfo(type) {
 // const statsDiv = document.createElement('div');

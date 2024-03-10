@@ -27,6 +27,23 @@ export const userHeaderMappings = {
   'linked_item': ['linked item']
 };
 
+export const headersToDisplayUI = {
+  'scan_code': 'Scan Code',
+  'item_name': 'Description',
+  'department': 'Department # In Register',
+  'cost': 'Cost',
+  'price': 'Price',
+  'vendor_name': 'Vendor Name',
+  'modifier': 'Modifier',
+  'units_per_case': 'Units/Case',
+  'tax_type_number': 'Tax Type # in Register',
+  'is_food_stampable': 'Is Food Stampable',
+  'current_inventory': 'Current Inventory',
+  'price_group_name': 'Price Group Name',
+  'linked_item': 'Linked Item'
+};
+
+
 //what will be displayed, will be used in objToCsvString to keep same order
 export const databaseHeaders = [
   'scan_code',

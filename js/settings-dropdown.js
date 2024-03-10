@@ -3,7 +3,6 @@ import { featureFlags } from "./file-constants.js";
 const selectButtons = document.querySelectorAll(".select-btn"); // Select all dropdown buttons
 const items = document.querySelectorAll(".item");
 
-
 export function clearCheckboxes() {
     items.forEach(item => {
         item.classList.remove("checked"); // Remove 'checked' from all items
@@ -86,9 +85,22 @@ function closeDropdown() {
     selectButtons.forEach(selectBtn => selectBtn.classList.remove("open"));
 }
 
-document.addEventListener("click", (event) => {
-    const withinBoundaries = Array.from(selectButtons).some(selectBtn => event.composedPath().includes(selectBtn));
-    if (!withinBoundaries) {
-        closeDropdown();
-    }
+document.addEventListener('DOMContentLoaded', (event) => {
+    // Define relevant containers once the document is fully loaded
+    const relevantContainers = [
+        document.querySelector(".settings-container-matching"),
+        document.querySelector(".settings-container-partial-match") // Spread operator to handle NodeList
+    ].filter(Boolean); // Filter out any null values in case the selectors don't match any elements
+
+    // Add the click event listener to the document
+    document.addEventListener("click", (event) => {
+        // Check if the click was within any of the relevant containers
+        const withinBoundaries = relevantContainers.some(container => {
+            return event.composedPath().includes(container);
+        });
+
+        if (!withinBoundaries) {
+            closeDropdown(); // Close the dropdown if the click is outside the relevant containers
+        }
+    });
 });
