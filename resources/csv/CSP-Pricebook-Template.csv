@@ -1,0 +1,5 @@
+Scan Code,Modifier,Description,Price,Cost,Units/Case,Department # In register,Tax Type # In register,Is Foodstampable,Current Inventory,Price Group Name,Vendor Name,Linked Item
+00002835727,0,MARLBORO KING SIZE BOX PACK,6.15,6.06,10,100,1,0,50,Marlboro Packs,Sams Wholesale,0
+00002835727,2,MARLBORO KING SIZE BOX 2-PACK,12.3,12.12,5,100,1,0,5,,Sams Wholesale,0
+02820013580,0,MARLBORO KING SIZE BOX CARTON,61.5,60.6,1,150,1,0,5,Marlboro Cartons,Sams Wholesale,0
+06827444311,0,NESTLE PURE LIFE WATER,1.39,0.3291,24,50,99,1,12,Water,Grocery Supply Co,120
