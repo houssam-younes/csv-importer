@@ -118,156 +118,6 @@ export function exportSelectedRowsToCsv() {
   document.body.removeChild(link); // Clean up
 }
 
-// export function exportSelectedRowsToCsvWithExportHeaders() {
-//   const exportData = dataToExport(); // Prepare data based on selected rows
-
-//   if (exportData.length === 0) {
-//     alert("No Rows Selected for Export");
-//     return;
-//   }
-
-//   let csvContent = "data:text/csv;charset=utf-8,\uFEFF"; // Initialize CSV content with UTF-8 BOM for Excel compatibility
-
-//   // Construct the CSV header row, ensuring headers are properly quoted
-//   const headersRow = Object.values(exportHeaders).map(header => `"${header.exportName.replace(/"/g, '""')}"`); // Ensure special characters are maintained and double quotes are escaped
-//   csvContent += headersRow.join(",") + "\r\n";
-
-//   exportData.forEach(row => {
-//     const rowCsv = Object.entries(exportHeaders).map(([internalHeader, { defaultValue }]) => {
-//       let cellValue;
-//       if (row.hasOwnProperty(internalHeader)) {
-//         cellValue = row[internalHeader];
-//       } else {
-//         // Apply default value if the property is not found, except for databaseHeaders
-//         cellValue = databaseHeaders.includes(internalHeader) ? '' : defaultValue;
-//       }
-//       // Encode cell values to handle special characters like hashtags and ensure they are properly quoted
-//       cellValue = encodeURIComponent(cellValue.toString()).replace(/"/g, '""');
-//       // Replace encoded spaces with actual spaces for readability in CSV
-//       cellValue = cellValue.replace(/%20/g, ' ');
-//       return `"${cellValue}"`;
-//     }).join(",");
-
-//     csvContent += rowCsv + "\r\n";
-//   });
-
-//   // Encode the entire CSV content
-//   const encodedUri = encodeURI(csvContent);
-//   //to fix # issue that was causing it to halt the export
-//   const fixedEncodedURI = encodedUri.replaceAll('#', '%23');
-//   const link = document.createElement("a");
-//   link.setAttribute("href", fixedEncodedURI);
-//   link.setAttribute("download", "exported_data.csv"); // Set the filename for the exported CSV
-//   document.body.appendChild(link); // Required for Firefox and other browsers that may block direct clicking
-//   link.click(); // Trigger the download
-//   document.body.removeChild(link); // Clean up by removing the link element
-// }
-
-
-// Function to generate a CSV row for a given data object
-// function generateCsvRow(row) {
-//   return Object.entries(exportHeaders).map(([internalHeader, { defaultValue }]) => {
-//     let cellValue = row[internalHeader] !== undefined ? row[internalHeader] : defaultValue;
-//     if (databaseHeaders.includes(internalHeader) && cellValue === defaultValue) {
-//       cellValue = ''; // Leave blank for database headers if no value is present
-//     }
-//     return `"${cellValue.toString().replace(/"/g, '""')}"`; // Handle internal quotes
-//   }).join(",");
-// }
-
-// export function exportSelectedRowsToCsvWithExportHeaders2() {
-//   const exportData = dataToExport(); // Prepare data based on selected rows
-
-//   if (exportData.length === 0) {
-//     alert("No Rows Selected for Export");
-//     return;
-//   }
-
-//   let csvContent = "data:text/csv;charset=utf-8,\uFEFF"; // Initialize CSV content with UTF-8 BOM for Excel compatibility
-//   // const headersRow = Object.values(exportHeaders).map(header => header.exportName).join(","); // Construct the CSV header row
-//   // csvContent += headersRow + "\r\n";
-//   // Construct the CSV header row, ensuring headers are properly quoted and encoded if necessary
-//   const headersRow = Object.values(exportHeaders).map(header => {
-//     debugger
-//     const encodedHeader = encodeURIComponent(header.exportName).replace(/"/g, '""').replace(/%20/g, ' '); // Encode and then replace encoded spaces with actual spaces
-//     return `"${encodedHeader}"`;
-//   });
-//   csvContent += headersRow.join(",") + "\r\n";
-
-//   // Generate CSV rows for each data object
-//   exportData.forEach(row => {
-//     const rowCsv = generateCsvRow(row);
-//     csvContent += rowCsv + "\r\n";
-//   });
-
-//   // Code to trigger the download...
-//   triggerCsvDownload(csvContent);
-// }
-
-// Function to trigger CSV download
-// function triggerCsvDownload(csvContent) {
-//   const encodedUri = encodeURI(csvContent);
-//   const link = document.createElement("a");
-//   link.setAttribute("href", encodedUri);
-//   link.setAttribute("download", "exported_data.csv");
-//   document.body.appendChild(link); // Required for Firefox
-//   link.click(); // Trigger the download
-//   document.body.removeChild(link); // Clean up after download
-// }
-
-
-// export function exportSelectedRowsToCsv2() {
-//   if (selectedRowsMap.size === 0) {
-//     const checkboxes = document.querySelectorAll('input.row-checkbox:checked');
-//     if (checkboxes.length != 0) {
-//       alert("Please make sure file includes required headers");
-//       return;
-//     }
-//     alert("No Rows Selected");
-//     return;
-//   }
-
-//   let csvContent = "data:text/csv;charset=utf-8,\uFEFF"; // Include UTF-8 BOM for Excel compatibility
-
-//   // Map originalUserHeaders to their corresponding database headers
-//   const mappedUserHeaders = originalUserHeaders.map(originalHeader =>
-//     getDatabaseHeaderFromUserHeader(originalHeader)
-//   );
-
-//   csvContent += originalUserHeaders.join(",") + "\r\n"; // Use mapped user headers for the CSV header row
-
-//   selectedRowsMap.forEach(row => {
-//     const rowCsv = mappedUserHeaders.map(mappedHeader => {
-//       // Directly use the value if it exists under the mapped header
-//       const cellValue = (mappedHeader in row) ? row[mappedHeader] : "";
-//       return `"${cellValue.toString().replace(/"/g, '""')}"`; // Handle internal quotes
-//     }).join(",");
-
-//     csvContent += rowCsv + "\r\n";
-//   });
-
-//   const encodedUri = encodeURI(csvContent);
-//   const link = document.createElement("a");
-//   link.setAttribute("href", encodedUri);
-//   link.setAttribute("download", "selected_rows.csv");
-//   document.body.appendChild(link);
-//   link.click();
-//   document.body.removeChild(link);
-// }
-
-// // Function to get the database header from the user header using userHeaderMappings
-// function getDatabaseHeaderFromUserHeader(userHeader) {
-//   for (const dbHeader in userHeaderMappings) {
-//     if (userHeaderMappings[dbHeader].includes(userHeader)) {
-//       return dbHeader;
-//     }
-//   }
-//   // If not found, return the user header itself
-//   return userHeader;
-// }
-
-
-
 /**
  * Main function to export selected rows to a CSV file.
  */
@@ -312,10 +162,28 @@ function initializeCsvContent() {
  * @return {string} The CSV header row.
  */
 function constructHeadersRow() {
-  return Object.values(exportHeaders).map(header =>
-    `"${header.exportName.replace(/"/g, '""')}"`
-  ).join(",");
+  return Object.values(exportHeaders).map(header => {
+    return checkAndFormatCsvValue(header.exportName);
+  }).join(",");
 }
+
+function checkAndFormatCsvValue(value) {
+  // Check if the value contains commas, double quotes, or line breaks
+  if (value.includes(',') || value.includes('"') || value.includes('\n')) {
+    // If so, escape double quotes by doubling them and enclose the value in double quotes
+    return `"${value.replace(/"/g, '""')}"`;
+  } else {
+    // Otherwise, return the value as is
+    return value;
+  }
+}
+
+
+// function constructHeadersRow() {
+//   return Object.values(exportHeaders).map(header =>
+//     `"${header.exportName.replace(/"/g, '""')}"`
+//   ).join(",");
+// }
 
 /**
  * Constructs a single data row for the CSV file by mapping over the defined export headers
@@ -360,23 +228,36 @@ function joinCsvRow(cellValues) {
  * @param {string} cellValue - The value of the cell to format.
  * @return {string} The formatted cell value. Returns an empty string for `null` or `undefined` values.
  */
+// function formatCsvCell(cellValue) {
+//   if (cellValue === null || cellValue === undefined) {
+//     return '""'; // Represents an empty cell in CSV
+//   }
+
+//   try {
+//     // Convert the cell value to a string to prevent errors
+//     let formattedValue = cellValue.toString();
+
+//     // Escape double quotes by doubling them (CSV standard for escaping quotes)
+//     formattedValue = formattedValue.replace(/"/g, '""');
+
+//     // Enclose the cell value in double quotes
+//     return `"${formattedValue}"`;
+//   } catch (error) {
+//     console.error(`Error formatting cell value: ${error}`);
+//     // throw new Error(`Failed to format cell value: ${cellValue}. Error: ${error.message}`);
+//   }
+// }
 function formatCsvCell(cellValue) {
   if (cellValue === null || cellValue === undefined) {
-    return '""'; // Represents an empty cell in CSV
+    return ''; // Return an empty string for null or undefined values
   }
 
   try {
-    // Convert the cell value to a string to prevent errors
     let formattedValue = cellValue.toString();
-
-    // Escape double quotes by doubling them (CSV standard for escaping quotes)
-    formattedValue = formattedValue.replace(/"/g, '""');
-
-    // Enclose the cell value in double quotes
-    return `"${formattedValue}"`;
+    return checkAndFormatCsvValue(formattedValue);
   } catch (error) {
     console.error(`Error formatting cell value: ${error}`);
-    // throw new Error(`Failed to format cell value: ${cellValue}. Error: ${error.message}`);
+    return '';
   }
 }
 

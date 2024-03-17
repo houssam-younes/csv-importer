@@ -41,7 +41,8 @@ export function createCsvTableNew(rows, type) {
   // For other types, use the first row as headers with "Source" prepended
   // headers = rows[0].split(",").map(header => header.trim());
 
-  let originalHeaders = rows[0].split(",").map(header => header.trim());
+  // let originalHeaders = rows[0].split(",").map(header => header.trim());
+  let originalHeaders = splitCsvRow(rows[0]);
 
   // Use the new function to get the mapped headers
   let headers = mapHeadersForDisplay(originalHeaders);
@@ -70,9 +71,12 @@ export function createCsvTableNew(rows, type) {
       const userRow = rows[i];
       const dbItemId = userRow.pair_id;
       const dbItem = databaseMap.get(dbItemId);
-      const userCells = userRow.csv.split(",").map(cell => cell.trim());
+      // const userCells = userRow.csv.split(",").map(cell => cell.trim());
+      // Use splitCsvRow for user and database rows
+      const userCells = splitCsvRow(userRow.csv);
       const userItemId = userCells[0];
-      const dbCells = dbItem ? objectToCsvString(dbItem, databaseHeaders).split(",").map(cell => cell.trim()) : [];
+      const dbCells = dbItem ? splitCsvRow(objectToCsvString(dbItem, databaseHeaders)) : [];
+      // const dbCells = dbItem ? objectToCsvString(dbItem, databaseHeaders).split(",").map(cell => cell.trim()) : [];
 
       const dbRowDom = generateRowHtml(dbCells, `database-row ${type}-database-row ${dbItemId}`, userItemId, i, type);
       const exportRowDom = generateExportRowHtml(userCells, `export-row ${type}-export-row ${userItemId}`, userItemId, userRow.pair_id, i, type);
@@ -85,7 +89,8 @@ export function createCsvTableNew(rows, type) {
       table.appendChild(userRowDom);
 
     } else if (type === RowTypes.NO_MATCH) {
-      const cells = rows[i].split(",").map(cell => cell.trim());
+      //const cells = rows[i].split(",").map(cell => cell.trim());
+      const cells = splitCsvRow(rows[i]);
       // const noMatchRowDom = generateRowHtml(cells, "no-match-user-row user-row", null, i, type, true);
       const noMatchRowDom = generateRowHtml(cells, "no-match-user-row", null, i, type, true);
       table.appendChild(noMatchRowDom);
@@ -252,3 +257,36 @@ export function formatDifference(value, inverted = false) {
   return `<span class="${colorClass}">${sign}${formattedValue}</span>`;
 }
 
+
+/**
+ * Splits a CSV row into an array of fields, correctly handling quoted fields that
+ * contain commas.
+ * 
+ * @param {string} row - A single row from a CSV file.
+ * @returns {string[]} An array of fields from the CSV row.
+ */
+function splitCsvRow(row) {
+  const fields = [];
+  let field = '';
+  let insideQuotes = false;
+
+  for (let i = 0; i < row.length; i++) {
+    const char = row[i];
+    const nextChar = i + 1 < row.length ? row[i + 1] : null;
+
+    if (char === '"' && insideQuotes && nextChar === '"') { // Handle escaped quotes
+      field += char;
+      i++; // Skip the next quote
+    } else if (char === '"') {
+      insideQuotes = !insideQuotes;
+    } else if (char === ',' && !insideQuotes) {
+      fields.push(field);
+      field = '';
+    } else {
+      field += char;
+    }
+  }
+
+  fields.push(field); // Add the last field
+  return fields.map(f => f.trim()); // Trim whitespace around fields
+}
