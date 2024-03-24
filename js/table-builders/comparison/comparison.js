@@ -223,7 +223,6 @@ export async function compareCsvDataToDB(databaseCsv, userCsv) {
   if (duplicateScanCodes.length > 0) {
     showDuplicateScanCodesErrorMessage();
   }
-  console.log('User export map:', exportRowsMap);
 
   return { matchingItems, partialMatches, noMatches };
 }
