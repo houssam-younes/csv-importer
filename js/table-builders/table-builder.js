@@ -170,6 +170,11 @@ export function generateExportRowHtml(userCells, rowClass, userItemId, pairId, i
   userCells.forEach((cell, cellIndex) => {
     const td = document.createElement('td');
     td.className = 'relative-td';
+    if (duplicateScanCodes.length >0 && cellIndex === 0 ){
+      if (duplicateScanCodes.includes(cell)){
+        td.style.color='red';
+      }
+    }
     const cellContentWrapper = document.createElement('div');
     cellContentWrapper.className = 'cell-content-wrapper js-td-wrapper';
 
