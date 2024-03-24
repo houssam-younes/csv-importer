@@ -1,5 +1,7 @@
 .selection-controls {
   display: flex;
+  /* display none temporarily till buttons are updated */
+  display: none;
   justify-content: center;
   align-items: center;
   position: relative;

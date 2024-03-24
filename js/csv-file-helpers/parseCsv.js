@@ -22,7 +22,6 @@ export function parseCsv(csvData) {
 
     return lines.slice(1).map(line => {
         const values = parseLine(line);
-        console.log('values ? ' + values);
         return headers.reduce((obj, header, index) => {
             // If the normalized header is 'scan_code', call logScanCode
             if (header === 'scan_code') {

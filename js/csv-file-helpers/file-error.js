@@ -22,10 +22,15 @@ function displayErrorMessage(errorMessage) {
     if (errorMessage) {
         const errorContainer = document.createElement('div');
         errorContainer.setAttribute('id', 'errorContainer');
-        errorContainer.style.color = 'red';
+        errorContainer.style.color = '#b30000'; // Dark red text for better readability
         errorContainer.style.fontWeight = 'bold';
+        errorContainer.style.padding = '10px';
+        errorContainer.style.boxShadow = '0px 4px 8px rgba(179, 0, 0, 0.2)'; // Soft shadow for a subtle border effect
+        errorContainer.style.backgroundColor = '#ffe6e6'; // Light red background for contrast
+        errorContainer.style.borderRadius = '5px';
         errorContainer.style.marginTop = '20px';
-        errorContainer.innerHTML = `<div class="file-error" style="color: red;">⚠️ ${errorMessage} ,<br> please check out 'how to use' for more details </div>`;
+        errorContainer.style.maxWidth = '50%';        
+        errorContainer.innerHTML = `<div class="file-error">⚠️ ${errorMessage}<br> </div>`;
 
         const mainElement = document.querySelector('main');
         const firstChild = mainElement.firstChild;

@@ -5,6 +5,7 @@ import { resetTotals } from "./table-builders/comparison/price-comparison.js";
 import { clearExportRowsMap } from "./table-builders/comparison/comparison.js";
 import { resetFeatureFlags } from "./file-constants.js";
 import { clearCheckboxes } from "./settings-dropdown.js";
+import { clearDuplicateScanCodes } from "./table-builders/comparison/duplicate-scan-codes.js";
 
 export function switchView(viewId) {
   const importView = document.getElementById("importView");
@@ -12,6 +13,7 @@ export function switchView(viewId) {
   const legend = document.getElementsByClassName("legend")[0];
 
   clearSelectedRowsMap();
+  clearDuplicateScanCodes();
   resetFeatureFlags();
 
   // Function to clear inner HTML of all elements with a given class

@@ -3,6 +3,7 @@ import { databaseHeaders } from "../file-constants.js";
 import { getDatabaseMap } from "./comparison/comparison.js";
 import { CELL_INDICES, featureFlags } from "../file-constants.js";
 import { handleDropdownChange, handleSourceChange } from "../export/dropdown-listeners.js";
+import { duplicateScanCodes } from "./comparison/duplicate-scan-codes.js";
 
 export let PricePercentageArray = [];
 export let PriceDifferenceArrayTypeMatching = [];
@@ -64,6 +65,11 @@ export function generateRowHtml(cells, rowClass, pair_id, index, type, isExportR
   cells.forEach((cell, cellIndex) => {
     const td = document.createElement('td');
     td.className = 'relative-td';
+    if (duplicateScanCodes.length >0 && cellIndex === 0 ){
+      if (duplicateScanCodes.includes(cell)){
+        td.style.color='red';
+      }
+    }
     const cellContentWrapper = document.createElement('div');
     cellContentWrapper.className = 'cell-content-wrapper js-td-wrapper';
 

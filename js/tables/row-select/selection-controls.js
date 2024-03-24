@@ -6,6 +6,7 @@ export function createSelectionControls(type) {
   //   <label for="unselectAll_${type}">Unselect All</label>
 
   if (type == RowTypes.NO_MATCH) {
+    //display none temporarily
     return `
       <div class="selection-controls">
         <div class="selection-buttons">

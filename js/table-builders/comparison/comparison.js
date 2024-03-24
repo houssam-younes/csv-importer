@@ -5,6 +5,7 @@ import { setGlobalErrorMessage, clearGlobalErrorMessage } from '../../csv-file-h
 import { normalizeUserItemKeys, originalUserHeaders, setOriginalUserHeaders } from "../../csv-file-helpers/user-header-to-db-header.js";
 import { incrementMatchingTotals, incrementPartialMatchTotals } from './price-comparison.js';
 import { setTotalItems, setTotalSelectedItems } from "./totals-legend.js";
+import { addDuplicateScanCode, duplicateScanCodes, showDuplicateScanCodesErrorMessage } from "./duplicate-scan-codes.js";
 
 // External variable for database items map
 let databaseMap = new Map();
@@ -31,10 +32,11 @@ function addToExportRowsMap(userItem) {
   // Clone userItem to avoid modifying the original object
   const userItemWithSelection = { ...userItem };
 
-  // Check if the ID already exists in exportRowsMap
+  // Check if the ID already exists in exportRowsMap  
   if (exportRowsMap.has(userItem.scan_code)) {
+    addDuplicateScanCode(userItem.scan_code);
     console.warn("Duplicate Scan Code detected: " + userItem.scan_code);
-  }
+}
 
   // Use the Symbol as a key for the selection status
   //userItemWithSelection[isSelectedKey] = false;
@@ -218,6 +220,9 @@ export async function compareCsvDataToDB(databaseCsv, userCsv) {
   setTotalItems(exportRowsMap.size);
   setTotalSelectedItems(exportRowsMap.size);
 
+  if (duplicateScanCodes.length > 0) {
+    showDuplicateScanCodesErrorMessage();
+  }
   console.log('User export map:', exportRowsMap);
 
   return { matchingItems, partialMatches, noMatches };
